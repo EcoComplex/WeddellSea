@@ -1,0 +1,612 @@
+---
+title: "From metawebs to regional and local"
+author: "L.A.S."
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+## Setup
+
+```{r setup, eval=TRUE,echo=FALSE }
+load(".RData")
+# rm(list=lsf.str())
+# rm(list=ls())
+# oldcd <-getwd()
+require(ggplot2)
+require(igraph)
+require(dplyr)
+require(stringr)
+require(devtools)
+require(meweasmo)
+#  install_github("lsaravia/meweasmo")
+require(multiweb)
+#  install_github("lsaravia/multiweb")
+
+source("R/network_fun.r")
+
+```
+
+# Build network without bird species from aves data.frame   
+
+```{r buildNetworkNoBirds, eval=F,echo=FALSE,message=T,warning=T}
+
+#
+# Read Networks 
+#
+#
+meta <- readNetwork("Data/Meta.dat",edgeListFormat = 2)
+
+# Meta es la simplificacion de meta1 
+#meta <- simplify(meta, remove.multiple = TRUE, remove.loops = FALSE)
+
+wedd <- readNetwork("Data/Wedd.dat",edgeListFormat = 2)
+
+# Check that local webs are included in the metaweb
+#
+ecount(difference(wedd,meta)) == 0 
+length(setdiff( V(wedd)$name,V(meta)$name) ) ==0
+basal_species(wedd)                             #### SOME BASAL SPECIES WRONG IN OLD WEDDELL!!!!!!!!
+
+# Vertex that are Birds
+#
+# Extract the birds from the network
+#
+require(taxize)
+dfn <- igraph::as_data_frame( wedd, what="vertices" )
+can_names <- gnr_resolve(dfn$name, best_match_only = TRUE, canonical=TRUE)
+class_names <- tax_name(query =can_names$matched_name2  , get = "class", db = "ncbi")
+aves <- class_names %>% filter( class =="Aves")
+
+siBird <- V(wedd)$name %in% aves$query
+sum(siBird) == nrow(aves)   # ALl rows in aves must be the in wedd igraph object  
+noBird <- delete_vertices(wedd, siBird)
+rm(dfn,nod,g,n0,g1,lnk,siBird,lred,can_names,class_names)
+rm(list=names(Filter(is.function, mget(ls(all=T)))))
+saveRDS(noBird,"Data/noBird_ig.rds")
+save.image()
+
+# degree 
+V(noBird)[ degree(noBird) == 0]
+siBird <- V(wedd)$name %in% aves$query
+
+bsp <- tibble::rownames_to_column(as.data.frame(degree(wedd, v=siBird, mode=c("out")))) 
+names(bsp) <- c("Species","out_degree")
+bsp1 <- tibble::rownames_to_column(as.data.frame(degree(wedd, v=siBird, mode=c("in")))) 
+names(bsp1) <- c("Species","in_degree")
+bsp <- inner_join(bsp1,bsp)
+knitr::kable(bsp %>% arrange(desc(in_degree)))
+
+
+```
+
+# Calc Metrics/QSS for empirical networks  
+
+```{r calcMetrics, eval=F,echo=F,message=T,warning=T}
+
+ecount(wedd)
+ecount(noBird)
+require(tictoc)
+tic()
+qss <- bind_cols(calc_topological_indices(wedd), calc_QSS(wedd,10000,48)) %>% mutate(Network="Weddell")
+toc()
+
+
+qss <- bind_rows(qss, bind_cols(calc_topological_indices(noBird), calc_QSS(noBird,10000,48)) %>% mutate(Network="Nobirds")) 
+
+# QSS with simetric coefficients like Old simulations 
+
+qss <- qss %>% select(Network, everything()) 
+
+qss1 <- calcIncoherence(wedd)  %>% mutate(Network="Weddell")
+qss1 <- bind_rows(qss1, calcIncoherence(noBird) %>% mutate(Network="Nobirds"))
+qss <- inner_join(qss,qss1)
+rm(qss1)
+save.image()
+
+```
+
+
+
+# Calculate Small-World-Ness
+
+The random networks with the same number of links and species than Weddell Sea generate networks with many disconected components (15551) 
+in consequence is not possible to calculate small-world-ness because the clustering coeficient is 0
+
+
+```{r calcSWNess, eval=F,echo=T,message=T,warning=T}
+
+
+require(future.apply)
+require(tictoc)
+plan(multiprocess)
+ss <- vcount(wedd)
+ll <- ecount(wedd)
+nsim <- 1000
+tic("Generate Erdos Renyi networks")
+ern <- future_lapply(1:nsim, function (x) {
+    e <- sample_gnm(ss, ll,directed = TRUE)
+    return(e) }
+    )
+toc()
+
+# calculate the number of components
+
+ncomp <- sapply(ern, function(g) components(g)$no)
+mean(ncomp)
+
+tic("SWness for Weddell")
+tp0 <- calc_swness_zscore(wedd,ern,ncores=48)
+tp1 <- mutate(tp0$da, Network="Weddell")
+toc()
+
+# NoBirds Weddell
+#
+tic("Generate Erdos Renyi NoBirds")
+
+ss <- vcount(noBird)
+ll <- ecount(noBird)
+ern <- future_lapply(1:nsim, function (x) {
+    e <- erdos.renyi.game(ss, ll, type="gnm",directed = TRUE)
+    return(e) }
+    )
+toc()
+
+tic("SWness for NoBirds")
+tp0 <- calc_swness_zscore(noBird,ern,ncores=48)
+tp1 <- bind_rows(tp1,mutate(tp0$da, Network="Nobirds"))
+toc()
+
+qss <- inner_join(qss,tp1)
+
+rm(ncomp,ll,ss,nsim,tp1,tp0,ern)
+save.image()
+
+```
+
+# Compare Networks using curve ball randomizations
+
+```{r compTopologicalMetrics, eval=F,echo=F,message=T,warning=T}
+
+lred <- curve_ball(wedd,1000)
+curveBallNets <- calcTopologicalIndices(lred,ncores=48)
+curveBallNets <- bind_cols(curveBallNets, calcIncoherence(lred,ncores = 48)) %>% mutate(Network="Weddell")
+
+tp0 <- calcModularitySWnessZScore(wedd,lred,ncores=48)
+tp <- mutate(tp0$da, Network="Weddell")
+#websTbl <- websTbl %>% select(Size:QSS)
+curveBallSumm <- tp
+cb1 <- tp0$sims %>% dplyr::select(modularity)
+curveBallNets <- bind_cols(curveBallNets, cb1)
+
+rm(lred,tp0,tp,cb1)
+save.image()
+```
+
+
+```{r compTopologicalMetricsNoBird, eval=F,echo=F,message=T,warning=T}
+
+# Add the simulations for Weddell with no birds 
+#
+lred <- curve_ball(noBird,1000)
+tp <- calcTopologicalIndices(lred,ncores=48)
+tp <- bind_cols(tp, calcIncoherence(lred,ncores = 48)) %>% mutate(Network="Nobirds")
+
+curveBallNets <- bind_rows(curveBallNets,tp)
+
+tp0 <- cacModularitySWnessZScore(noBird,lred,ncores=48)
+tp <- mutate(tp0$da, Network="Nobirds")
+#websTbl <- websTbl %>% select(Size:QSS)
+curveBallSumm <- bind_rows(curveBallSumm,tp)
+
+cb1 <- tp0$sims %>% dplyr::select(modularity)
+curveBallNets <- bind_cols(curveBallNets, cb1)
+
+rm(lred,tp0,tp,cb1)
+save.image()
+
+```
+
+
+## Plot metrics interval confidence using curveBall 
+
+* ADD PLOT Bivariate confidence ellipses for metrics in function of S
+
+```{r plotMetricsCurbeBall, eval=FALSE,echo=F,message=T,warning=T}
+
+
+
+# Density plots
+#
+g1 <- ggplot(curveBallNets, aes(x=Q, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=qss, aes(xintercept=Q,  colour=Network), linetype="dashed", size=.5) + 
+    scale_color_viridis_d(labels=c("NO birds","YES Birds")) + 
+    scale_fill_viridis_d(labels=c("NO birds","YES Birds"))+
+    coord_cartesian(xlim=c(.69,0.75)) + xlab("Trophic Coherence")
+g1
+
+g2 <- ggplot(curveBallNets, aes(x=TLmean, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=qss, aes(xintercept=TLmean,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() +
+    coord_cartesian(xlim=c(2.55,2.68)) + xlab("Mean Trophic Level")
+g2
+
+g3 <- ggplot(curveBallNets, aes(x=PathLength, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=qss, aes(xintercept=PathLength,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() #+ coord_cartesian(xlim=c(2.55,2.68)) 
+g3
+
+g4 <- ggplot(curveBallNets, aes(x=Clustering, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=qss, aes(xintercept=Clustering,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() 
+g4
+
+g5 <- ggplot(curveBallNets, aes(x=Omnivory, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=qss, aes(xintercept=Omnivory,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() 
+g5
+
+g6 <- ggplot(curveBallNets, aes(x=modularity, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=curveBallSumm, aes(xintercept=Modularity,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() 
+g6
+
+
+# Deleted PathLength and Clustering
+#
+#
+require(cowplot)
+gg <- plot_grid(g2 + theme(legend.position="none"),
+                g1 + theme(legend.position="none"),
+                g5 + theme(legend.position="none"),
+                g6+ theme(legend.position="none"),align = "h",ncol=2)
+gg
+
+legend_b <- get_legend(
+  g1 + guides(color = guide_legend(nrow = 1)) +
+    theme(legend.position = "bottom")
+)
+
+# add the legend underneath the row we made earlier. Give it 10%
+# of the height of one plot (via rel_heights).
+gg <- plot_grid(gg, legend_b, ncol = 1, rel_heights = c(1, .1))
+gg
+
+save_plot("Figures/curveBall_metrics.png",gg,base_width=8,base_height=5,dpi=600)
+
+
+#
+# Anderson Darling test of distributions and effect size  
+#
+require(kSamples)
+require(tidyr)
+require(purrr)
+
+df <- curveBallNets %>% dplyr::select(Q,TLmean,Omnivory,PathLength,Clustering,modularity) %>% map(~ad.test(. ~ Network, data=curveBallNets)) %>% map_df(~.$ad[1,])
+knitr::kable(df)
+
+df <- curveBallNets %>% group_by(Network) %>% dplyr::select(Q,TLmean,Omnivory,PathLength,Clustering,modularity) %>% summarize_if(is.numeric, median)  %>% gather("metric","medianDif" ,-Network) %>% group_by(metric) %>% summarize_if(is.numeric,~diff(.))
+
+df1 <- curveBallNets %>% dplyr::select(Network,Q,TLmean,TLmax,Omnivory,PathLength,Clustering,modularity) %>% gather("metric","value" ,-Network) %>%   group_by(metric) %>% summarize(sdM = sd(value))
+
+df2 <- curveBallNets %>% group_by(Network) %>% dplyr::select(Q,TLmean,Omnivory,PathLength,Clustering,modularity) %>% summarize_if(is.numeric, median) %>%  gather("metric","median" ,-Network) %>%  spread(Network,median)
+
+df <- inner_join(df,df1)  %>% inner_join(df2) %>% mutate(effectSize=medianDif/sdM) %>% arrange(effectSize) 
+
+knitr::kable(df)
+
+```
+
+# Simulate a grid of parameters    
+
+```{r fitMetaWebPC, eval=F,echo=F,message=T,warning=T}
+
+require(MetaWebAssemblyModels)
+
+A <- get.adjacency(meta,sparse=F)
+dim(A)==919
+
+
+# Simulate a grid of parameters to select the best options
+#
+#
+
+# Combine parameters
+#
+simMetaWebAssembly <- simul_metaWebAssembly(0.01,0.1,0.001, 0.01,0.1, 0.001, 10, 500, A)
+simMetaWebAssembly <- bind_rows(simMetaWebAssembly, simul_metaWebAssembly(0.001,0.01,0.001, 0.1,0.9, 0.001, 10, 500, A))
+
+saveRDS(simMetaWebAssembly,"Data/simulations_metaWebAssembly.rds")
+simMetaWebAssembly <- readRDS("Data/simulations_metaWebAssembly.rds")
+
+require(RColorBrewer)
+col <- brewer.pal(8,"Dark2")
+ 
+ggplot(simMetaWebAssembly,aes(S, L))+ geom_point(alpha=0.5,shape = 21,fill="white",color=col[1],size=1) +  geom_point(data=qss,aes(Size, Links,colour=Network),shape = 21, size=1) + theme_bw() + scale_color_viridis_d()
+ggsave("Figures/MetaWebMdls_vs_data.png",width=6,height=6,units="in",dpi=600)
+#
+# Selecting simulations with 30% tolerance for both Species and Links
+#
+
+sel_tolerance_local_web(list(noBird,wedd),meta,0.30,simMetaWebAssembly)
+
+
+#        m      a     S      L      C  cost alpha     n
+#    <dbl>  <dbl> <dbl>  <dbl>  <dbl> <dbl> <dbl> <int>
+# NoBi 0.0728 0.0241  613. 11167. 0.0298 0.583  3.01    54
+# Wedd 0.0703 0.0221  626. 11546. 0.0295 0.557  3.19   143
+
+################################################################################# ACA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#
+# Simulations with the fitted parameters
+#
+tf <- 500
+mig <- rep(0.0728,nrow(A))
+ext <- rep(0.0241,nrow(A))
+AA <- metaWebNetAssembly(A,mig,ext,tf)
+plot_NetAssemblyModel(AA,400)
+plot_NetAssemblyModel_eqw(AA,100)
+tf <- 500
+mig <- rep(0.0703,nrow(A))
+ext <- rep(0.0221,nrow(A))
+AA <- metaWebNetAssembly(A,mig,ext,tf)
+plot_NetAssemblyModel(AA,400)
+plot_NetAssemblyModel_eqw(AA,100)
+
+
+```
+
+# Simulate with fitted parameters to get species variability    
+
+```{r fittedSimulationsMetaWebAssembly, eval=F,echo=F,message=T,warning=T}
+require(future.apply)
+require(MetaWebAssemblyModels)
+plan(multiprocess)
+#plan(sequential)
+
+A <- get.adjacency(meta,sparse=F)
+dim(A)==919
+
+
+# Simulate Nobirds
+#
+nsim <- 1000
+tf <- 500
+mig <- rep(0.0728,nrow(A))
+ext <- rep(0.0241,nrow(A))
+tini <- tf-99                  # Ultimos 100 pasos temporales
+
+df <- future_lapply(seq_len(nsim), function(i){
+      # Nobirds
+      AA <- metaWebNetAssembly(A,mig,ext,tf)
+      g <- graph_from_adjacency_matrix( AA$A, mode  = "directed")
+      # Select only a connected subgraph graph 
+      dg <- components(g)
+      g <- induced_subgraph(g, which(dg$membership == which.max(dg$csize)))
+      
+      sti <- calcTopologicalIndices(g) 
+      sti <- bind_cols(sti,calcIncoherence(g))
+      sti <- bind_cols(sti,calc_modularity(g))
+      sti <- bind_cols(sti,tibble(sdS=sd(AA$S[tini:tf]),meanS=mean(AA$S[tini:tf]),cvS=sdS/meanS))
+  })
+
+fittedMetaWebAssemblySim <- do.call(rbind,df) %>% mutate(Network="Nobirds")
+
+# Complete Weddell
+#
+mig <- rep(0.0703,nrow(A))
+ext <- rep(0.0221,nrow(A))
+
+df <- future_lapply(seq_len(nsim), function(i){
+      # Nobirds
+      AA <- metaWebNetAssembly(A,mig,ext,tf)
+      g <- graph_from_adjacency_matrix( AA$A, mode  = "directed")
+      # Select only a connected subgraph graph 
+      dg <- components(g)
+      g <- induced_subgraph(g, which(dg$membership == which.max(dg$csize)))
+      
+      sti <- calcTopologicalIndices(g) 
+      sti <- bind_cols(sti,calcIncoherence(g))
+      sti <- bind_cols(sti,calc_modularity(g))
+      sti <- bind_cols(sti,tibble(sdS=sd(AA$S[tini:tf]),meanS=mean(AA$S[tini:tf]),cvS=sdS/meanS))
+  })
+
+fittedMetaWebAssemblySim <- bind_rows(fittedMetaWebAssemblySim, do.call(rbind,df) %>% mutate(Network="Weddell"))
+
+rm(df,mig,ext,A,AA,tf,tini,lred)
+save.image()
+
+```
+
+
+# Plot Metaweb assembly simulations     
+
+```{r plotSimulationsMetaWebAssembly, eval=F,echo=T,message=T,warning=T}
+
+names(fittedMetaWebAssemblySim)
+names(qss)
+# ggplot(fittedMetaWebAssemblySim, aes(x=Q, fill=Network)) +
+#     geom_histogram( alpha=.5, position="identity") + theme_bw() + 
+#     geom_vline(data=qss, aes(xintercept=Q,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() 
+
+g1 <- ggplot(fittedMetaWebAssemblySim, aes(x=Q, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=qss, aes(xintercept=Q,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() 
+
+
+g2 <- ggplot(fittedMetaWebAssemblySim, aes(x=TLmean, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=qss, aes(xintercept=TLmean,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() 
+
+g3 <- ggplot(fittedMetaWebAssemblySim, aes(x=PathLength, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=qss, aes(xintercept=PathLength,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() 
+
+g4 <- ggplot(fittedMetaWebAssemblySim, aes(x=Clustering, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=qss, aes(xintercept=Clustering,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() 
+
+g5 <- ggplot(fittedMetaWebAssemblySim, aes(x=Omnivory, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=qss, aes(xintercept=Omnivory,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() 
+
+g6 <- ggplot(fittedMetaWebAssemblySim, aes(x=Modularity, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=curveBallSumm, aes(xintercept=Modularity,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() 
+
+
+
+require(cowplot)
+gg <- plot_grid(g2 + theme(legend.position="none"),
+                g3 + theme(legend.position="none"),
+                g4 + theme(legend.position="none"),
+                g1 + theme(legend.position="none"),
+                g5 + theme(legend.position="none"),
+                g6+ theme(legend.position="none"),align = "h",ncol=3)
+gg
+
+legend_b <- get_legend(
+  g1 + 
+    guides(color = guide_legend(nrow = 1)) +
+    theme(legend.position = "bottom")
+)
+
+# add the legend underneath the row we made earlier. Give it 10%
+# of the height of one plot (via rel_heights).
+gg <- plot_grid(gg, legend_b, ncol = 1, rel_heights = c(1, .1))
+
+save_plot("Figures/metaWebAssem_metrics.png",gg,base_width=8,base_height=5,dpi=600)
+
+
+sfit <- fittedMetaWebAssemblySim %>% group_by(Network) %>% summarize(cvS = median(cvS))
+
+ggplot(fittedMetaWebAssemblySim, aes(x=cvS, fill=Network)) +
+    geom_density( alpha=.5) + theme_bw() + 
+    geom_vline(data=sfit, aes(xintercept=cvS,  colour=Network), linetype="dashed", size=.5) + scale_color_viridis_d() + scale_fill_viridis_d() + xlab("Temporal CV") 
+ggsave("Figures/TempCV_MetaWebAss.png",width=6,height=6,units="in",dpi=600)
+
+require(kSamples)
+require(tidyr)
+require(purrr)
+
+df <- fittedMetaWebAssemblySim %>% dplyr::select(Q,TLmean,Omnivory,PathLength,Clustering,Modularity,cvS) %>% map(~ad.test(. ~ Network, data=fittedMetaWebAssemblySim)) %>% map_df(~.$ad[1,])
+knitr::kable(df)
+
+
+```
+
+
+# Calculate topological roles      
+
+```{r calcTopoRoles, eval=T,echo=T,message=T,warning=T}
+
+tic("Topo Roles")
+topoR <- multiweb::calc_topological_roles(wedd,nsim=100,ncores = 48) %>% mutate(Network="Weddell")
+toc()
+save.image()
+
+topoR <- bind_rows(topoR, multiweb::calc_topological_roles(noBird,nsim=100,ncores = 48) %>% mutate(Network="Nobirds"))
+save.image()
+
+mdd <- cluster_spinglass(wedd)
+mdf <- tibble( modulos = list(mdd), Network="Weddell")
+
+hub_conn <- classify_topological_roles(filter(topoR,Network=="Weddell"),wedd,mdd,TRUE) %>% mutate(Network="Weddell")
+
+knitr::kable(aves%>% rename(name=query) %>% inner_join( hub_conn, by = "name") %>% select(Network, name:among_module_conn))
+
+mdd <- cluster_spinglass(noBird)
+mdf <- bind_rows(mdf, tibble( modulos = list(mdd), Network="Nobirds"))
+
+hub_conn <- bind_rows(hub_conn,
+classify_topological_roles(filter(topoR,Network=="Nobirds"),noBird,mdd,TRUE) %>% mutate(Network="Nobirds"))
+
+# Module hubs and Hub connectors 
+#
+hub_conn %>% filter(type %in% c("modhub","hubcon")) %>% arrange(type)
+
+
+# png("Figures/TopoRolNoBirds.png",width=6,height=6,units = "in",res=300)
+classify_topological_roles(filter(topoR,Network=="Nobirds"),noBird,plt=TRUE)
+# dev.off()
+# 
+# 
+# mdd <- mdf$modulos[1][[1]]
+# 
+# png("Figures/TopoRolWeddell.png",width=6,height=6,units = "in",res=300)
+classify_topological_roles(filter(topoR,Network=="Weddell"),wedd,plt=TRUE)
+# dev.off()
+
+
+```
+
+
+## Summary of birds metrics 
+
+```{r birdsMetrics, eval=T,echo=T,message=T,warning=T}
+# degree of birds joined with topoological roles 
+#
+V(noBird)[ degree(noBird) == 0]
+siBird <- V(wedd)$name %in% aves$query
+
+bsp <- tibble::rownames_to_column(as.data.frame(degree(wedd, v=siBird, mode=c("out")))) 
+names(bsp) <- c("Species","out_degree")
+bsp1 <- tibble::rownames_to_column(as.data.frame(degree(wedd, v=siBird, mode=c("in")))) 
+names(bsp1) <- c("Species","in_degree")
+bsp <- inner_join(bsp1,bsp) %>% arrange(desc(in_degree))
+knitr::kable(bsp, digits = 3 )
+
+
+bsp <- inner_join( bsp, hub_conn, by=c("Species" = "name") ) 
+
+require(NetIndices)
+TL <- tibble::rownames_to_column(as.data.frame(TrophInd(get.adjacency(wedd,sparse=F))))
+names(TL)[1] <- "Species"
+
+bsp <- inner_join( bsp, TL, by=c("Species") ) %>% dplyr::select(-Network,-node) 
+
+knitr::kable(bsp)
+```
+
+
+## Plots of the  
+
+```{r birdsMetrics, eval=T,echo=T,message=T,warning=T}
+
+require(multiweb)
+require(igraph)
+require(ggraph)
+require(NetIndices)
+
+g2 <- wedd
+V(g2)$name <- vegan::make.cepnames(V(g2)$name)
+plot_troph_level(g2,modules =TRUE ,vertexLabel = FALSE,maxTL=5,vertex.label.color="black")
+
+#
+# Ver conexiones de aves
+#
+siBird <- V(wedd)$name %in% aves$query
+adjacent_vertices(wedd, V(wedd)[siBird], mode="in")
+
+adjacent_vertices(wedd, V(wedd)[c(aves$query[12],aves$query[2])], mode="in")
+adjacent_vertices(wedd, V(wedd)["Electrona antarctica"], mode="in")
+adjacent_vertices(wedd, V(wedd)["Euphausia superba"], mode="in")
+
+#
+# Estimar sub red de aves marinas
+#
+sg  <- make_ego_graph(wedd, nodes = V(wedd)[c(aves$query[12])], order=2, mode="in")
+
+res <- do.call(igraph::union, sg)
+#V(res)$name <- vegan::make.cepnames(V(res)$name)
+plot_troph_level(res, vertexLabel = TRUE, tk=TRUE, vertexSizeFactor = 5,modules = TRUE, edge.width = 1)
+
+require(NetIndices)
+TL <- tibble::rownames_to_column(as.data.frame(TrophInd(get.adjacency(res,sparse=F))))
+TL <- arrange(TL, desc(TL))
+V(wedd)$color <- round(TL$TL)
+V(wedd)$size <-  as.numeric(cut(degree(wedd),11))
+
+
+```
