@@ -2,7 +2,7 @@
 
 ## New insights into the Weddell Sea ecosystem applying a network approach 
 
-## Krill, salps and a sea star as keystone species in the Weddell Sea (Antarctica)
+### Krill, salps and a sea star as keystone species in the Weddell Sea (Antarctica)
 
 ## Authors
 
@@ -11,6 +11,8 @@
  * Georgina Cordone 
  * Vanesa Salinas 
  * Fernando R. Momo
+ * Susanne Kortsch
+
 
 ## Abstract
 
