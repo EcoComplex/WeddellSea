@@ -3,7 +3,7 @@ title: 'New insights into the Weddell Sea ecosystem: a network approach'
 author: "Tomás I. Marina, Leonardo A. Saravia, Susanne Kortsch, Georgina Cordone, Vanesa Salinas, Iara D. Rodríguez and Fernando R. Momo"
 date: "12/15/2020"
 output: html_document
-bibliography: Weddell Sea.bib
+bibliography: MetawebsAssembly.bib
 ---
 
 ```{r global_setting, echo=FALSE}
