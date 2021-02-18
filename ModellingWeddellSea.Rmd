@@ -50,7 +50,7 @@ save.image()
 
 ```{r makeBodyMass, eval=F,echo=F,message=T,warning=T}
 
-# Parameters for alometric equations
+# Parameters for alometric equations @Emmerson2004 y ...
 #
 n0 <- -1.16 
 g <- -0.75 
