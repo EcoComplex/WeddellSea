@@ -1,3 +1,22 @@
+# Susanne last Paper
+
+https://rfrelat.github.io/BalticFoodWeb.html 
+
+https://besjournals.onlinelibrary.wiley.com/doi/10.1111/1365-2656.13447
+
+# infomap R package weighted modualrity
+
+https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13569
+https://www.researchgate.net/publication/340648485_A_dynamical_perspective_to_community_detection_in_ecological_networks
+https://github.com/mapequation/infomap
+
+https://www.r-bloggers.com/2020/03/community-detection-with-louvain-and-infomap/
+
+
+# Food web stability and weighted connectance: the complexity-stability debate revisited
+
+https://link.springer.com/article/10.1007/s12080-015-0291-7
+
 
 ------------
 @Rossi2019
