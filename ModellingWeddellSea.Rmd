@@ -51,6 +51,11 @@ save.image()
 ```{r makeBodyMass, eval=F,echo=F,message=T,warning=T}
 
 # Parameters for alometric equations @Emmerson2004 y ...
+# @Yang2019 --> Parametriza Lotka Volterra
+# @Donohue2017 --> Parametriza model derived from Yodzis and Innes (1992), updated with more recent allometric coefficients
+#
+# @Petchey2008 ver como parametriza!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#
 #
 n0 <- -1.16 
 g <- -0.75 
