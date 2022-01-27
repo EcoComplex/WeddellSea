@@ -50,13 +50,22 @@ save.image()
 
 ```{r makeBodyMass, eval=F,echo=F,message=T,warning=T}
 
-# Parameters for alometric equations @Emmerson2004 y ...
+# Parameters for alometric equations @Emmerson2004 y ... 
 # @Yang2019 --> Parametriza Lotka Volterra
 # @Donohue2017 --> Parametriza model derived from Yodzis and Innes (1992), updated with more recent allometric coefficients
+# @Fahimipour2014 ---> Estima el flujo a partir de la tasa metabólica y las densidad de la poblacion
+# @Carrara2015  --> distintos metodos para estimar interacciones basados en LV
 #
-# @Petchey2008 ver como parametriza!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# @Petchey2008 LV Parametrization an interesting idea is that it adds Type 2 functional response to check structural robustness 
 #
+# @Brose2006 Parametrization of consumer–resource model (Yodzis & Innes 1992) updated with new allometric coefficients (Brown et al. 2004)
+# and extended to multispecies systems (Williams & Martinez 2004b)
 #
+# @James2015 Uses @Emerson2004 as a method to get LV interaction strength using body masses 
+#
+# @Neutel2014 Uses LV parametrized from empirical data 
+# @Pawar2012 ------------------------------------------------- YES 
+
 n0 <- -1.16 
 g <- -0.75 
 
