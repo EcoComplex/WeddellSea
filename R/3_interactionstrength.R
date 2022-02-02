@@ -5,7 +5,7 @@
 
 ## Load packages ----
 
-pkg_list <- c("dplyr", "readr", "igraph", "multiweb", "NetIndices", "ggplot2")
+pkg_list <- c("dplyr", "readr", "ggplot2", "ggpmisc", "IDPmisc")
 
 lapply(pkg_list, FUN = function(pkg_list) {
   do.call("require", list(pkg_list)) 
@@ -19,7 +19,53 @@ load("../Data/Weddell_database.rda")
 load("../Data/g_unweighted_att.rda")
 
 
-# Resource/Consumer ratio
-weddell_ratio <- data_total %>% 
-  mutate(mass.ratio = res.mass.mean.g./con.mass.mean.g.)
+## Estimation of search rate "alfa" (following Pawar et al. 2012) ----
+
+# alfa_2D = alfa2D * mC^0.68, where alfa2D = -3.08
+# alfa_3D = alfa3D * mC^1.05, where alfa3D = 1.77
+# derivative alfa_2D = alpha2D * ln(mC)*mC^0.68
+# derivative alfa_3D = alpha3D * ln(mC)*mC^1.05
+
+# Estimate derivative alfa_2D & alfa_3D
+weddell_sr <- weddell_df %>% 
+  mutate(m_R.kg = res.mass.mean.g.*1e-3, m_C.kg = con.mass.mean.g.*1e-3) %>%  # g to kg
+  mutate(mass.ratio = m_R.kg/m_C.kg) %>% 
+  mutate(alfa_2D = -3.08*m_C.kg^0.68, alfa_3D = 1.77*m_C.kg^1.05) %>%  # search rate
+  mutate(der_alfa_2D = -3.08*(log(m_C.kg)*m_C.kg^0.68), der_alfa_3D = -1.77*(log(m_C.kg)*m_C.kg^1.05))  # derivative search rate
+
+ggplot(weddell_sr, aes(x = log10(m_C.kg), y = log10(m_R.kg))) +
+  geom_point() +
+  geom_smooth(method = "lm", fill = NA)
+
+# Fit to ordinary least squares regression (OLS) & plot m_C vs der_alfa
+weddell_OLS <- weddell_sr %>% 
+  mutate(log_der_alfa_2D = log10(der_alfa_2D), log_der_alfa_3D = log10(der_alfa_3D), 
+         log_m_C.kg = log10(m_C.kg))
+weddell_OLS <- NaRV.omit(weddell_OLS)  # omit NA, NaN, Inf
+
+# Interaction dimensionality 2D
+OLS_model_2D <- lm(log_der_alfa_2D ~ log_m_C.kg, data = weddell_OLS)
+summary(OLS_model_2D)
+
+plot_OLS_2D <- ggplot(data = weddell_OLS, aes(x = log_m_C.kg, y = log_der_alfa_2D)) +
+  geom_point(colour = "red") +
+  geom_smooth(method = "lm", se=FALSE, color="black", linetype = "dashed", formula = y ~ x) +
+  stat_poly_eq(formula = y ~ x, 
+               aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
+               parse = TRUE) +
+  xlab("log(m_C.kg)") + ylab("log(der_alfa_2D)")
+plot_OLS_2D
+
+# Interaction dimensionality 3D
+OLS_model_3D <- lm(log_der_alfa_3D ~ log_m_C.kg, data = weddell_OLS)
+summary(OLS_model_3D)
+
+plot_OLS_3D <- ggplot(data = weddell_OLS, aes(x = log_m_C.kg, y = log_der_alfa_3D)) +
+  geom_point(colour = "blue") +
+  geom_smooth(method = "lm", se=FALSE, color="black", linetype = "dashed", formula = y ~ x) +
+  stat_poly_eq(formula = y ~ x, 
+               aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
+               parse = TRUE) +
+  xlab("log(m_C.kg)") + ylab("log(der_alfa_3D)")
+plot_OLS_3D
 
