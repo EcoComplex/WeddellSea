@@ -25,5 +25,5 @@ and species ecological roles than the unweighted ones.
 
 ## Methodology
 
-Unweighted and link-weighted network metrics (link weigths include node weigths = intearction strength).
+Unweighted and link-weighted network metrics (link weigths include node weigths? = intearction strength).
 Metrics: connectance, generality, vulnerability, trophic level, omnivory, modularity, QSS Stability

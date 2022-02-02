@@ -16,16 +16,14 @@ editor_options:
 #
 source("R/network_fun.r")
 require(igraph)
-require(dplyr)
 require(multiweb)
-require(readr)
+require(tidyverse)
 
 # Read the original database
 #
 ga <- readr::read_csv("Data/283_2_FoodWebDataBase_2018_12_10.csv",col_types = "icccccccccccccddddddccccccccddddddcddccddciicc")
 names(ga)
-wedd_df <-  ga %>%filter(grepl('Weddell',foodweb.name)) # %>% dplyr::select(con.taxonomy,con.taxonomy.level,res.taxonomy,res.taxonomy.level)
-#saveRDS(wedd_df, "Data/wedd_df.rds")
+wedd_df <-  ga %>%filter(grepl('Weddell',foodweb.name))  #saveRDS(wedd_df, "Data/wedd_df.rds")
 
 # Read the network file (from the same source but different format)
 #
@@ -36,12 +34,17 @@ names(wedd_df)
 
 # Extract the birds from the network
 #
-require(taxize)
-can_names <- gnr_resolve(unique(wedd_df$con.taxonomy), best_match_only = TRUE, canonical=TRUE)
-class_names <- tax_name(query =can_names$matched_name2  , get = "class", db = "ncbi")
-aves <- class_names %>% filter( class =="Aves")
+# require(taxize)
+# can_names <- gnr_resolve(unique(wedd_df$con.taxonomy), best_match_only = TRUE, canonical=TRUE)
+# class_names <- tax_name(query =can_names$matched_name2  , get = "class", db = "ncbi")
+# aves <- class_names %>% filter( class =="Aves")
+# 
+# wedd_df %>% filter(con.taxonomy=="Fulmarus glacialoides") %>% select(con.mass.mean.g.)
 
-wedd_df %>% filter(con.taxonomy=="Fulmarus glacialoides") %>% select(con.mass.mean.g.)
+# Rename and Select fields 
+
+wedd_df <- wedd_df %>% rename(con_mass_mean=con.mass.mean.g.,res_mass_mean=res.mass.mean.g.,con_taxonomy=con.taxonomy,res_taxonomy=res.taxonomy,interaction_dim=interaction.dimensionality) %>% select(con_taxonomy,res_taxonomy, con_mass_mean,res_mass_mean,interaction_dim)
+
 save.image()
 ```
 
@@ -64,46 +67,23 @@ save.image()
 # @James2015 Uses @Emerson2004 as a method to get LV interaction strength using body masses 
 #
 # @Neutel2014 Uses LV parametrized from empirical data 
-# @Pawar2012 ------------------------------------------------- YES 
+# @Pawar2012 2D/3D search space + metabolic theory 
 
-n0 <- -1.16 
-g <- -0.75 
 
-# Make the body mass of Phytodetritus Sediment = 1e-14 to obtain better interaction rates for detritivores
+
+# Check detritus
 #
-wedd_df <- wedd_df %>% mutate(res.mass.mean.g.=ifelse(res.mass.mean.g.==-9.99e+02, 1e-14, res.mass.mean.g.))
+detritus <- wedd_df %>% filter(grepl("tritus",res_taxonomy)) 
+detritus <- wedd_df %>% filter(is.na(interaction_dim))
+write_tsv(wedd_df %>% arrange(interaction_dim), "Data/Wedd_mass.dat")
 
-res <- wedd_df %>% distinct(res.taxonomy, .keep_all = TRUE) %>% rename(name=res.taxonomy,mass_mean = res.mass.mean.g.) %>% select(name, mass_mean) 
-con <- wedd_df %>% distinct(con.taxonomy, .keep_all = TRUE) %>% rename(name=con.taxonomy) %>% select(name, con.mass.mean.g.) 
-con <- anti_join(con,res) %>% rename(mass_mean =con.mass.mean.g.)
-wedd_sp <- bind_rows(res,con) 
+wedd_int <- interaction_intensity(wedd_df,res_mass_mean,con_mass_mean,interaction_dim )
+  
+#wedd_df <- wedd_df %>% mutate(res.mass.mean.g.=ifelse(res.mass.mean.g.==-9.99e+02, 1e-14, res.mass.mean.g.))
 
-# Neq Multiplied by 1e8 to make min populations on the order of 1000, detritus set at big values
-#
-# Make the mass_mean of  Phytodetritus Sediment = 3e+07
-#
-wedd_sp <- wedd_sp %>% mutate(mass_mean=ifelse(mass_mean==1e-14,3e+07,mass_mean	 ),
-  Neq = 10^(n0+g+rnorm(nrow(wedd_sp),0,0.2))*mass_mean^(g+1)*1e9) %>% arrange(desc(Neq)) %>% mutate(Num_eq=Neq/mass_mean)
+ggplot(wedd_int, aes(qRC)) +  geom_histogram(bins=50,color="darkblue",fill="white") + theme_bw() + scale_y_log10() 
 
-
-require(ggplot2)
-ggplot(wedd_sp, aes(Num_eq)) +  geom_histogram(bins=50,color="darkblue",fill="white") + theme_bw() + scale_y_log10() 
-
-require(ggplot2)
-ggplot(wedd_sp, aes(Neq)) +  geom_histogram(bins=50,color="darkblue",fill="white") + theme_bw() + scale_y_log10()
-
-# Generate interaction rates from wedd_df 
-#
-#
-wedd_aij <- wedd_df %>% mutate(aij =  10^-3.5 * con.mass.mean.g. *( (res.mass.mean.g./con.mass.mean.g.)^0.46 / (1 + (res.mass.mean.g./con.mass.mean.g.)^2)) ) %>% select( res.taxonomy, con.taxonomy, aij) %>% arrange(desc(aij))
-
-ggplot(wedd_aij, aes(aij)) +  geom_density(color="darkblue",fill="white") + theme_bw()
-
-rm(res,con,can_names,class_names)
-save.image()
-
-wedd_aij %>% filter(con.taxonomy=="Fulmarus glacialoides") 
-wedd_aij %>% filter(res.taxonomy=="Fulmarus glacialoides") 
+ave.image()
 
 ``` 
 

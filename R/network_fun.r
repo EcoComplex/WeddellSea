@@ -1217,3 +1217,39 @@ plot_troph_level_mod <- function(redl,modulObj,groups,legendPos=""){
     legend(legendPos, pch=19, col=colnet, legend= legstr)
   
 }
+
+
+#' Calcultates the interaction intensity of a food web using the metabolic theory and
+#' interaction dimensionality 
+#'
+#' @param da data.frame with the interactions body mass and type of interaction dimensionality
+#' @param res_mm name of the column with the resource mass mean
+#' @param con_mm name of the column with the consumer mass mean
+#' @param int_dim name of the column with the interaction dimensionality 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+interaction_intensity <- function(da,res_mm,con_mm,int_dim) # alfa0 = alfa2D/3D Pa = exponente of alfa 2D/3D
+{
+  #  con_taxonomy            res_taxonomy              con_mass_mean res_mass_mean interaction_dim 
+  #
+  det <- da %>% filter(is.na({{int_dim}}))
+  if( nrow(det) > 0 ) warning(paste("Interaction dimensionality is not defined for", nrow(det), "rows"))
+  d2D <- filter(da, {{int_dim}}=="2D") %>% 
+    mutate(mR=if_else({{res_mm}}==-999, 10^-2.6*{{con_mm}}^0.67 , {{res_mm}} ),
+                  xR= 10^-2.67 * mR^-0.79,
+                 alfa=10^-3.08 *{{con_mm}}^0.68,
+                 qRC = alfa*xR*mR/{{con_mm}})
+  
+  d3D <- filter(da, {{int_dim}}=="3D") %>%
+    mutate(mR=if_else({{res_mm}}==-999, 10^-2.96*{{con_mm}}^1.46 , {{res_mm}} ),
+                  xR= 10^-2.48 * mR^-0.86,
+                 alfa = 10^-1.77 * {{con_mm}}^1.05,
+                 qRC = alfa*xR*mR/{{con_mm}}
+                 )
+  bind_rows(d2D,d3D)
+  
+}
+  
