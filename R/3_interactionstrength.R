@@ -19,6 +19,35 @@ load("../Data/Weddell_database.rda")
 load("../Data/g_unweighted_att.rda")
 
 
+## Completing missing interaction dimensionality ----
+
+# Following Pawar et al. 2012 criteria:
+# benthic resource (R) and benthic consumer (C) = 2D
+# benthic resource and pelagic consumer = 2D
+# pelagic resource and pelagic consumer = 3D
+# pelagic resource and benthic consumer = 3D
+
+# Then, looking at res.movement.type and con.movement.type we can get dimensionality:
+# 'sessile' R and 'sessile' C = 2D
+# 'sessile' R and 'walking' C = 2D
+# 'walking' R and 'walking' C = 2D
+# 'walking' R and 'sessile' C = 2D
+# 'swimming' R and any con.movement.type C = 3D
+
+weddell_dim_fill <- weddell_df %>% 
+  select(res.taxonomy, res.movement.type, res.mass.mean.g.,
+         con.taxonomy, con.movement.type, con.mass.mean.g., interaction.dimensionality) %>% 
+  mutate (complete.dim = case_when(res.movement.type == "sessile" ~ "2D",
+                               res.movement.type == "walking" ~ "2D",
+                               res.taxonomy == "Sediment" ~ "2D",
+                               res.movement.type == "swimming" ~ "3D"))
+
+weddell_dim_fill <- weddell_dim_fill %>%
+  select(con.taxonomy, res.taxonomy, con.mass.mean.g., res.mass.mean.g., complete.dim) %>% 
+  rename(interaction.dim = complete.dim)
+write.table(weddell_dim_fill, file = "../Data/Wedd_mass_complete.dat")
+
+
 ## Estimation of search rate "alfa" (following Pawar et al. 2012) ----
 
 # alfa_2D = alfa2D * mC^0.68, where alfa2D = -3.08
