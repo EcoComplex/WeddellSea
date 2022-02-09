@@ -1,4 +1,4 @@
-"con.taxonomy" "res.taxonomy" "con.mass.mean.g." "res.mass.mean.g." "interaction.dim"
+id con_taxonomy res_taxonomy con_mass_mean res_mass_mean interaction_dim
 "1" "Bodo saltans" "Amphidinium hadai" 2.28e-13 4e-12 "3D"
 "2" "Bodo saltans" "Gyrodinium lachryama" 2.28e-13 1.2e-10 "3D"
 "3" "Amphidinium hadai" "Amphidinium hadai" 4e-12 4e-12 "3D"
