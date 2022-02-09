@@ -6,19 +6,28 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Read Weddell Sea Data from GATEWAY 
+## Setup
 
-```{r readWeddell, eval=F,echo=F,message=T,warning=T}
+```{r setup, eval=TRUE,echo=F,message=T,warning=T}
 
+if(file.exists(".RData")) load(".RData")
 
-#
-# Read and check data available on GATEWAy about Weddell Sea
-#
 source("R/network_fun.r")
 require(igraph)
 require(multiweb)
 require(tidyverse)
 
+
+```
+
+## Read Weddell Sea Data from GATEWAY 
+
+```{r readWeddell, eval=FALSE,echo=F,message=T,warning=T}
+
+
+#
+# Read and check data available on GATEWAy about Weddell Sea
+#
 # Read the original database
 #
 ga <- readr::read_csv("Data/283_2_FoodWebDataBase_2018_12_10.csv",col_types = "icccccccccccccddddddccccccccddddddcddccddciicc")
@@ -42,7 +51,7 @@ save.image()
 
 ## Add body masses in g to a data.frame
 
-```{r makeBodyMass, eval=F,echo=F,message=T,warning=T}
+```{r makeBodyMass, eval=FALSE,echo=F,message=T,warning=T}
 
 # Parameters for alometric equations @Emmerson2004 y ... 
 # @Yang2019 --> Parametriza Lotka Volterra
@@ -82,8 +91,6 @@ wedd_int <- interaction_intensity(wedd_df,res_mass_mean,con_mass_mean,interactio
   
 ggplot(wedd_int, aes(qRC)) +  geom_histogram(bins=50,color="darkblue",fill="white") + theme_bw() + scale_y_log10() 
 
-save.image()
-
 #
 # Convert to an igraph with weights
 #
@@ -94,6 +101,34 @@ E(g)$weight
 calc_weighted_topological_indices(g)
 calc_topological_indices(g)
 
+rm(detritus,wedd,wedd_df1)
+save.image()
+
 ``` 
 
 
+## Calc unweighted topological indices
+
+```{r calcunweightedtopo, eval=TRUE,echo=F,message=T,warning=T}
+
+websTbl <- tibble()
+curveBallNets <- tibble()
+
+tp <- calcTopologicalIndices(g)
+#tp <- bind_cols(tp, calcIncoherence(g1)) 
+tp <- bind_cols(tp, calc_QSS(g,10000,48, istrength=FALSE)) 
+
+websTbl <- bind_rows(websTbl, tp)
+
+lred <- curveBall(g,1000)
+tp <- calcTopologicalIndices(lred,ncores=48) 
+
+tp0 <- calcModularitySWnessZScore(g,lred,ncores=48)
+tp1 <- tp0$da %>% dplyr::select(Modularity:isSWness)
+websTbl <- bind_cols(websTbl,tp1)
+
+curveBallNets <- tp0$sims 
+rm(tp,tp0,lred,tp1)
+save.image()
+
+```
