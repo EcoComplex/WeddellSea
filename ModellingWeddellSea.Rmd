@@ -22,6 +22,8 @@ require(tidyverse)
 
 ## Read Weddell Sea Data from GATEWAY 
 
+* Initially we read this an then we saved it with less fields to add information not present in the database about dimensionality of interactions 2D or 3D
+
 ```{r readWeddell, eval=FALSE,echo=F,message=T,warning=T}
 
 
@@ -34,16 +36,20 @@ ga <- readr::read_csv("Data/283_2_FoodWebDataBase_2018_12_10.csv",col_types = "i
 names(ga)
 wedd_df <-  ga %>%filter(grepl('Weddell',foodweb.name))  #saveRDS(wedd_df, "Data/wedd_df.rds")
 
-# Read the network file (from the same source but different format)
-#
-wedd <- readNetwork("Data/Wedd.dat",edgeListFormat = 2)
-
 # Check all species are in res.taxonomy 
 names(wedd_df)
 
 # Rename and Select fields 
 
 wedd_df <- wedd_df %>% rename(con_mass_mean=con.mass.mean.g.,res_mass_mean=res.mass.mean.g.,con_taxonomy=con.taxonomy,res_taxonomy=res.taxonomy,interaction_dim=interaction.dimensionality) %>% select(con_taxonomy,res_taxonomy, con_mass_mean,res_mass_mean,interaction_dim)
+
+write_tsv(wedd_df %>% arrange(interaction_dim), "Data/Wedd_mass.dat")
+      
+
+#
+# Update by hand the missing interaction_dim to a new file called ---> "Data/Wedd_mass_complete.dat"
+#
+
 
 save.image()
 ```
@@ -70,19 +76,16 @@ save.image()
 # @Pawar2012 2D/3D search space + metabolic theory 
 
 
+# Read the updated database
+#
+wedd_df <- read_delim("Data/Wedd_mass_complete.dat",delim=" ")
+
 
 # Check detritus
 #
 detritus <- wedd_df %>% filter(grepl("tritus",res_taxonomy)) 
 detritus <- wedd_df %>% filter(is.na(interaction_dim))
-write_tsv(wedd_df %>% arrange(interaction_dim), "Data/Wedd_mass.dat")
 
-
-#
-# Update by hand the missing interaction_dim to a new file called ---> "Data/Wedd_mass_complete.dat"
-#
-
-wedd_df <- read_delim("Data/Wedd_mass_complete.dat",delim=" ")
 
 #
 # Calculate interaction intensity
@@ -109,7 +112,7 @@ save.image()
 
 ## Calc unweighted topological indices
 
-```{r calcunweightedtopo, eval=TRUE,echo=F,message=T,warning=T}
+```{r calc_unweighted_metrics, eval=TRUE,echo=F,message=T,warning=T}
 
 websTbl <- tibble()
 curveBallNets <- tibble()
@@ -128,6 +131,47 @@ tp1 <- tp0$da %>% dplyr::select(Modularity:isSWness)
 websTbl <- bind_cols(websTbl,tp1)
 
 curveBallNets <- tp0$sims 
+rm(tp,tp0,lred,tp1)
+save.image()
+
+```
+
+
+## Calc unweighted topological indices
+
+```{r calc_weighted_metrics, eval=TRUE,echo=F,message=T,warning=T}
+
+weightedNets <- tibble()
+
+weightedTbl <- tibble()
+tp <- calc_weighted_topological_indices(g)
+#tp <- bind_cols(tp, calcIncoherence(g1)) 
+tp <- bind_cols(tp, calc_QSS(g,10000,48, istrength=TRUE)) 
+
+
+# Modularity should be repeatedly calculated because is a stochastic algorithm
+#
+plan(multisession)
+wm <- future_lapply(seq_len(100),function(X){
+  wm <- calc_modularity(g,weights = NULL) 
+  })
+modularityTbl <- bind_rows(wm %>% mutate(type="weighted"))
+
+tp <- bind_cols(tp, summarise(modularityTbl, Modularity=mean(Modularity)))
+
+weightedTbl <- bind_rows(weightedTbl, tp)                 ## Modularity -49643343 what happens if all the weights have the average weigth valus?????????
+
+
+lred <- curveBall(g,1000,istrength=TRUE)
+tp <- calc_weighted_topological_indices(lred,ncores=48)
+tp <- bind_cols(tp, calc_modularity(lred,ncores=48,weights = NULL)) 
+
+
+# tp0 <- calcModularitySWnessZScore(g,lred,ncores=48)  -----> Against which model do we calculate SWness in the weighed case???????????
+# tp1 <- tp0$da %>% dplyr::select(Modularity:isSWness)
+# websTbl <- bind_cols(websTbl,tp1)
+
+weightedNets <- tp 
 rm(tp,tp0,lred,tp1)
 save.image()
 
