@@ -158,8 +158,13 @@ plot
 #
 require(mgcv)
 require(gratia)
+<<<<<<< HEAD
 fitw <- gam(TotalStrength ~ te(TLw, Degree), data = spp_attr,family=tw)
 plot(fitw,rug=F,scheme=T,theta=45,main="Strength")
+=======
+fitw <- gam( TotalStrength ~ te(TLw, Degree, k=c(8,8)), data = spp_attr,family=tw)
+plot(fitw,rug=F,pers=T,theta=45,main="Strength")
+>>>>>>> ee07ebff6da429965f83378bdb9e1e6ee0b7bef4
 draw(fitw,residuals=T) 
 appraise(fitw) 
 gam.check(fitw)
@@ -167,11 +172,19 @@ summary(fitw)
 
 # Example https://stackoverflow.com/questions/55047365/r-plot-gam-3d-surface-to-show-also-actual-response-values
 #
+<<<<<<< HEAD
 fitu <- gam(TotalStrength ~ te(TLu, Degree), data = spp_attr,family=tw)
 draw(fitu,residuals=T) 
 appraise(fitu) 
 gam.check(fitu)
 plot(fitu,rug=F,scheme=T,theta=45,main="Strength")
+=======
+fitu <- gam( TotalStrength ~ te(TLu, Degree,k=c(8,8)), data = spp_attr,family=tw)
+plot(fitu,rug=F,pers=T,theta=45,main="Strength")
+draw(fitu,residuals=T) 
+appraise(fitu) 
+gam.check(fitu)
+>>>>>>> ee07ebff6da429965f83378bdb9e1e6ee0b7bef4
 summary(fitu)
 
 AIC(fitw,fitu)
