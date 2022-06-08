@@ -135,16 +135,36 @@ spp_attr <- spp_attr %>%
 
 # Interactive plot
 plotly::ggplotly(plot_totalstr_tl)
-plot_ly(data=spp_attr, x=~TotalStrength, y=~TLu, 
-        z=~Degree, type="scatter3d", mode="markers", 
-        color="black", marker = list(size = 3), text = ~TrophicSpecies)
+plot_3d <- plot_ly(data=spp_attr, x=~Degree, y=~TLu, 
+        z=~TotalStrength, type="scatter3d", mode="markers", 
+        color="black", marker = list(size = 5), hoverinfo = "text",
+        text = ~paste(TrophicSpecies, '<br>Degree:', Degree, '<br>Trophic level:', TLu, 
+                      '<br>Interaction strength:', round(TotalStrength,4)))
+plot_3d <- plot_3d %>%  
+  layout(scene = list(xaxis=list(title = "Degree"),
+                      yaxis=list(title = "Trophic level"),
+                      zaxis=list(title = "Interaction strength", color = "red")))
+plot_3d
+
+# Plot scatter and mesh 3d
+# not run
+
+plot <- plot_ly() %>%
+  add_trace(data=spp_attr, type = "scatter3d", mode="markers", x = ~TotalStrength, y = ~TLu, z = ~Degree) %>%
+  add_trace(data=spp_attr, type="mesh3d", x = TotalStrength, y = TLu, z = Degree, opacity = 0.3)
+plot
 
 # GAM prediction of interaction strength with TL and degree 
 #
 require(mgcv)
 require(gratia)
+<<<<<<< HEAD
+fitw <- gam(TotalStrength ~ te(TLw, Degree), data = spp_attr,family=tw)
+plot(fitw,rug=F,scheme=T,theta=45,main="Strength")
+=======
 fitw <- gam( TotalStrength ~ te(TLw, Degree, k=c(8,8)), data = spp_attr,family=tw)
 plot(fitw,rug=F,pers=T,theta=45,main="Strength")
+>>>>>>> ee07ebff6da429965f83378bdb9e1e6ee0b7bef4
 draw(fitw,residuals=T) 
 appraise(fitw) 
 gam.check(fitw)
@@ -152,11 +172,19 @@ summary(fitw)
 
 # Example https://stackoverflow.com/questions/55047365/r-plot-gam-3d-surface-to-show-also-actual-response-values
 #
+<<<<<<< HEAD
+fitu <- gam(TotalStrength ~ te(TLu, Degree), data = spp_attr,family=tw)
+draw(fitu,residuals=T) 
+appraise(fitu) 
+gam.check(fitu)
+plot(fitu,rug=F,scheme=T,theta=45,main="Strength")
+=======
 fitu <- gam( TotalStrength ~ te(TLu, Degree,k=c(8,8)), data = spp_attr,family=tw)
 plot(fitu,rug=F,pers=T,theta=45,main="Strength")
 draw(fitu,residuals=T) 
 appraise(fitu) 
 gam.check(fitu)
+>>>>>>> ee07ebff6da429965f83378bdb9e1e6ee0b7bef4
 summary(fitu)
 
 AIC(fitw,fitu)
