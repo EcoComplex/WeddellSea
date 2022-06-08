@@ -1235,6 +1235,10 @@ interaction_intensity <- function(da,res_mm,con_mm,int_dim) # alfa0 = alfa2D/3D 
 {
   #  con_taxonomy            res_taxonomy              con_mass_mean res_mass_mean interaction_dim 
   #
+  # 
+  if( typeof(wedd_df$interaction_dim) != "character") 
+    stop("int_dim must be character type")
+  
   det <- da %>% filter(is.na({{int_dim}}))
   if( nrow(det) > 0 ) warning(paste("Interaction dimensionality is not defined for", nrow(det), "rows"))
   d2D <- filter(da, {{int_dim}}=="2D") %>% 
@@ -1250,6 +1254,39 @@ interaction_intensity <- function(da,res_mm,con_mm,int_dim) # alfa0 = alfa2D/3D 
                  qRC = alfa*xR*mR/{{con_mm}}
                  )
   bind_rows(d2D,d3D)
+  
+}
+
+overlap<- function(g)
+{
+  m <- get.adjacency(g,sparse=FALSE)
+  m[m==0] <- NA
+  # Compara las columnas
+  #
+  cc <- matrix(0,ncol=ncol(m),nrow=ncol(m))
+  for(i in seq_len(ncol(m)))
+    for(j in seq_len(ncol(m)))
+      cc[i,j] = sum(m[,as.character(i)] == m[,as.character(j)], na.rm=TRUE)
+  
+  # Diagonal have number of prey so we need to discard it
+  #
+  diag(cc) <- 0
+
+  
+  # Compara las filas
+  #
+  ff <- matrix(0,ncol=ncol(m),nrow=ncol(m))
+  for(i in seq_len(ncol(m)))
+    for(j in seq_len(ncol(m)))
+      ff[i,j] = sum(m[as.character(i),] == m[as.character(j),], na.rm=TRUE)
+  
+  # Diagonal have number of prey so we need to discard it
+  #
+  diag(ff) <- 0
+  
+  # return the number of shared preys 
+  #
+  data.frame( preys = colSums(cc)/gorder(g),predators=colSums(ff)/gorder(g)) 
   
 }
   
