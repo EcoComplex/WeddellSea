@@ -8,7 +8,7 @@
 
 ## Load packages ----
 
-source("network_fun.r")
+source("R/network_fun.r")
 require(igraph)
 require(multiweb)
 require(tidyverse)
@@ -19,7 +19,7 @@ require(NetIndices)
 
 # Read and check data available on GATEWAy about Weddell Sea
 # Read the original database
-ga <- readr::read_csv("../Data/283_2_FoodWebDataBase_2018_12_10.csv", col_types = "icccccccccccccddddddccccccccddddddcddccddciicc")
+ga <- readr::read_csv("Data/283_2_FoodWebDataBase_2018_12_10.csv", col_types = "icccccccccccccddddddccccccccddddddcddccddciicc")
 names(ga)
 wedd_df <-  ga %>%
   filter(grepl('Weddell', foodweb.name))
@@ -32,7 +32,7 @@ wedd_df <- wedd_df %>%
 
 # Read the updated database
 # We completed missing interaction dimensionality following Pawar et al. (2012)
-wedd_df <- read_delim("../Data/Wedd_mass_complete.dat", delim = " ")
+wedd_df <- read_delim("Data/Wedd_mass_complete.dat", delim = " ")
 
 
 ## Calculate interaction intensity ----
@@ -107,6 +107,12 @@ spp_attr <- spp_attr %>%
           axis.text.x = element_blank(),
           axis.text.y = element_text(size = 15)))
 
+# Interactive plot
+plotly::ggplotly(plot_totalstr_tl)
+plot_ly(data=spp_attr, x=~TotalStrength, y=~TL, 
+        z=~Degree, type="scatter3d", mode="markers", 
+        color="black", marker = list(size = 3), text = ~TrophicSpecies)
+
 #### In strength ----
 
 data_instr <- spp_attr %>% 
@@ -152,13 +158,11 @@ data_outstr <- spp_attr %>%
 
 ### Total strength by Degree ----
 
-(plot_totalstr_dg <- spp_attr %>% 
-    mutate(Degree = degree(g)) %>%
-    ggplot(aes(x = reorder(TrophicSpecies, -Degree), y = TotalStrength)) +
+(plot_totalstr_dg <- ggplot(spp_attr, aes(x = reorder(TrophicSpecies, -Degree), y = TotalStrength)) +
     geom_point() +
     labs(x = "Trophic Species (descending degree)", y = "Total Strength") +
     ylim(c(0,0.018)) +
-    scale_y_log10()+
+    scale_y_log10() +
     theme_bw() +
     theme(panel.grid = element_blank(),
            axis.title = element_text(size = 18, face = "bold"),
@@ -194,8 +198,7 @@ plot.igraph(g,
 
 # Redundancia funcional:
 # Análisis multivariado con propiedades: TL, Degree, Interaction strength,
-# omnivory, movement type
-# Calcular betweenness pesado por Total Strength
+# omnivory
 # Diet overlap promedio
 
 
