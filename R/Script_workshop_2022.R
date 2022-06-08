@@ -143,7 +143,7 @@ plot_ly(data=spp_attr, x=~TotalStrength, y=~TLu,
 #
 require(mgcv)
 require(gratia)
-fitw <- gam( TotalStrength ~ te(TLw, Degree), data = spp_attr,family=tw)
+fitw <- gam( TotalStrength ~ te(TLw, Degree, k=c(8,8)), data = spp_attr,family=tw)
 plot(fitw,rug=F,pers=T,theta=45,main="Strength")
 draw(fitw,residuals=T) 
 appraise(fitw) 
@@ -152,11 +152,11 @@ summary(fitw)
 
 # Example https://stackoverflow.com/questions/55047365/r-plot-gam-3d-surface-to-show-also-actual-response-values
 #
-fitu <- gam( TotalStrength ~ te(TLu, Degree), data = spp_attr,family=tw)
+fitu <- gam( TotalStrength ~ te(TLu, Degree,k=c(8,8)), data = spp_attr,family=tw)
+plot(fitu,rug=F,pers=T,theta=45,main="Strength")
 draw(fitu,residuals=T) 
 appraise(fitu) 
 gam.check(fitu)
-plot(fitu,rug=F,pers=T,theta=45,main="Strength")
 summary(fitu)
 
 AIC(fitw,fitu)
