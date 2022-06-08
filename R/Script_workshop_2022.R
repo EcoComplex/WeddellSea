@@ -13,7 +13,7 @@ require(igraph)
 require(multiweb)
 require(tidyverse)
 require(NetIndices)
-
+require(plotly)
 
 ## Load food web database ----
 
@@ -32,7 +32,7 @@ wedd_df <- wedd_df %>%
 
 # Read the updated database
 # We completed missing interaction dimensionality following Pawar et al. (2012)
-wedd_df <- read_delim("Data/Wedd_mass_complete.dat", delim = " ")
+wedd_df <- read_delim("Data/Wedd_mass_complete.dat", delim = " ",col_types="dccddc")
 
 
 ## Calculate interaction intensity ----
@@ -61,11 +61,23 @@ V(g)$outstr <- strength(g, mode = "out")
 V(g)$totalstr <- strength(g, mode = "all")
 vertex.attributes(g)
 
-# Add TL as species attr
+# Add weighted TL as species attr
+#
 adj_mat <- as_adjacency_matrix(g, sparse = TRUE, attr = "weight")
+
 tl <- round(TrophInd(as.matrix(adj_mat)), digits = 3)
-V(g)$TL <- tl$TL
-V(g)$Omn <- tl$OI
+V(g)$TLw <- tl$TL
+V(g)$Omnw <- tl$OI
+vertex.attributes(g)
+
+
+# Add unweighted TL as species attr
+#
+adj_mat <- as_adjacency_matrix(g, sparse = TRUE)
+
+tl <- round(TrophInd(as.matrix(adj_mat)), digits = 3)
+V(g)$TLu <- tl$TL
+V(g)$Omnu <- tl$OI
 vertex.attributes(g)
 
 # Betweenness & Degree
@@ -77,12 +89,13 @@ spp_name <- as.data.frame(V(g)$name)
 spp_totalstr <- as.data.frame(V(g)$totalstr)
 spp_instr <- as.data.frame(V(g)$instr)
 spp_outstr <- as.data.frame(V(g)$outstr)
-spp_tl <- as.data.frame(V(g)$TL)
-spp_omn <- as.data.frame(V(g)$Omn)
+spp_tlw <- as.data.frame(V(g)$TLw)
+spp_tlu <- as.data.frame(V(g)$TLu)
+spp_omnw <- as.data.frame(V(g)$Omnw)
 spp_attr <- bind_cols(spp_name, spp_instr, spp_outstr, 
-                      spp_totalstr, spp_tl, spp_omn, deg, btw)
+                      spp_totalstr, spp_tlw, spp_tlu, spp_omnw, deg, btw)
 colnames(spp_attr) <- c("TrophicSpecies", "InStrength", "OutStrength", 
-                        "TotalStrength", "TL", "Omn", "Degree", "Betweenness")
+                        "TotalStrength", "TLw", "TLu", "Omn", "Degree", "Betweenness")
 
 ### Int strength by TL ----
 
@@ -96,7 +109,20 @@ spp_attr <- spp_attr %>%
 
 (plot_totalstr_tl <- spp_attr %>% 
     mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
-    ggplot(aes(x = reorder(TrophicSpecies, -TL), y = TotalStrength, color = Color)) +
+    ggplot(aes(x = reorder(TrophicSpecies, -TLw), y = TotalStrength, color = Color)) +
+    geom_point() +
+    scale_color_identity() +
+    labs(x = "Trophic Species (descending TL)", y = "Total Strength") +
+    ylim(c(0,0.018)) +
+    theme_bw() +
+    theme(panel.grid = element_blank(),
+          axis.title = element_text(size = 18, face = "bold"),
+          axis.text.x = element_blank(),
+          axis.text.y = element_text(size = 15)))
+
+(plot_totalstr_tl <- spp_attr %>% 
+    mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
+    ggplot(aes(x = reorder(TrophicSpecies, -TLu), y = TotalStrength, color = Color)) +
     geom_point() +
     scale_color_identity() +
     labs(x = "Trophic Species (descending TL)", y = "Total Strength") +
@@ -109,9 +135,31 @@ spp_attr <- spp_attr %>%
 
 # Interactive plot
 plotly::ggplotly(plot_totalstr_tl)
-plot_ly(data=spp_attr, x=~TotalStrength, y=~TL, 
+plot_ly(data=spp_attr, x=~TotalStrength, y=~TLu, 
         z=~Degree, type="scatter3d", mode="markers", 
         color="black", marker = list(size = 3), text = ~TrophicSpecies)
+
+# GAM prediction of interaction strength with TL and degree 
+#
+require(mgcv)
+require(gratia)
+fitw <- gam( TotalStrength ~ te(TLw, Degree), data = spp_attr,family=tw)
+plot(fitw,rug=F,pers=T,theta=45,main="Strength")
+draw(fitw,residuals=T) 
+appraise(fitw) 
+gam.check(fitw)
+summary(fitw)
+
+# Example https://stackoverflow.com/questions/55047365/r-plot-gam-3d-surface-to-show-also-actual-response-values
+#
+fitu <- gam( TotalStrength ~ te(TLu, Degree), data = spp_attr,family=tw)
+draw(fitu,residuals=T) 
+appraise(fitu) 
+gam.check(fitu)
+plot(fitu,rug=F,pers=T,theta=45,main="Strength")
+summary(fitu)
+
+AIC(fitw,fitu)
 
 #### In strength ----
 

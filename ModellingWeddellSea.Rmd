@@ -12,10 +12,10 @@ editor_options:
 
 if(file.exists(".RData")) load(".RData")
 
-source("R/network_fun.r")
 require(igraph)
 require(multiweb)
 require(tidyverse)
+source("R/network_fun.r")
 
 
 ```
@@ -78,7 +78,7 @@ save.image()
 
 # Read the updated database
 #
-wedd_df <- read_delim("Data/Wedd_mass_complete.dat",delim=" ")
+wedd_df <- read_delim("Data/Wedd_mass_complete.dat",delim=" ",col_types="dccddc")
 
 
 # Check detritus
