@@ -35,6 +35,11 @@ wedd_df <- wedd_df %>%
 wedd_df <- read_delim("Data/Wedd_mass_complete.dat", delim = " ",col_types="dccddc")
 
 
+## Plot food web ----
+
+plot_troph_level(g)
+
+
 ## Calculate interaction intensity ----
 
 wedd_int <- interaction_intensity(wedd_df, res_mass_mean, con_mass_mean, interaction_dim)
@@ -97,7 +102,7 @@ spp_attr <- bind_cols(spp_name, spp_instr, spp_outstr,
 colnames(spp_attr) <- c("TrophicSpecies", "InStrength", "OutStrength", 
                         "TotalStrength", "TLw", "TLu", "Omn", "Degree", "Betweenness")
 
-### Int strength by TL ----
+### Strength by TL ----
 
 #### Total ----
 
@@ -133,61 +138,6 @@ spp_attr <- spp_attr %>%
           axis.text.x = element_blank(),
           axis.text.y = element_text(size = 15)))
 
-# Interactive plot
-plotly::ggplotly(plot_totalstr_tl)
-plot_3d <- plot_ly(data=spp_attr, x=~Degree, y=~TLu, 
-        z=~TotalStrength, type="scatter3d", mode="markers", 
-        color="black", marker = list(size = 5), hoverinfo = "text",
-        text = ~paste(TrophicSpecies, '<br>Degree:', Degree, '<br>Trophic level:', TLu, 
-                      '<br>Interaction strength:', round(TotalStrength,4)))
-plot_3d <- plot_3d %>%  
-  layout(scene = list(xaxis=list(title = "Degree"),
-                      yaxis=list(title = "Trophic level"),
-                      zaxis=list(title = "Interaction strength", color = "red")))
-plot_3d
-
-# Plot scatter and mesh 3d
-# not run
-
-plot <- plot_ly() %>%
-  add_trace(data=spp_attr, type = "scatter3d", mode="markers", x = ~TotalStrength, y = ~TLu, z = ~Degree) %>%
-  add_trace(data=spp_attr, type="mesh3d", x = TotalStrength, y = TLu, z = Degree, opacity = 0.3)
-plot
-
-# GAM prediction of interaction strength with TL and degree 
-#
-require(mgcv)
-require(gratia)
-<<<<<<< HEAD
-fitw <- gam(TotalStrength ~ te(TLw, Degree), data = spp_attr,family=tw)
-plot(fitw,rug=F,scheme=T,theta=45,main="Strength")
-=======
-fitw <- gam( TotalStrength ~ te(TLw, Degree, k=c(8,8)), data = spp_attr,family=tw)
-plot(fitw,rug=F,pers=T,theta=45,main="Strength")
->>>>>>> ee07ebff6da429965f83378bdb9e1e6ee0b7bef4
-draw(fitw,residuals=T) 
-appraise(fitw) 
-gam.check(fitw)
-summary(fitw)
-
-# Example https://stackoverflow.com/questions/55047365/r-plot-gam-3d-surface-to-show-also-actual-response-values
-#
-<<<<<<< HEAD
-fitu <- gam(TotalStrength ~ te(TLu, Degree), data = spp_attr,family=tw)
-draw(fitu,residuals=T) 
-appraise(fitu) 
-gam.check(fitu)
-plot(fitu,rug=F,scheme=T,theta=45,main="Strength")
-=======
-fitu <- gam( TotalStrength ~ te(TLu, Degree,k=c(8,8)), data = spp_attr,family=tw)
-plot(fitu,rug=F,pers=T,theta=45,main="Strength")
-draw(fitu,residuals=T) 
-appraise(fitu) 
-gam.check(fitu)
->>>>>>> ee07ebff6da429965f83378bdb9e1e6ee0b7bef4
-summary(fitu)
-
-AIC(fitw,fitu)
 
 #### In strength ----
 
@@ -232,7 +182,7 @@ data_outstr <- spp_attr %>%
           axis.text.y = element_text(size = 15)))
 
 
-### Total strength by Degree ----
+### Strength by Degree ----
 
 (plot_totalstr_dg <- ggplot(spp_attr, aes(x = reorder(TrophicSpecies, -Degree), y = TotalStrength)) +
     geom_point() +
@@ -246,36 +196,77 @@ data_outstr <- spp_attr %>%
            axis.text.y = element_text(size = 15)))
 
 
-## Plot food web ----
+### Interactive plot ----
 
-# By TL and degree
-plot_troph_level(g, vertexSizeFactor = degree(g)*0.05)
-
-# By TL and total interaction strength
-layout_trophic <- matrix(nrow = length(V(g)), ncol = 2)
-layout_trophic[, 1] <- runif(length(V(g)))
-layout_trophic[, 2] <- V(g)$TL
-
-plot.igraph(g,
-            vertex.size = degree(g)*0.05,
-            vertex.label = NA,
-            vertex.color = V(g)$totalstr,
-            layout = layout_trophic,
-            edge.width = .75, edge.curved = 0.3,
-            edge.arrow.size = 0.15)
+plot_3d <- plot_ly(data=spp_attr, x=~Degree, y=~TLu, 
+                   z=~TotalStrength, type="scatter3d", mode="markers", 
+                   color="black", marker = list(size = 5), hoverinfo = "text",
+                   text = ~paste(TrophicSpecies, '<br>Degree:', Degree, '<br>Trophic level:', TLu, 
+                                 '<br>Interaction strength:', round(TotalStrength,4))) %>%  
+  layout(scene = list(xaxis=list(title = "Degree"),
+                      yaxis=list(title = "Trophic level"),
+                      zaxis=list(title = "Interaction strength", color = "red")))
+plot_3d
 
 
+## GAM prediction of interaction strength with TL and degree ----
+#
+require(mgcv)
+require(gratia)
 
-# Hacer análisis
+# Use weighted TL
+fitw <- gam(TotalStrength ~ te(TLw, Degree, k=c(8,8)), data = spp_attr, family=tw)
+plot(fitw, rug=F, pers=T, theta=45, main="Strength")
+draw(fitw, residuals=T) 
+appraise(fitw) 
+gam.check(fitw)
+summary(fitw)  # percentage of deviance explained
 
-# Regresión por cuartiles
+# Use unweighted (topological) TL
+fitu <- gam(TotalStrength ~ te(TLu, Degree, k=c(8,8)), data = spp_attr, family=tw)
+plot(fitu, rug=F, scheme=T, theta=45, main="Strength")
+draw(fitu, residuals=T) 
+appraise(fitu) 
+gam.check(fitu)
+summary(fitu)
 
-# Ajustar a power law Total Strength vs TL
+# Compare GAM models (using weighted & unweighted TL)
+AIC(fitw,fitu)
 
-# Redundancia funcional:
-# Análisis multivariado con propiedades: TL, Degree, Interaction strength,
-# omnivory
-# Diet overlap promedio
+# Plot GAM model and observed data
+# Taken from https://stackoverflow.com/questions/55047365/r-plot-gam-3d-surface-to-show-also-actual-response-values
+# 2D plot
+
+fitu_plot <- gam(TotalStrength ~ te(TLu, Degree, k=c(6,6)), data = spp_attr)  # not work with 'family=tw'
+summary(fitu_plot)  # deciance % explained by the model
+# Now expand it to a grid so that persp will work
+steps <- 30
+Degree <- with(spp_attr, seq(min(Degree), max(Degree), length = steps) )
+TLu <-  with(spp_attr, seq(min(TLu), max(TLu), length = steps) )
+newdat <- expand.grid(Degree = Degree, TLu = TLu)
+TotalStrength <- matrix(predict(fitu_plot, newdat), steps, steps)
+# Now plot it
+p <- persp(Degree, TLu, TotalStrength, theta = 45, col = alpha("yellow", 0.01), 
+           xlim = range(Degree), ylim = range(TLu), zlim = range(TotalStrength),
+           xlab = "Degree", ylab = "Trophic level", zlab = "Interaction strength")
+# To add the points, you need the same 3d transformation
+obs <- with(spp_attr, trans3d(Degree, TLu, TotalStrength, p))
+pred <- with(spp_attr, trans3d(Degree, TLu, fitted(fitu_plot), p))
+dif <- obs[["y"]] - pred[["y"]]  # observed - predicted strength
+points(obs, col = ifelse(dif < 0, alpha("blue",0.4), alpha("red",1)), pch = 16)
+# Add segments to show where the points are in 3d
+segments(obs$x, obs$y, pred$x, pred$y)
+
+
+## To do list ----
+
+# Quantile regression in Total Strength vs TL
+
+# Fit power law to Total Strength vs TL
+
+# Functional redundancy: secondary graphs
+
+# Multivariate analysis: TL, Degree, Interaction strength, omnivory
 
 
 
