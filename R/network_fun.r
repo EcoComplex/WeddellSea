@@ -1257,7 +1257,19 @@ interaction_intensity <- function(da,res_mm,con_mm,int_dim) # alfa0 = alfa2D/3D 
   
 }
 
-overlap<- function(g)
+
+#' Network overlap 
+#'
+#' Calculates by species the shared preys (diet overlap) with respect to the total number of same species' preys, and
+#' the number of shared predators with respect to the total number of predators. Takes into account cannibalism if present.
+#' 
+#' @param g igraph object
+#'
+#' @return a data.frame with 
+#' @export
+#'
+#' @examples
+network_overlap<- function(g)
 {
   m <- get.adjacency(g,sparse=FALSE)
   m[m==0] <- NA
@@ -1266,27 +1278,38 @@ overlap<- function(g)
   cc <- matrix(0,ncol=ncol(m),nrow=ncol(m))
   for(i in seq_len(ncol(m)))
     for(j in seq_len(ncol(m)))
-      cc[i,j] = sum(m[,as.character(i)] == m[,as.character(j)], na.rm=TRUE)
+      cc[i,j] = sum(m[,i] == m[,j], na.rm=TRUE)
   
   # Diagonal have number of prey so we need to discard it
   #
+  cc_diag <- diag(cc)
   diag(cc) <- 0
-
+  cc_ovl <- colSums(cc) ## /cc_diag
+  cc_ovl <- ifelse(is.nan(cc_ovl),0,cc_ovl)
+  
   
   # Compara las filas
   #
   ff <- matrix(0,ncol=ncol(m),nrow=ncol(m))
   for(i in seq_len(ncol(m)))
     for(j in seq_len(ncol(m)))
-      ff[i,j] = sum(m[as.character(i),] == m[as.character(j),], na.rm=TRUE)
+      ff[i,j] = sum(m[i,] == m[j,], na.rm=TRUE)
   
   # Diagonal have number of prey so we need to discard it
   #
+  ff_diag <- diag(ff)
   diag(ff) <- 0
+  ff[ff>1] <- 1
+  # Calculates the diet overlap with 
+  #
+  ff_ovl <- colSums(ff) ## /ff_diag
+  ff_ovl <- ifelse(is.nan(ff_ovl),0,ff_ovl)
+  #ff_ovl <- ifelse(ff_ovl>1,1,ff_ovl)
+  
   
   # return the number of shared preys 
   #
-  data.frame( preys = colSums(cc)/gorder(g),predators=colSums(ff)/gorder(g)) 
+  data.frame(species=V(g)$name, prey_ovl = cc_ovl,predator_ovl=ff_ovl) 
   
 }
   
