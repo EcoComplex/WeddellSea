@@ -215,17 +215,17 @@ require(mgcv)
 require(gratia)
 
 # Use weighted TL
-fitw <- gam(TotalStrength ~ te(TLw, Degree, k=c(8,8)), data = spp_attr,family=tw)
-plot(fitw,rug=F,pers=T,theta=45,main="Strength")
-draw(fitw,residuals=T) 
+fitw <- gam(TotalStrength ~ te(TLw, Degree, k=c(8,8)), data = spp_attr, family=tw)
+plot(fitw, rug=F, pers=T, theta=45, main="Strength")
+draw(fitw, residuals=T) 
 appraise(fitw) 
 gam.check(fitw)
 summary(fitw)  # percentage of deviance explained
 
 # Use unweighted (topological) TL
-fitu <- gam(TotalStrength ~ te(TLu, Degree, k=c(8,8)), data = spp_attr,family=tw)
-plot(fitu,rug=F,scheme=T,theta=45,main="Strength")
-draw(fitu,residuals=T) 
+fitu <- gam(TotalStrength ~ te(TLu, Degree, k=c(8,8)), data = spp_attr, family=tw)
+plot(fitu, rug=F, scheme=T, theta=45, main="Strength")
+draw(fitu, residuals=T) 
 appraise(fitu) 
 gam.check(fitu)
 summary(fitu)
@@ -237,50 +237,25 @@ AIC(fitw,fitu)
 # Taken from https://stackoverflow.com/questions/55047365/r-plot-gam-3d-surface-to-show-also-actual-response-values
 # 2D plot
 
-fitu
+fitu_plot <- gam(TotalStrength ~ te(TLu, Degree, k=c(6,6)), data = spp_attr)  # not work with 'family=tw'
+summary(fitu_plot)  # deciance % explained by the model
 # Now expand it to a grid so that persp will work
 steps <- 30
 Degree <- with(spp_attr, seq(min(Degree), max(Degree), length = steps) )
 TLu <-  with(spp_attr, seq(min(TLu), max(TLu), length = steps) )
 newdat <- expand.grid(Degree = Degree, TLu = TLu)
-TotalStrength <- matrix(predict(fitu, newdat), steps, steps)
+TotalStrength <- matrix(predict(fitu_plot, newdat), steps, steps)
 # Now plot it
-p <- persp(Degree, TLu, TotalStrength, theta = 45, col = "yellow")
+p <- persp(Degree, TLu, TotalStrength, theta = 45, col = alpha("yellow", 0.01), 
+           xlim = range(Degree), ylim = range(TLu), zlim = range(TotalStrength),
+           xlab = "Degree", ylab = "Trophic level", zlab = "Interaction strength")
 # To add the points, you need the same 3d transformation
 obs <- with(spp_attr, trans3d(Degree, TLu, TotalStrength, p))
-pred <- with(spp_attr, trans3d(Degree, TLu, fitted(fitu), p))
-points(obs, col = "red", pch = 16)
+pred <- with(spp_attr, trans3d(Degree, TLu, fitted(fitu_plot), p))
+dif <- obs[["y"]] - pred[["y"]]  # observed - predicted strength
+points(obs, col = ifelse(dif < 0, alpha("blue",0.4), alpha("red",1)), pch = 16)
 # Add segments to show where the points are in 3d
 segments(obs$x, obs$y, pred$x, pred$y)
-
-# 3D plot
-mod <- gam(TotalStrength ~ te(TLu, Degree, k=c(8,8)), data = spp_attr, family=tw)
-
-deg.seq <- seq(min(spp_attr$Degree, na.rm=TRUE), max(spp_attr$Degree, na.rm=TRUE), length=25)
-tl.seq <- seq(min(spp_attr$TLu, na.rm=TRUE), max(spp_attr$TLu, na.rm=TRUE), length=25)
-
-predfun <- function(x,y){
-  newdat <- data.frame(Degree = x, TLu=y)
-  predict(mod, newdata=newdat)
-}
-fit <- outer(deg.seq, tl.seq, Vectorize(predfun))
-
-plot_3d_gam <- plot_ly() %>% 
-  add_markers(data = spp_attr, x = ~Degree, y = ~TLu, z = ~TotalStrength,
-              marker = list(size = 3), color="black", marker = list(size = 5), hoverinfo = "text",
-              text = ~paste(TrophicSpecies, '<br>Degree:', Degree, '<br>Trophic level:', TLu, 
-                            '<br>Interaction strength:', round(TotalStrength,4))) %>% 
-  add_surface(x = ~deg.seq, y = ~tl.seq, z = fit) %>% 
-  layout(scene = list(xaxis=list(title = "Degree"),
-                      yaxis=list(title = "Trophic level"),
-                      zaxis=list(title = "Interaction strength", color = "red")))
-plot_3d_gam
-
-plot_ly() %>% 
-  add_markers(x = ~mtcars$hp, y=mtcars$wt, z=mtcars$qsec) %>% 
-  add_surface(x = ~hp.seq, y = ~wt.seq, z = t(fit))
-
-
 
 
 ## To do list ----
