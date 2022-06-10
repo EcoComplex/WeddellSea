@@ -238,7 +238,7 @@ AIC(fitw,fitu)
 # 2D plot
 
 fitu_plot <- gam(TotalStrength ~ te(TLu, Degree, k=c(6,6)), data = spp_attr)  # not work with 'family=tw'
-summary(fitu_plot)  # deciance % explained by the model
+summary(fitu_plot)  # deviance % explained by the model
 # Now expand it to a grid so that persp will work
 steps <- 30
 Degree <- with(spp_attr, seq(min(Degree), max(Degree), length = steps) )
@@ -246,7 +246,7 @@ TLu <-  with(spp_attr, seq(min(TLu), max(TLu), length = steps) )
 newdat <- expand.grid(Degree = Degree, TLu = TLu)
 TotalStrength <- matrix(predict(fitu_plot, newdat), steps, steps)
 # Now plot it
-p <- persp(Degree, TLu, TotalStrength, theta = 45, col = alpha("yellow", 0.01), 
+p <- persp(Degree, TLu, TotalStrength, theta = 45, col = alpha("yellow", 0.2), 
            xlim = range(Degree), ylim = range(TLu), zlim = range(TotalStrength),
            xlab = "Degree", ylab = "Trophic level", zlab = "Interaction strength")
 # To add the points, you need the same 3d transformation
@@ -257,6 +257,8 @@ points(obs, col = ifelse(dif < 0, alpha("blue",0.4), alpha("red",1)), pch = 16)
 # Add segments to show where the points are in 3d
 segments(obs$x, obs$y, pred$x, pred$y)
 
+#
+a <- data.frame(cbind(spp_attr$TrophicSpecies, obs[["y"]], pred[["y"]], abs(dif)))
 
 ## To do list ----
 
