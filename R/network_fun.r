@@ -1222,10 +1222,13 @@ plot_troph_level_mod <- function(redl,modulObj,groups,legendPos=""){
 #' Calcultates the interaction intensity of a food web using the metabolic theory and
 #' interaction dimensionality 
 #'
-#' It uses all the coeficients from Pawar 2012, taking into account the interaction dimensionality
-#' For detritus or sediment calculates resource body mass based in the equation S9 and supplementary figures 2c & d (kg). 
+#' It uses all the coeficients from [1], taking into account the interaction dimensionality and body mass units in Kg.
+#' For detritus or sediment res_mm is < 0 thus resource body mass is calculated using the equation S9 and supplementary figures 2c & d (kg). 
 #' The values for the resource density Xr where estimated according S18 and supplementary figures 2i & j (individuals/m2 - m3)
 #'
+#' @references
+#' 1. Pawar, S., Dell, A. I., & Van M. Savage. (2012). Dimensionality of consumer search space drives trophic interaction strengths. Nature, 486, 485. https://doi.org/10.1038/nature11131
+#' 
 #' @param da data.frame with the interactions body mass and type of interaction dimensionality
 #' @param res_mm name of the column with the resource mass mean
 #' @param con_mm name of the column with the consumer mass mean
