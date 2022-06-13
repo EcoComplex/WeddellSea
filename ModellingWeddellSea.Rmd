@@ -90,6 +90,7 @@ detritus <- wedd_df %>% filter(is.na(interaction_dim))
 #
 # Calculate interaction intensity
 #
+wedd_df <- wedd_df %>% mutate(res_mass_mean = res_mass_mean*1000,con_mass_mean = con_mass_mean*1000)
 wedd_int <- interaction_intensity(wedd_df,res_mass_mean,con_mass_mean,interaction_dim )
   
 ggplot(wedd_int, aes(qRC)) +  geom_histogram(bins=50,color="darkblue",fill="white") + theme_bw() + scale_y_log10() 
