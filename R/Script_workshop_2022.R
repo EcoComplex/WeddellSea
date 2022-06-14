@@ -32,12 +32,8 @@ wedd_df <- wedd_df %>%
 
 # Read the updated database
 # We completed missing interaction dimensionality following Pawar et al. (2012)
-wedd_df <- read_delim("Data/Wedd_mass_complete.dat", delim = " ",col_types="dccddc")
-
-
-## Plot food web ----
-
-plot_troph_level(g)
+wedd_df <- read_delim("Data/Wedd_mass_complete.dat", delim = " ",col_types="dccddc") %>% 
+  mutate(res_mass_mean = res_mass_mean*1000,con_mass_mean = con_mass_mean*1000)
 
 
 ## Calculate interaction intensity ----
@@ -48,14 +44,23 @@ wedd_int <- interaction_intensity(wedd_df, res_mass_mean, con_mass_mean, interac
 ggplot(wedd_int, aes(qRC)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   labs(x = "Interaction strength", y = "Frequency (log scale)") +
-  theme_bw() + 
-  scale_y_log10() 
+  theme_classic() +
+  theme(axis.text.x = element_text(face="bold", size=14),
+        axis.text.y = element_text(face="bold", size=14),
+        axis.title.x = element_text(face="bold", size=18),
+        axis.title.y = element_text(face="bold", size=18)) +
+  scale_y_log10()
 
 # Convert to an igraph with weights
 g <- graph_from_data_frame(wedd_int %>% 
                              dplyr::select(res_taxonomy, con_taxonomy,qRC) %>% 
                              rename(weight=qRC), directed = TRUE)
 E(g)$weight
+
+
+## Plot food web ----
+
+plot_troph_level(g, vertexSizeFactor = degree(g)*0.03)
 
 
 # Explore interactions strength by TL ----
@@ -113,12 +118,12 @@ spp_attr <- spp_attr %>%
          prop_spp = rank_spp/nrow(spp_attr))
 
 (plot_totalstr_tl <- spp_attr %>% 
-    mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
-    ggplot(aes(x = reorder(TrophicSpecies, -TLw), y = TotalStrength, color = Color)) +
+    # mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
+    ggplot(aes(x = reorder(TrophicSpecies, -TLw), y = TotalStrength)) +  # , color = Color
     geom_point() +
     scale_color_identity() +
-    labs(x = "Trophic Species (descending TL)", y = "Total Strength") +
-    ylim(c(0,0.018)) +
+    labs(x = "Trophic species (descending TL)", y = "Interaction strength") +
+    ylim(c(0,0.07)) +
     theme_bw() +
     theme(panel.grid = element_blank(),
           axis.title = element_text(size = 18, face = "bold"),
@@ -186,8 +191,8 @@ data_outstr <- spp_attr %>%
 
 (plot_totalstr_dg <- ggplot(spp_attr, aes(x = reorder(TrophicSpecies, -Degree), y = TotalStrength)) +
     geom_point() +
-    labs(x = "Trophic Species (descending degree)", y = "Total Strength") +
-    ylim(c(0,0.018)) +
+    labs(x = "Trophic species (descending degree)", y = "Interaction strength (log scale)") +
+    ylim(c(0,0.07)) +
     scale_y_log10() +
     theme_bw() +
     theme(panel.grid = element_blank(),
@@ -257,8 +262,6 @@ points(obs, col = ifelse(dif < 0, alpha("blue",0.4), alpha("red",1)), pch = 16)
 # Add segments to show where the points are in 3d
 segments(obs$x, obs$y, pred$x, pred$y)
 
-#
-a <- data.frame(cbind(spp_attr$TrophicSpecies, obs[["y"]], pred[["y"]], abs(dif)))
 
 ## To do list ----
 
@@ -269,6 +272,29 @@ a <- data.frame(cbind(spp_attr$TrophicSpecies, obs[["y"]], pred[["y"]], abs(dif)
 # Functional redundancy: secondary graphs
 
 # Multivariate analysis: TL, Degree, Interaction strength, omnivory
+
+
+## Figures workshop ----
+
+# Plot food web
+plot_troph_level(g, vertexSizeFactor = degree(g)*0.03)
+
+# Plot distribution of interaction strength
+ggplot(wedd_int, aes(qRC)) + 
+  geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
+  labs(x = "Interaction strength", y = "Frequency (log scale)") +
+  theme_classic() +
+  theme(axis.text.x = element_text(face="bold", size=14),
+        axis.text.y = element_text(face="bold", size=14),
+        axis.title.x = element_text(face="bold", size=18),
+        axis.title.y = element_text(face="bold", size=18)) +
+  scale_y_log10()
+
+# Calculate topological properties
+calc_topological_indices(g)
+
+
+
 
 
 
