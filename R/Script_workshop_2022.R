@@ -118,12 +118,13 @@ spp_attr <- spp_attr %>%
          prop_spp = rank_spp/nrow(spp_attr))
 
 (plot_totalstr_tl <- spp_attr %>% 
-    # mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
-    ggplot(aes(x = reorder(TrophicSpecies, -TLw), y = TotalStrength)) +  # , color = Color
+    mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
+    ggplot(aes(x = reorder(TrophicSpecies, -TLw), y = TotalStrength, color = Color)) +  # 
     geom_point() +
+    scale_y_log10() +
     scale_color_identity() +
     labs(x = "Trophic species (descending TL)", y = "Interaction strength") +
-    ylim(c(0,0.07)) +
+    # ylim(c(0,0.07)) +
     theme_bw() +
     theme(panel.grid = element_blank(),
           axis.title = element_text(size = 18, face = "bold"),
