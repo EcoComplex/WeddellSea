@@ -25,6 +25,12 @@ spp_all <- spp_attr %>%
   left_join(mts)
 write.csv(spp_all, file = "Data/spp_all_attr.csv")
 
+spp_all <- read_csv("Data/spp_all_attr.csv")
+spp_all <- spp_all %>% 
+  mutate(cumsum_str = order_by(-TotalStrength, cumsum(TotalStrength)),
+         prop_str = cumsum_str/(sum(TotalStrength))) %>% 
+  mutate(rank_spp = dense_rank(desc(TotalStrength)),
+         prop_spp = rank_spp/nrow(spp_attr))
 #
 # Plot total interaction strength by TS
 #
@@ -40,7 +46,24 @@ write.csv(spp_all, file = "Data/spp_all_attr.csv")
           axis.text.y = element_text(size = 15)))
 
 
-require(plotly)
+#
+# Plot trophic level vs Trophic Similarity with 
+# species with 80% of interaction strength in red
+#
 
-ggplotly(plot_totalstr_ts)
+(plot_trophLevel_ts <- spp_all %>% mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
+   ggplot(aes(x = meanTrophicSimil, y = TLu,color = Color)) +
+    geom_point() +
+    scale_color_identity() +
+    labs(x = "Trophic Similarity", y = "Trophic Level") +
+    # ylim(c(0,0.07)) +
+    theme_bw() +
+    theme(panel.grid = element_blank(),
+          axis.title = element_text(size = 18, face = "bold"),
+          axis.text.y = element_text(size = 15))
+)
+
+require(plotly)
+ggplotly(plot_trophLevel_ts + aes(label = TrophicSpecies))
+
 

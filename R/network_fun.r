@@ -1243,9 +1243,9 @@ interaction_intensity <- function(da,res_mm,con_mm,int_dim) # alfa0 = alfa2D/3D 
   #  con_taxonomy            res_taxonomy              con_mass_mean res_mass_mean interaction_dim 
   #
   # 
-  if( typeof(wedd_df$interaction_dim) != "character") 
-    stop("int_dim must be character type")
-  
+  # if( typeof(wedd_df$interaction_dim) != "character") 
+  #   stop("int_dim must be character type")
+  # 
   det <- da %>% filter(is.na({{int_dim}}))
   if( nrow(det) > 0 ) warning(paste("Interaction dimensionality is not defined for", nrow(det), "rows"))
   d2D <- filter(da, {{int_dim}}=="2D") %>% 
