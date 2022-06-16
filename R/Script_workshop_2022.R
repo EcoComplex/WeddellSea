@@ -117,13 +117,14 @@ spp_attr <- spp_attr %>%
   mutate(rank_spp = dense_rank(desc(TotalStrength)),
          prop_spp = rank_spp/nrow(spp_attr))
 
+# Weighted trophic level
 (plot_totalstr_tl <- spp_attr %>% 
-    mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
-    ggplot(aes(x = reorder(TrophicSpecies, -TLw), y = TotalStrength, color = Color)) +  # 
+    # mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
+    ggplot(aes(x = reorder(TrophicSpecies, -TLw), y = TotalStrength)) +  # , color = Color
     geom_point() +
     scale_y_log10() +
     scale_color_identity() +
-    labs(x = "Trophic species (descending TL)", y = "Interaction strength") +
+    labs(x = "Trophic species (descending TL)", y = "Interaction strength (log scale)") +
     # ylim(c(0,0.07)) +
     theme_bw() +
     theme(panel.grid = element_blank(),
@@ -131,13 +132,14 @@ spp_attr <- spp_attr %>%
           axis.text.x = element_blank(),
           axis.text.y = element_text(size = 15)))
 
+# Unweighted trophic level
 (plot_totalstr_tl <- spp_attr %>% 
     mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
     ggplot(aes(x = reorder(TrophicSpecies, -TLu), y = TotalStrength, color = Color)) +
     geom_point() +
+    scale_y_log10() +
     scale_color_identity() +
-    labs(x = "Trophic Species (descending TL)", y = "Total Strength") +
-    ylim(c(0,0.018)) +
+    labs(x = "Trophic Species (descending TL)", y = "Interaction strength (log scale)") +
     theme_bw() +
     theme(panel.grid = element_blank(),
           axis.title = element_text(size = 18, face = "bold"),
@@ -190,11 +192,13 @@ data_outstr <- spp_attr %>%
 
 ### Strength by Degree ----
 
-(plot_totalstr_dg <- ggplot(spp_attr, aes(x = reorder(TrophicSpecies, -Degree), y = TotalStrength)) +
+(plot_totalstr_dg <- spp_attr %>% 
+    mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
+    ggplot(aes(x = reorder(TrophicSpecies, -Degree), y = TotalStrength, color = Color)) +
     geom_point() +
-    labs(x = "Trophic species (descending degree)", y = "Interaction strength (log scale)") +
-    ylim(c(0,0.07)) +
     scale_y_log10() +
+    scale_color_identity() +
+    labs(x = "Trophic species (descending degree)", y = "Interaction strength (log scale)") +
     theme_bw() +
     theme(panel.grid = element_blank(),
            axis.title = element_text(size = 18, face = "bold"),
