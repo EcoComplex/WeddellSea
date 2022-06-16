@@ -30,7 +30,8 @@ spp_all <- spp_all %>%
   mutate(cumsum_str = order_by(-TotalStrength, cumsum(TotalStrength)),
          prop_str = cumsum_str/(sum(TotalStrength))) %>% 
   mutate(rank_spp = dense_rank(desc(TotalStrength)),
-         prop_spp = rank_spp/nrow(spp_attr))
+         prop_spp = rank_spp/nrow(spp_all))
+
 #
 # Plot total interaction strength by TS
 #
@@ -51,8 +52,9 @@ spp_all <- spp_all %>%
 # species with 80% of interaction strength in red
 #
 
-(plot_trophLevel_ts <- spp_all %>% mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
-   ggplot(aes(x = meanTrophicSimil, y = TLu,color = Color)) +
+(plot_trophLevel_ts <- spp_all %>% 
+    mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>%
+    ggplot(aes(x = meanTrophicSimil, y = TLu, color = Color)) +
     geom_point() +
     scale_color_identity() +
     labs(x = "Trophic Similarity", y = "Trophic Level") +
