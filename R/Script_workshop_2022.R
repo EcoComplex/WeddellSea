@@ -99,13 +99,12 @@ spp_name <- as.data.frame(V(g)$name)
 spp_totalstr <- as.data.frame(V(g)$totalstr)
 spp_instr <- as.data.frame(V(g)$instr)
 spp_outstr <- as.data.frame(V(g)$outstr)
-spp_tlw <- as.data.frame(V(g)$TLw)
 spp_tlu <- as.data.frame(V(g)$TLu)
-spp_omnw <- as.data.frame(V(g)$Omnw)
+spp_omnu <- as.data.frame(V(g)$Omnu)
 spp_attr <- bind_cols(spp_name, spp_instr, spp_outstr, 
-                      spp_totalstr, spp_tlw, spp_tlu, spp_omnw, deg, btw)
-colnames(spp_attr) <- c("TrophicSpecies", "InStrength", "OutStrength", 
-                        "TotalStrength", "TLw", "TLu", "Omn", "Degree", "Betweenness")
+                      spp_totalstr, spp_tlu, spp_omnu, deg, btw)
+colnames(spp_attr) <- c("TrophicSpecies", "InStrength_sum", "OutStrength_sum", 
+                        "AllStrength_sum", "TLu", "Omnu", "Degree", "Betweenness")
 
 ### Strength by TL ----
 
@@ -227,7 +226,7 @@ require(gratia)
 # Use weighted TL
 fitw <- gam(TotalStrength ~ te(TLw, Degree, k=c(8,8)), data = spp_attr, family=tw)
 plot(fitw, rug=F, pers=T, theta=45, main="Strength")
-draw(fitw, residuals=T) 
+draw(fitw, residuals=T)
 appraise(fitw) 
 gam.check(fitw)
 summary(fitw)  # percentage of deviance explained
@@ -278,25 +277,6 @@ segments(obs$x, obs$y, pred$x, pred$y)
 
 # Multivariate analysis: TL, Degree, Interaction strength, omnivory
 
-
-## Figures workshop ----
-
-# Plot food web
-plot_troph_level(g, vertexSizeFactor = degree(g)*0.03)
-
-# Plot distribution of interaction strength
-ggplot(wedd_int, aes(qRC)) + 
-  geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
-  labs(x = "Interaction strength", y = "Frequency (log scale)") +
-  theme_classic() +
-  theme(axis.text.x = element_text(face="bold", size=14),
-        axis.text.y = element_text(face="bold", size=14),
-        axis.title.x = element_text(face="bold", size=18),
-        axis.title.y = element_text(face="bold", size=18)) +
-  scale_y_log10()
-
-# Calculate topological properties
-calc_topological_indices(g)
 
 
 
