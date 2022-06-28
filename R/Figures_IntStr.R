@@ -8,6 +8,7 @@ library(tidyverse)
 library(Rmisc)
 library(ggtext)
 library(plotly)
+source("R/network_fun.r")
 
 # Load spp data
 load("Data/network_&_spp_attr.rda")
@@ -123,16 +124,3 @@ TL_TS <- ggplot(all_data, aes(x = meanTrophicSimil, y = TLu)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 TL_TS
-
-
-
-
-
-
-
-
-
-
-
-
-
