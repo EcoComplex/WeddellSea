@@ -1,10 +1,17 @@
 #
-# Transform g object ('igraph') into community files ('cheddar')
+## Function to convert g object ('igraph') into community files ('cheddar')
 #
 
-require(igraph)
-require(cheddar)
-require(readr)
+
+#' Convert igraph object to cheddar object
+#'
+#' @param g igraph object to convert
+#'
+#' @return Directory 'Community' with the 3 needed .csv (comma-separated) files 
+#'         to run cheddar functions
+#' @export
+#'
+#' @examples
 
 igraph_to_cheddar <- function(g) {
   
@@ -24,9 +31,3 @@ igraph_to_cheddar <- function(g) {
 
 }
 
-igraph_to_cheddar(g)
-
-# Calculate trophic similarity
-ts <- TrophicSimilarity(cc)
-# Generate a data frame with mean trophic similarity for each species
-mts <- tibble(TrophicSpecies=rownames(ts), meanTrophicSimil=colMeans(ts))
