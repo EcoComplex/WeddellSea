@@ -1,10 +1,8 @@
 
-
 ## Load packages
 library(igraph)
 library(multiweb)
 library(dplyr)
-library(ggplot2)
 source("R/extinction_fun.R")
 
 ## Load data
@@ -13,22 +11,29 @@ load("Data/network_&_spp_attr.rda")
 
 ## Extinction sequences
 
-# Sequence by trophic level
+# By trophic level
 order_tl <- arrange(spp_attr_all, desc(TLu)) %>% 
   dplyr::select(TrophicSpecies, TLu)
 tl_seq <- order_tl$TrophicSpecies
-tl_seq <- tl_seq[1:3]
+tl_seq <- tl_seq[1:10]
 
-# Sequence by degree
+# By degree
 order_deg <- arrange(spp_attr_all, desc(Degree)) %>% 
   dplyr::select(TrophicSpecies, Degree)
 deg_seq <- order_deg$TrophicSpecies
-deg_seq <- deg_seq[1:3]
+deg_seq <- deg_seq[1:10]
 
-# Sequence by interaction strength
+# By interaction strength
 order_is <- arrange(spp_attr_all, desc(AllStrength_mean)) %>% 
   dplyr::select(TrophicSpecies, AllStrength_mean)
-deg_is <- order_is$TrophicSpecies
-deg_is <- deg_is[1:3]
+is_seq <- order_is$TrophicSpecies
+is_seq <- is_seq[1:20]
 
-extinctions_QSS(g,tl_seq)
+
+QSS_extinction_tl <- extinctions_QSS(g, tl_seq, nsim = 100, ncores = 4, istrength = TRUE)
+QSS_extinction_tl
+
+QSS_extinction_is <- extinctions_QSS(g, is_seq, nsim = 100, ncores = 4, istrength = TRUE)
+QSS_extinction_is
+
+
