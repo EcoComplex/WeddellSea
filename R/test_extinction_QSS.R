@@ -41,6 +41,10 @@ QSS_extinction_tl
 QSS_extinction_is <- extinctions_QSS(g, is_seq, nsim = 100, ncores = 4, istrength = TRUE)
 QSS_extinction_is
 
+# Extinctions by degree
+QSS_extinction_deg <- extinctions_QSS(g, deg_seq, nsim = 100, ncores = 4, istrength = TRUE)
+QSS_extinction_deg
+
 # Extinctions topological
 QSS_extinction_topol <- extinctions_QSS(g, deg_seq, nsim = 100, ncores = 4, istrength = FALSE)
 QSS_extinction_topol
@@ -78,6 +82,22 @@ QSS_extinction_topol
     labs(x = "Proportion of deleted spp", y = "Components", 
          title = "Extinction sequence: decreasing Trophic Level"))
 
+# Results deleting by Trophic Level
+(plot_del_QSS_deg <- QSS_extinction_deg %>% 
+    mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
+    ggplot(aes(x = Ext_prop, y = QSS_median)) +
+    geom_line() +
+    labs(x = "Proportion of deleted spp", y = "QSS median", 
+         title = "Extinction sequence: decreasing Degree"))
+
+(plot_comp_del_deg <- QSS_extinction_deg %>% 
+    mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
+    ggplot(aes(x = Ext_prop, y = Components)) +
+    geom_line() +
+    labs(x = "Proportion of deleted spp", y = "Components", 
+         title = "Extinction sequence: decreasing Degree"))
+
+
 # Topological results deleting by Degree
 (plot_del_QSS_top <- QSS_extinction_topol %>% 
     mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
@@ -96,5 +116,5 @@ QSS_extinction_topol
 
 ## Save data ----
 
-save(QSS_extinction_is, QSS_extinction_tl, QSS_extinction_topol,
+save(QSS_extinction_is, QSS_extinction_tl, QSS_extinction_deg, QSS_extinction_topol,
      file = "Results/extinction_res.rda")
