@@ -7,7 +7,7 @@ library(ggplot2)
 source("R/extinction_fun.R")
 
 ## Load data
-load("Data/network_&_spp_attr.rda")
+load("Results/network_&_spp_attr.rda")
 
 
 ## Extinction sequences ----
