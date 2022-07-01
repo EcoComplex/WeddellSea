@@ -24,8 +24,10 @@ extinctions_QSS <- function(g_del, seq, nsim=100, ncores=0, istrength=FALSE){
   qdel <- lapply(seq, function(i){
     g_del <<- delete_vertices(g_del, i) 
     size <- vcount(g_del)
-    QSS <- multiweb::calc_QSS(g_del, nsim = nsim, ncores = ncores, istrength = istrength, returnRaw = TRUE) %>% summarize(QSS_median = median(maxre)) %>%  
-      mutate(Network_size = size, Last_deleted = i)
+    con <- multiweb::calc_topological_indices(g_del)$Connectance
+    comp <- multiweb::calc_topological_indices(g_del)$Components
+    QSS <- multiweb::calc_QSS(g_del, nsim = nsim, ncores = ncores, istrength = istrength, returnRaw = TRUE) %>% summarize(QSS_median = median(maxre), QSS_prop = sum(maxre <0)/nsim) %>%  
+      mutate(Size = size, Connectance = con, Components = comp, Last_deleted = i)
   })
   qdel <- bind_rows(qdel)
 }
