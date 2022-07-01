@@ -10,7 +10,7 @@ library(dplyr)
 library(ggplot2)
 
 ## Load data
-load("Data/network_&_spp_attr.rda")
+load("Results/network_&_spp_attr.rda")
 
 
 ## Weighted ----
