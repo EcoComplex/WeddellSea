@@ -19,15 +19,13 @@ sp_list <- arrange(spp_attr_all, desc(AllStrength_mean)) %>%
 sp_list <- sp_list$TrophicSpecies
 sp_list <- sp_list[1:2]
 
-dest_fun <- function(g, sp_list){
+calc_QSS_extinction_dif <- function(g, sp_list,nsim=10){
 
   comp_webs <- lapply(sp_list, function(i){
       # delete one sp and create igraph object
       g_ext <- delete_vertices(g, i)
       size <- vcount(g_ext)
       # subset mean strength for deleted sp
-      sp_str <- spp_attr_all %>% 
-        subset(., TrophicSpecies = i, select = AllStrength_mean)
       # QSS for complete and deleted network
       QSS_all <- multiweb::calc_QSS(g, nsim = 3, ncores = 4, istrength = TRUE, returnRaw = TRUE) %>% 
         mutate(Network = "All spp")
@@ -37,12 +35,15 @@ dest_fun <- function(g, sp_list){
       # extract p-value for Anderson-Darling test comparing complete and deleted network
       ad_test <- kSamples::ad.test(maxre ~ Network, data = QSS)$ad[1,3]
       # data frame
-      data <- data.frame(Deleted = i, Sp_strength = sp_str, Network_size = size, AdTest = ad_test)
+      data.frame(Deleted = i, Network_size = size, AdTest = ad_test, QSS_all=median(QSS_all$maxre), QSS_ext=median(QSS_ext$maxre), difQSS = median(QSS_all$maxre)-median(QSS_ext$maxre))
       
   })
-
+  bind_rows(comp_webs)
 }
 
-test <- dest_fun(g, sp_list)
+test <- calc_QSS_extinction_dif(g, sp_list)
+sp_str <- spp_attr_all %>% 
+  subset(., TrophicSpecies = i, select = AllStrength_mean)
+
 test
 
