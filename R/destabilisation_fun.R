@@ -26,3 +26,9 @@ QSS_extinction_dif <- calc_QSS_extinction_dif(g, sp_list,ncores=48, nsim=5000, i
 toc()
 
 saveRDS(QSS_extinction_dif, "Results/QSS_extinction_dif.rds")
+
+
+QSS_extinction_dif <- readRDS("Results/QSS_extinction_dif.rds")
+
+QSS_extinction_dif %>% filter(grepl("Euphausia",Deleted))
+
