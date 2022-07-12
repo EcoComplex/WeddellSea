@@ -50,7 +50,7 @@ spp_attr_all <- spp_all %>%
                 AllStrength_mean, AllStrength_Q1, AllStrength_Q3, AllStrength_count)
 
 save(wedd_df, wedd_int, g, all_int, spp_attr_all,
-     file = "Data/network_&_spp_attr.rda")
+     file = "Results/network_&_spp_attr.rda")
 
 
 
