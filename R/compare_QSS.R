@@ -55,3 +55,9 @@ QSS_null_comp_raw <- bind_rows(tibble(network="null", maxre=qss_null$maxre),
 #saveRDS(QSS_null_comp, "Results/QSS_null_comp.rds")
 save(QSS_null_comp,QSS_null_comp_raw,
      file = "Results/QSS_extinction_dif.rda")
+
+
+ad_test <- kSamples::ad.test(maxre ~ network, data = QSS_null_comp_raw)
+
+QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_density() + theme_bw()
+QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_histogram(bins=30) + theme_bw()
