@@ -13,22 +13,30 @@ library(tictoc)
 
 ## Load data
 load("Results/network_&_spp_attr.rda")
+load("Results/QSS_extinction_dif.rda")
+
 
 
 sp_list <- arrange(spp_attr_all, desc(AllStrength_mean)) %>% 
   dplyr::select(TrophicSpecies, AllStrength_mean)
 sp_list <- sp_list$TrophicSpecies
-#sp_list <- sp_list[1:2]
 
-print("Complete Network - Nsim = 5000")
+#grep("Euphausia",sp_list, value=TRUE)
+
+#sp_list <- sp_list[c(1,87)]
+
+nsim <- 1000
+print(paste("QSS 1 sp extinction  - Nsim = ",nsim))
+
 tic("QSS dif")
-QSS_extinction_dif <- calc_QSS_extinction_dif(g, sp_list,ncores=48, nsim=5000, istrength = TRUE)
+QSS_extinction_dif <- calc_QSS_extinction_dif(g, sp_list,ncores=48, nsim=nsim, istrength = TRUE)
 toc()
 
-saveRDS(QSS_extinction_dif, "Results/QSS_extinction_dif.rds")
-
-
-QSS_extinction_dif <- readRDS("Results/QSS_extinction_dif.rds")
 QSS_extinction_dif <- as_tibble(QSS_extinction_dif)
+
+save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
+     file = "Results/QSS_extinction_dif.rda")
+
+
 QSS_extinction_dif %>% filter(grepl("Euphausia",Deleted))
 

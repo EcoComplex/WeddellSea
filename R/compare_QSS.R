@@ -13,6 +13,7 @@ library(tictoc)
 
 ## Load data
 load("Results/network_&_spp_attr.rda")
+load("Results/QSS_extinction_dif.rda")
 
 #
 # Compare weighted QSS against randomized QSS with the same max weight
@@ -28,24 +29,25 @@ mean(E(g1)$weight)
 # QSS        MEing
 # 0.9278 -0.002284682
 if( FALSE ) {
-  print("QSS Comparison mean value - Nsim = 5000")
+  nsim <- 1000
+  print(paste("QSS Comparison - mean values - Nsim =",nsim))
   tic("QSS")
-  qss_null <- calc_QSS(g1,ncores=48, nsim=5000, istrength = TRUE, returnRaw = FALSE)
-  qss_tot  <- calc_QSS(g,ncores=48, nsim=5000, istrength = TRUE, returnRaw = FALSE)
+  qss_null <- calc_QSS(g1,ncores=48, nsim=nsim, istrength = TRUE, returnRaw = FALSE)
+  qss_tot  <- calc_QSS(g,ncores=48, nsim=nsim, istrength = TRUE, returnRaw = FALSE)
   toc()
-  
-  
-  QSS_null_comp <- bind_rows(QSS_null_comp, tibble(nsim=1000,QSS_null=qss_null,QSS_tot=qss_tot))
+
+  QSS_null_comp <- bind_rows(QSS_null_comp, tibble(nsim=5000,QSS_null=qss_null,QSS_tot=qss_tot))
 }
 
 # QSS_null$QSS $MEing QSS_tot$QSS  $MEing
 # <dbl>  <dbl>       <dbl>   <dbl>
 #   1            0 0.0543           0 0.00494
 
-print("QSS Comparison - Save Raw values - Nsim = 5000")
+nsim <- 1000
+print(paste("QSS Comparison - Save Raw values - Nsim =",nsim))
 tic("QSS")
-qss_null <- calc_QSS(g1,ncores=48, nsim=5000, istrength = TRUE, returnRaw = TRUE)
-qss_tot  <- calc_QSS(g,ncores=48, nsim=5000, istrength = TRUE, returnRaw = TRUE)
+qss_null <- calc_QSS(g1,ncores=48, nsim=nsim, istrength = TRUE, returnRaw = TRUE)
+qss_tot  <- calc_QSS(g,ncores=48, nsim=nsim, istrength = TRUE, returnRaw = TRUE)
 toc()
 QSS_null_comp_raw <- bind_rows(tibble(network="null", maxre=qss_null$maxre), 
                                tibble(network="empirical", maxre=qss_tot$maxre))
