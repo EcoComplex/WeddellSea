@@ -34,8 +34,12 @@ is_seq <- is_seq[1:400]
 ## Extinction simulations ----
 
 # Extinctions by trophic level
-QSS_extinction_tl <- extinctions_QSS(g, tl_seq, nsim = 100, ncores = 4, istrength = TRUE)
+tic("Tl Extinctions")
+QSS_extinction_tl <- extinctions_QSS(g, tl_seq, nsim = 1000, ncores = 48, istrength = TRUE)
+toc()
 QSS_extinction_tl
+
+
 
 # Extinctions by interaction strength
 QSS_extinction_is <- extinctions_QSS(g, is_seq, nsim = 100, ncores = 4, istrength = TRUE)
@@ -118,3 +122,22 @@ QSS_extinction_topol
 
 save(QSS_extinction_is, QSS_extinction_tl, QSS_extinction_deg, QSS_extinction_topol,
      file = "Results/extinction_res.rda")
+
+
+
+
+# Test with a small network
+#
+#
+g1 <-   graph_from_literal( 2 -+ 1 +-3,4 -+ 1, 4-+4, 3+-3, 5-+5, 4-+6-+2, 2+-5-+3, simplify = FALSE)
+c <- cluster_infomap(as.undirected(g1))
+plot_troph_level(g1,vertexLabel = TRUE,vertexSizeFactor = 20,vertexSizeMin = 12, modules = TRUE, community_obj = c)
+E(g1)$weight <- sample(c(.1,.2,.8,.9),gsize(g1),replace=TRUE)
+tl_seq <- V(g1)$name
+QSS_extinction_tl <- extinctions_QSS(g1, tl_seq, nsim = 10, ncores = 4, istrength = TRUE)
+
+# if(count_components(g)>1){
+#   dg <- components(g)
+#   for(comp in unique(dg$membership)) {
+#     g1 <- induced_subgraph(g, which(dg$membership == comp))
+  

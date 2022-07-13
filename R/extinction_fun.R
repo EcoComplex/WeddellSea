@@ -20,7 +20,11 @@
 #' @examples
 
 extinctions_QSS <- function(g_del, seq, nsim=100, ncores=0, istrength=FALSE){
-  
+  lseq <- length(seq)
+  if(lseq ==vcount(g_del)){                   # if the secuence is equal to the number of nodes delete the last component
+    seq <- seq[1:(lseq-1)]
+  }
+    
   qdel <- lapply(seq, function(i){
     g_del <<- delete_vertices(g_del, i) 
     size <- vcount(g_del)
