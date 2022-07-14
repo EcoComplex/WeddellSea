@@ -37,13 +37,13 @@ total_int <- bind_rows(con_int, res_int) %>%
   dplyr::summarize(AllStrength_mean = mean(IS),
             AllStrength_Q1 = quantile(IS, 0.25),
             AllStrength_Q3 = quantile(IS, 0.75),
-            AllStrength_count = n())
+            Numb_Int = n())
 
 # Add to spp attributes data frame 'spp_all'
 total_int
-spp_all
+spp_attr_all
 
-spp_attr_all <- spp_all %>% 
+spp_attr_all <- spp_attr_all %>% 
   left_join(total_int) %>% 
   dplyr::select(TrophicSpecies, Degree, Betweenness, TLu, Omnu, meanTrophicSimil,
                 InStrength_sum, OutStrength_sum, AllStrength_sum,

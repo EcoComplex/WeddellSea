@@ -1,8 +1,10 @@
 #
-## Figures showing relationship btw Interaction Strength 'IS' & sp properties
+## Figures showing relationship btw Interaction Strength 'IS' & spp attributes
 #
 
-# Load packages
+
+# Load packages ----
+
 library(ggplot2)
 library(tidyverse)
 library(Rmisc)
@@ -10,11 +12,13 @@ library(ggtext)
 library(plotly)
 source("R/network_fun.r")
 
-# Load spp data
-load("Data/network_&_spp_attr.rda")
+# Load spp data ----
+
+load("Results/network_&_spp_attr.rda")
 
 
-# Explore distribution of interaction intensity (qRC)
+# Explore distribution of interaction intensity (qRC) ----
+
 ggplot(wedd_int, aes(qRC)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   labs(x = "Interaction strength", y = "Frequency (log scale)") +
@@ -26,28 +30,21 @@ ggplot(wedd_int, aes(qRC)) +
   scale_y_log10()
 
 
-# Summary of IS
-sum_IS <- summarySE(all_int, measurevar="IS", groupvars="TrophicSpecies")
-sum_IS
+# Interaction Strength & spp attr. ---- 
 
-# Join spp attributes to 'sum_IS'
-all_data <- spp_attr_all %>% 
-  left_join(sum_IS)
+## By Trophic Level ----
 
+summary(spp_attr_all$TLu)
+spp_nt_12 <- length(spp_attr_all$TLu[spp_attr_all$TLu < 2])
+spp_nt_23 <- length(spp_attr_all$TLu[spp_attr_all$TLu >= 2 & spp_attr_all$TLu < 3])
+spp_nt_34 <- length(spp_attr_all$TLu[spp_attr_all$TLu >= 3 & spp_attr_all$TLu < 4])
+spp_nt_45 <- length(spp_attr_all$TLu[spp_attr_all$TLu >= 4 & spp_attr_all$TLu < 5])
+spp_nt_56 <- length(spp_attr_all$TLu[spp_attr_all$TLu < 6])
 
-## Plot IS by Trophic Level
+pd <- position_dodge(0.5) # move them .05 to the left and right
 
-summary(all_data$TLu)
-spp_nt_12 <- length(all_data$TLu[all_data$TLu < 2])
-spp_nt_23 <- length(all_data$TLu[all_data$TLu >= 2 & all_data$TLu < 3])
-spp_nt_34 <- length(all_data$TLu[all_data$TLu >= 3 & all_data$TLu < 4])
-spp_nt_45 <- length(all_data$TLu[all_data$TLu >= 4 & all_data$TLu < 5])
-spp_nt_56 <- length(all_data$TLu[all_data$TLu < 6])
-
-pd <- position_dodge(0.1) # move them .05 to the left and right
-
-IS_TL <- ggplot(all_data, aes(x = reorder(TrophicSpecies, TLu), y = IS)) + 
-  geom_errorbar(aes(ymin = IS-AllStrength_Q1, ymax = IS+AllStrength_Q3), width = .1, position = pd) +
+IS_TL <- ggplot(spp_attr_all, aes(x = reorder(TrophicSpecies, TLu), y = AllStrength_mean)) + 
+  geom_errorbar(aes(ymin = AllStrength_mean-AllStrength_Q1, ymax = AllStrength_mean+AllStrength_Q3), width = .1, position = pd) +
   geom_line(position = pd) +
   geom_point(position = pd) +
   scale_y_log10() +
@@ -68,10 +65,10 @@ IS_TL +
   # annotate(x = spp_nt_12+spp_nt_23+spp_nt_34+20, y = +Inf, label = "Trophic Level 5", geom = "label", vjust = 8)
 
 
-## Plot IS by Degree
+## By Degree ----
 
-IS_Deg <- ggplot(all_data, aes(x = reorder(TrophicSpecies, Degree), y = IS)) + 
-  geom_errorbar(aes(ymin = IS-AllStrength_Q1, ymax = IS+AllStrength_Q3), width = .1, position = pd) +
+IS_Deg <- ggplot(spp_attr_all, aes(x = reorder(TrophicSpecies, Degree), y = AllStrength_mean)) + 
+  geom_errorbar(aes(ymin = AllStrength_mean-AllStrength_Q1, ymax = AllStrength_mean+AllStrength_Q3), width = .1, position = pd) +
   geom_line(position = pd) +
   geom_point(position = pd) +
   scale_y_log10() +
@@ -84,27 +81,14 @@ IS_Deg <- ggplot(all_data, aes(x = reorder(TrophicSpecies, Degree), y = IS)) +
 IS_Deg
 
 
-## Interactive plot (IS, Degree, TL)
+## By Trophic Similarity ----
 
-plot_3d <- plot_ly(data=all_data, x=~Degree, y=~TLu, 
-                   z=~IS, type="scatter3d", mode="markers", 
-                   color="black", marker = list(size = 5), hoverinfo = "text",
-                   text = ~paste(TrophicSpecies, '<br>Degree:', Degree, '<br>Trophic level:', TLu, 
-                                 '<br>Mean IS:', round(IS,4))) %>%  
-  layout(scene = list(xaxis=list(title = "Degree"),
-                      yaxis=list(title = "Trophic level"),
-                      zaxis=list(title = "Interaction strength", color = "red")))
-plot_3d
-
-
-## Plot IS by Trophic Similarity
-
-IS_TS <- ggplot(all_data, aes(x = reorder(TrophicSpecies, -meanTrophicSimil), y = IS)) +
-  geom_errorbar(aes(ymin = IS-AllStrength_Q1, ymax = IS+AllStrength_Q3), width = .1, position = pd) +
+IS_TS <- ggplot(spp_attr_all, aes(x = reorder(TrophicSpecies, -meanTrophicSimil), y = AllStrength_mean)) +
+  geom_errorbar(aes(ymin = AllStrength_mean-AllStrength_Q1, ymax = AllStrength_mean+AllStrength_Q3), width = .1, position = pd) +
   geom_line(position = pd) +
   geom_point(position = pd) +
   scale_y_log10() +
-  labs(x = "Trophic species (descending TS)", y = "Interaction strength (log scale)") +
+  labs(x = "Trophic species (descending Trophic simil.)", y = "Interaction strength (log scale)") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -113,9 +97,22 @@ IS_TS <- ggplot(all_data, aes(x = reorder(TrophicSpecies, -meanTrophicSimil), y 
 IS_TS
 
 
-## Plot TL by TS
+# Interactive plot (IS, Degree, TL) ----
 
-TL_TS <- ggplot(all_data, aes(x = meanTrophicSimil, y = TLu)) +
+plot_3d <- plot_ly(data=spp_attr_all, x=~Degree, y=~TLu, 
+                   z=~AllStrength_mean, type="scatter3d", mode="markers", 
+                   color="black", marker = list(size = 5), hoverinfo = "text",
+                   text = ~paste(TrophicSpecies, '<br>Degree:', Degree, '<br>Trophic level:', TLu, 
+                                 '<br>Mean IS:', round(AllStrength_mean,4))) %>%  
+  layout(scene = list(xaxis=list(title = "Degree"),
+                      yaxis=list(title = "Trophic level"),
+                      zaxis=list(title = "Interaction strength", color = "red")))
+plot_3d
+
+
+# Trophic Level by T. Similarity ----
+
+TL_TS <- ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = TLu)) +
   geom_point() +
   labs(x = "Trophic similarity", y = "Trophic level") +
   theme_bw() +
