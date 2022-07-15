@@ -42,6 +42,10 @@ all_data <- QSS_data %>%
 # Positive values indicate spp that are destibilizers
 # Negative values indicate spp that are stibilizers
 
+# Subset sp with QSS difference significant (AD test p-value < 0.01)
+key_sp <- all_data %>% 
+  filter(., Ad_pvalue < 0.01)
+
 # Correlation p-values (Kolmogorov vs Anderson Darling)
 ggplot(all_data, aes(x = KS_pvalue, y = Ad_pvalue)) +
   geom_point() +

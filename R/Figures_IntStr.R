@@ -32,6 +32,14 @@ ggplot(wedd_int, aes(qRC)) +
 
 # Interaction Strength & spp attr. ---- 
 
+# Cumulative strength & proportion of spp 
+
+spp_attr_all <- spp_attr_all %>% 
+  mutate(cumsum_str = order_by(-AllStrength_sum, cumsum(AllStrength_sum)),
+         prop_str = cumsum_str/(sum(AllStrength_sum))) %>% 
+  mutate(rank_spp = dense_rank(desc(AllStrength_sum)),
+         prop_spp = rank_spp/nrow(spp_attr_all))
+
 ## By Trophic Level ----
 
 summary(spp_attr_all$TLu)
@@ -43,14 +51,17 @@ spp_nt_56 <- length(spp_attr_all$TLu[spp_attr_all$TLu < 6])
 
 pd <- position_dodge(0.5) # move them .05 to the left and right
 
-IS_TL <- ggplot(spp_attr_all, aes(x = reorder(TrophicSpecies, TLu), y = AllStrength_mean)) + 
+IS_TL <- spp_attr_all %>% 
+  # mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>% 
+  ggplot(aes(x = reorder(TrophicSpecies, TLu), y = AllStrength_mean)) + 
   geom_errorbar(aes(ymin = AllStrength_mean-AllStrength_Q1, ymax = AllStrength_mean+AllStrength_Q3), width = .1, position = pd) +
   geom_line(position = pd) +
-  geom_point(position = pd) +
+  geom_point(position = pd) +  # aes(color = Color)
   scale_y_log10() +
+  # scale_color_identity() +
   geom_vline(xintercept = c(spp_nt_12+1, spp_nt_12+spp_nt_23+1, spp_nt_12+spp_nt_23+spp_nt_34+1, 
                             spp_nt_12+spp_nt_23+spp_nt_34+spp_nt_45+1, spp_nt_56+1), 
-             linetype = "longdash", colour = "red") +
+             linetype = "longdash", colour = "blue") +
   labs(x = "Trophic species (ascending TL)", y = "Interaction strength (log scale)") +
   theme_bw() +
   theme(panel.grid = element_blank(),
@@ -67,11 +78,14 @@ IS_TL +
 
 ## By Degree ----
 
-IS_Deg <- ggplot(spp_attr_all, aes(x = reorder(TrophicSpecies, Degree), y = AllStrength_mean)) + 
+IS_Deg <- spp_attr_all %>% 
+  mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>% 
+  ggplot(aes(x = reorder(TrophicSpecies, Degree), y = AllStrength_mean)) + 
   geom_errorbar(aes(ymin = AllStrength_mean-AllStrength_Q1, ymax = AllStrength_mean+AllStrength_Q3), width = .1, position = pd) +
   geom_line(position = pd) +
-  geom_point(position = pd) +
+  geom_point(position = pd, aes(color = Color)) +
   scale_y_log10() +
+  scale_color_identity() +
   labs(x = "Trophic species (ascending degree)", y = "Interaction strength (log scale)") +
   theme_bw() +
   theme(panel.grid = element_blank(),
@@ -80,14 +94,27 @@ IS_Deg <- ggplot(spp_attr_all, aes(x = reorder(TrophicSpecies, Degree), y = AllS
         axis.text.y = element_text(size = 15))
 IS_Deg
 
+ggplot(spp_attr_all, aes(x = Degree, y = AllStrength_mean)) +
+  geom_point() +
+  scale_y_log10() +
+  scale_x_log10() +
+  labs(x = "Degree (log scale)", y = "Interaction strength (log scale)") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
 
 ## By Trophic Similarity ----
 
-IS_TS <- ggplot(spp_attr_all, aes(x = reorder(TrophicSpecies, -meanTrophicSimil), y = AllStrength_mean)) +
+IS_TS <- spp_attr_all %>% 
+  mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>% 
+  ggplot(aes(x = reorder(TrophicSpecies, -meanTrophicSimil), y = AllStrength_mean)) +
   geom_errorbar(aes(ymin = AllStrength_mean-AllStrength_Q1, ymax = AllStrength_mean+AllStrength_Q3), width = .1, position = pd) +
   geom_line(position = pd) +
-  geom_point(position = pd) +
+  geom_point(position = pd, aes(color = Color)) +
   scale_y_log10() +
+  scale_color_identity() +
   labs(x = "Trophic species (descending Trophic simil.)", y = "Interaction strength (log scale)") +
   theme_bw() +
   theme(panel.grid = element_blank(),
@@ -112,8 +139,11 @@ plot_3d
 
 # Trophic Level by T. Similarity ----
 
-TL_TS <- ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = TLu)) +
-  geom_point() +
+TL_TS <- spp_attr_all %>% 
+  mutate(Color = ifelse(prop_str < 0.8, "red", "black")) %>% 
+  ggplot(aes(x = meanTrophicSimil, y = TLu)) +
+  geom_point(aes(color = Color)) +
+  scale_color_identity() +
   labs(x = "Trophic similarity", y = "Trophic level") +
   theme_bw() +
   theme(panel.grid = element_blank(),
