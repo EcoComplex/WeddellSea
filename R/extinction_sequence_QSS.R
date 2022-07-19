@@ -4,7 +4,8 @@ library(igraph)
 library(multiweb)
 library(dplyr)
 library(ggplot2)
-source("R/extinction_fun.R")
+library(tictoc)
+# source("R/extinction_fun.R")
 
 ## Load data
 load("Results/network_&_spp_attr.rda")
@@ -64,10 +65,11 @@ save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
 ## Exploratory plots ----
 
 # Results deleting by mean IS
+#
 (plot_del_QSS <- QSS_extinction_is %>% 
   mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
   ggplot(aes(x = Ext_prop, y = QSS_median)) +
-  geom_line() +
+  geom_line() + scale_y_log10() +
   labs(x = "Proportion of deleted spp", y = "QSS median", 
        title = "Extinction sequence: decreasing mean IS"))
 
@@ -79,6 +81,7 @@ save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
        title = "Extinction sequence: decreasing mean IS"))
 
 # Results deleting by Trophic Level
+#
 (plot_del_QSS_tl <- QSS_extinction_tl %>% 
     mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
     ggplot(aes(x = Ext_prop, y = QSS_median)) +
@@ -93,7 +96,8 @@ save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
     labs(x = "Proportion of deleted spp", y = "Components", 
          title = "Extinction sequence: decreasing Trophic Level"))
 
-# Results deleting by Trophic Level
+# Topological results deleting by Degree
+#
 (plot_del_QSS_deg <- QSS_extinction_deg %>% 
     mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
     ggplot(aes(x = Ext_prop, y = QSS_median)) +
@@ -109,20 +113,6 @@ save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
          title = "Extinction sequence: decreasing Degree"))
 
 
-# Topological results deleting by Degree
-(plot_del_QSS_top <- QSS_extinction_topol %>% 
-    mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
-    ggplot(aes(x = Ext_prop, y = QSS_median)) +
-    geom_line() +
-    labs(x = "Proportion of deleted spp", y = "QSS median", 
-         title = "Topological extinctions: decreasing Degree"))
-
-(plot_comp_del_top <- QSS_extinction_topol %>% 
-    mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
-    ggplot(aes(x = Ext_prop, y = Components)) +
-    geom_line() +
-    labs(x = "Proportion of deleted spp", y = "Components", 
-         title = "Topological extinctions: decreasing Degree"))
 
 
 
