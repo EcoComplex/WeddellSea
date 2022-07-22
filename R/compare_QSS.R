@@ -16,14 +16,27 @@ load("Results/network_&_spp_attr.rda")
 load("Results/QSS_extinction_dif.rda")
 
 #
+# Maxnull was the QSS calculated using the maximum interaction strength for the null model distribution
+#
+# using 2*mean interaction strength for the null gives a mean value identical to the mean interaction strength
+#
+QSS_null_comp_raw <- QSS_null_comp_raw %>% mutate(network=if_else(network=='null', 'maxnull', network))
+
+#
 # Compare weighted QSS against randomized QSS with the same max weight
 #
 max_w <- max(E(g)$weight)
 mean_w <- mean(E(g)$weight)
 g1 <- g
-E(g1)$weight <- max_w
-mean(E(g1)$weight)
+E(g1)$weight <- mean_w
+g2 <- g
+E(g2)$weight <- max_w
 
+stopifnot(mean(E(g2)$weight) == max_w)
+
+stopifnot(mean(E(g1)$weight) == mean_w)
+
+# Testing if different number of simulations give different results
 #
 # qss_null
 # QSS        MEing
@@ -36,8 +49,10 @@ if( FALSE ) {
   qss_tot  <- calc_QSS(g,ncores=48, nsim=nsim, istrength = TRUE, returnRaw = FALSE)
   toc()
 
-  QSS_null_comp <- bind_rows(QSS_null_comp, tibble(nsim=5000,QSS_null=qss_null,QSS_tot=qss_tot))
+  QSS_null_comp <- bind_rows(QSS_null_comp, tibble(nsim=nsim,QSS_null=qss_null,QSS_tot=qss_tot))
 }
+
+
 
 # QSS_null$QSS $MEing QSS_tot$QSS  $MEing
 # <dbl>  <dbl>       <dbl>   <dbl>
@@ -47,17 +62,43 @@ nsim <- 1000
 print(paste("QSS Comparison - Save Raw values - Nsim =",nsim))
 tic("QSS")
 qss_null <- calc_QSS(g1,ncores=48, nsim=nsim, istrength = TRUE, returnRaw = TRUE)
+qss_null1 <- calc_QSS(g2,ncores=48, nsim=nsim, istrength = TRUE, returnRaw = TRUE)
 qss_tot  <- calc_QSS(g,ncores=48, nsim=nsim, istrength = TRUE, returnRaw = TRUE)
+qss_tot1  <- calc_QSS(g,ncores=48, nsim=nsim, istrength = TRUE, returnRaw = TRUE)
+
 toc()
-QSS_null_comp_raw <- bind_rows(tibble(network="null", maxre=qss_null$maxre), 
-                               tibble(network="empirical", maxre=qss_tot$maxre))
+QSS_null_comp_raw <- bind_rows(tibble(network="meannull", maxre=qss_null$maxre), 
+                               tibble(network="empirical1", maxre=qss_tot$maxre),
+                               tibble(network="empirical", maxre=qss_tot1$maxre),
+                               tibble(network="maxnull", maxre=qss_null1$maxre) )
 
 #saveRDS(QSS_null_comp, "Results/QSS_null_comp.rds")
 save(QSS_null_comp,QSS_null_comp_raw,
      file = "Results/QSS_extinction_dif.rda")
 
 
-ad_test <- kSamples::ad.test(maxre ~ network, data = QSS_null_comp_raw)
+# Empirical 2 runs
+#
+emp <- QSS_null_comp_raw %>% filter(grepl("empirical",network))
+ad_test <- kSamples::ad.test(maxre ~ network, data = emp)
+ks.test(maxre ~ network, data = emp, simulate.p.value = TRUE )
 
-QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_density() + theme_bw()
-QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_histogram(bins=30) + theme_bw()
+emp %>% ggplot(aes(maxre, color=network,fill=network)) + geom_density(alpha=0.5) + theme_bw()+ scale_fill_viridis_d() + scale_color_viridis_d() 
+ 
+# 3 Networks
+#
+ad_test <- kSamples::ad.test(maxre ~ network, data = QSS_null_comp_raw)
+ks_test <- ks.test(QSS_all$maxre,QSS_ext$maxre)
+# Mean Null vs Empirical
+#
+ad_test <- kSamples::ad.test(maxre ~ network, data = QSS_null_comp_raw %>% filter(network!="maxnull"))
+
+# Max Null vs Empirical
+#
+ad_test <- kSamples::ad.test(maxre ~ network, data = QSS_null_comp_raw %>% filter(network!="meannull"))
+
+
+
+require(ggplot2)
+QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_density() + theme_bw()+ scale_fill_viridis_d() + scale_color_viridis_d() 
+QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_histogram(bins=30) + theme_bw() + scale_fill_viridis_d()
