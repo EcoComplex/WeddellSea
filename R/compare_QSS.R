@@ -81,24 +81,25 @@ save(QSS_null_comp,QSS_null_comp_raw,
 #
 emp <- QSS_null_comp_raw %>% filter(grepl("empirical",network))
 ad_test <- kSamples::ad.test(maxre ~ network, data = emp)
-ks.test(maxre ~ network, data = emp, simulate.p.value = TRUE )
+ks.test(maxre ~ network, data = emp )
 
 emp %>% ggplot(aes(maxre, color=network,fill=network)) + geom_density(alpha=0.5) + theme_bw()+ scale_fill_viridis_d() + scale_color_viridis_d() 
  
 # 3 Networks
 #
-ad_test <- kSamples::ad.test(maxre ~ network, data = QSS_null_comp_raw)
-ks_test <- ks.test(QSS_all$maxre,QSS_ext$maxre)
+emp <- QSS_null_comp_raw %>% filter(network!="empirical")
+ad_test <- kSamples::ad.test(maxre ~ network, data = emp)
+
 # Mean Null vs Empirical
 #
-ad_test <- kSamples::ad.test(maxre ~ network, data = QSS_null_comp_raw %>% filter(network!="maxnull"))
+ad_test <- kSamples::ad.test(maxre ~ network, data = emp %>% filter(network!="maxnull"))
 
 # Max Null vs Empirical
 #
-ad_test <- kSamples::ad.test(maxre ~ network, data = QSS_null_comp_raw %>% filter(network!="meannull"))
+ad_test <- kSamples::ad.test(maxre ~ network, data = emp %>% filter(network!="meannull"))
 
 
 
 require(ggplot2)
-QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_density() + theme_bw()+ scale_fill_viridis_d() + scale_color_viridis_d() 
+emp %>% filter(network!="maxnull") %>% ggplot(aes(maxre, color=network,fill=network)) + geom_density() + theme_bw()+ scale_fill_viridis_d() + scale_color_viridis_d() 
 QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_histogram(bins=30) + theme_bw() + scale_fill_viridis_d()
