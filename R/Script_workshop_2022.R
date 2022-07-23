@@ -60,7 +60,8 @@ E(g)$weight
 
 ## Plot food web ----
 
-plot_troph_level(g, vertexSizeFactor = degree(g)*0.03)
+plot_troph_level(g, vertexSizeFactor = degree(g)*0.03, vertexLabel = FALSE,
+                 edge.width = 0.25, edge.arrow.size = 0.3)
 
 
 # Explore interactions strength by TL ----

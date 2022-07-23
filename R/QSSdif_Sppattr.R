@@ -10,11 +10,12 @@ load("Results/network_&_spp_attr.rda")
 
 ## Compare QSS empirical and null
 
-ggplot(QSS_null_comp_raw, aes(x = maxre, color = network)) +
-  geom_histogram() +
-  labs(x = "QSS eigenvalues", y = "Frequency", color = "Network") +
+p <- ggplot(QSS_null_comp_raw, aes(x = maxre, fill = network, color = network)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_viridis_d() +
+  labs(x = "QSS eigenvalues", y = "Frequency", fill = "Network") +
   theme_classic()
-
+p + guides(color = FALSE)
 
 ## Merge QSS results with spp attributes
 
@@ -39,8 +40,8 @@ all_data <- QSS_data %>%
 
 
 ## Relationship btw QSS difference and spp properties
-# Positive values indicate spp that are destibilizers
-# Negative values indicate spp that are stibilizers
+# Positive values indicate spp that are destabilizers
+# Negative values indicate spp that are stabilizers
 
 # Subset sp with QSS difference significant (AD test p-value < 0.01)
 key_sp <- all_data %>% 
