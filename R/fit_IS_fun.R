@@ -6,7 +6,7 @@
 
 ## Load packages
 
-packages <- c("univariateML", "fitdistrplus", "gamlss", "ggplot2", "Rmisc")
+packages <- c("univariateML", "fitdistrplus", "gamlss", "ggplot2", "Rmisc", "dplyr")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -38,20 +38,26 @@ ggplot(wedd_int, aes(qRC)) +
 # Function to fit distribution & test it
 aic.bic <- function(x){
   
-  aic.result <- c(AIC(mlunif(x), mlexp(x), mlpower(x), mllnorm(x), mlnorm(x)))
+  # Akaike's Information Criterion
+  aic.result <- c(AIC(mlunif(x), mlexp(x), mlpower(x), mllnorm(x), mlnorm(x), mlgamma(x)))
   
-  bic.result <- c(BIC(mlunif(x), mlexp(x), mlpower(x), mllnorm(x), mlnorm(x)))
+  # Schwarz's Bayesian criterion
+  bic.result <- c(BIC(mlunif(x), mlexp(x), mlpower(x), mllnorm(x), mlnorm(x), mlgamma(x)))
   
   aic.result <- aic.result$AIC
   bic.result <- bic.result$BIC
-  names(aic.result) <- c("uniform", "exp", "power", "lnorm", "norm")
-  names(bic.result) <- c("uniform", "exp", "power", "lnorm", "norm")
+  names(aic.result) <- c("uniform", "exp", "power", "lnorm", "norm", "gamma")
+  names(bic.result) <- c("uniform", "exp", "power", "lnorm", "norm", "gamma")
   
-  result <- c(names(aic.result)[which.min(aic.result)], names(bic.result)[which.min(bic.result)])
+  result <- bind_rows(aic.result, bic.result) %>% 
+    mutate(Statistic = c("AIC", "BIC"), 
+           BestFit = c(names(aic.result)[which.min(aic.result)], names(bic.result)[which.min(bic.result)])) %>% 
+    dplyr::select(Statistic, everything())
   
   return(result)
 }
 
-aic.bic(wedd_int$qRC)
+IS_fit <- aic.bic(wedd_int$qRC)
+
 descdist(wedd_int$qRC, discrete = TRUE)
 
