@@ -1,34 +1,93 @@
 # 
-# Build a GAM model to predict interactionStrength from topological measures
+## Build a GAM model to describe the dependence of interaction strength
+## using trophic level, degree and trophic similarity
 #
+
+
+# Load packages ----
 
 require(tidyverse)
-spp_attr <- read_csv("Data/spp_all_attr.csv")
-
-
-
-## GAM prediction of interaction strength with TL and degree ----
-#
 require(mgcv)
 require(gratia)
 
 
+# Load data ----
 
-# Full model 
+load("Results/network_&_spp_attr.rda")
 
-fit_full <- gam(TotalStrength ~ te(TLu, Degree, meanTrophicSimil, k=c(6,6,6)), data = spp_attr)
+
+# General Additive Model for mean interaction strength ----
+
+## Full model ----
+
+# Trophic level, degree & mean trophic similarity
+fit_full <- gam(AllStrength_mean ~ te(TLu, Degree, meanTrophicSimil, k=c(6,6,6)), data = spp_attr_all)
 summary(fit_full)
 gam.check(fit_full)
 draw(fit_full)
 appraise(fit_full) 
 
 # Full model no interaction
-
-fit_fnint <- gam(TotalStrength ~ s(TLu)+s(Degree)+ s(meanTrophicSimil), data = spp_attr)
+fit_fnint <- gam(AllStrength_mean ~ s(TLu) + s(Degree) + s(meanTrophicSimil), data = spp_attr_all)
 summary(fit_fnint)
 gam.check(fit_fnint)
 draw(fit_fnint)
 appraise(fit_fnint) 
+
+## TL & Degree ----
+
+fit_tldeg <- gam(AllStrength_mean ~ te(TLu, Degree, k=c(6,6)), data = spp_attr_all)
+summary(fit_tldeg)
+gam.check(fit_tldeg)
+draw(fit_tldeg)
+appraise(fit_tldeg) 
+
+# TL & Degree no interaction
+fit_tldeg_nint <- gam(AllStrength_mean ~ s(TLu) + s(Degree), data = spp_attr_all)
+summary(fit_tldeg_nint)
+gam.check(fit_tldeg_nint)
+draw(fit_tldeg_nint)
+appraise(fit_tldeg_nint) 
+
+## TL & TS ----
+
+fit_tlts <- gam(AllStrength_mean ~ te(TLu, meanTrophicSimil, k=c(6,6)), data = spp_attr_all)
+summary(fit_tlts)
+gam.check(fit_tlts)
+draw(fit_tlts)
+appraise(fit_tlts) 
+
+# TL & TS no interaction
+fit_tlts_nint <- gam(AllStrength_mean ~ s(TLu) + s(meanTrophicSimil), data = spp_attr_all)
+summary(fit_tlts_nint)
+gam.check(fit_tlts_nint)
+draw(fit_tlts_nint)
+appraise(fit_tlts_nint)
+
+## Degree & TS ----
+
+fit_degts <- gam(AllStrength_mean ~ te(Degree, meanTrophicSimil, k=c(6,6)), data = spp_attr_all)
+summary(fit_degts)
+gam.check(fit_degts)
+draw(fit_degts)
+appraise(fit_degts) 
+
+# TL & TS no interaction
+fit_degts_nint <- gam(AllStrength_mean ~ s(Degree) + s(meanTrophicSimil), data = spp_attr_all)
+summary(fit_degts_nint)
+gam.check(fit_degts_nint)
+draw(fit_degts_nint)
+appraise(fit_degts_nint)
+
+
+# Compare GAMs ----
+
+delta_aic <- tibble(AIC(fit_full, fit_fnint, fit_tldeg, fit_tldeg_nint,
+                        fit_tlts, fit_tlts_nint, fit_degts, fit_degts_nint))
+delta_aic$model <- rownames(AIC(fit_full, fit_fnint, fit_tldeg, fit_tldeg_nint,
+                                fit_tlts, fit_tlts_nint, fit_degts, fit_degts_nint))
+
+delta_aic %>% mutate(delta_AIC = AIC - min(AIC) ) %>% arrange(delta_AIC)
 
 
 # Use weighted TL
@@ -56,12 +115,7 @@ appraise(fitu)
 gam.check(fitu)
 summary(fitu)
 
-# Compare GAM models (using weighted & unweighted TL)
 
-delta_aic <- tibble(AIC(fit_full,fit_fnint,fit_dt,fit_tt,fitu,fitw))
-delta_aic$model <- rownames(AIC(fit_full,fit_fnint,fit_dt,fit_tt,fitu,fitw))
-
-delta_aic %>% mutate(delta_AIC = AIC - min(AIC) ) %>% arrange(delta_AIC)
 
 
 

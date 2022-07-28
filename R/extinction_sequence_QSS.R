@@ -69,16 +69,19 @@ save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
 (plot_del_QSS <- QSS_extinction_is %>% 
   mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
   ggplot(aes(x = Ext_prop, y = QSS_median)) +
-  geom_line() + scale_y_log10() +
+  geom_line() + 
+  scale_y_log10() +
   labs(x = "Proportion of deleted spp", y = "QSS median", 
-       title = "Extinction sequence: decreasing mean IS"))
+       title = "Extinction sequence: by decreasing mean IS") +
+   theme_classic())
 
 (plot_comp_del <- QSS_extinction_is %>% 
   mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
   ggplot(aes(x = Ext_prop, y = Components)) +
   geom_line() +
   labs(x = "Proportion of deleted spp", y = "Components", 
-       title = "Extinction sequence: decreasing mean IS"))
+       title = "Extinction sequence: by decreasing mean IS") +
+  theme_classic())
 
 # Results deleting by Trophic Level
 #
@@ -87,14 +90,16 @@ save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
     ggplot(aes(x = Ext_prop, y = QSS_median)) +
     geom_line() +
     labs(x = "Proportion of deleted spp", y = "QSS median", 
-         title = "Extinction sequence: decreasing Trophic Level"))
+         title = "Extinction sequence: by decreasing Trophic Level") +
+    theme_classic())
 
 (plot_comp_del_tl <- QSS_extinction_tl %>% 
     mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
     ggplot(aes(x = Ext_prop, y = Components)) +
     geom_line() +
     labs(x = "Proportion of deleted spp", y = "Components", 
-         title = "Extinction sequence: decreasing Trophic Level"))
+         title = "Extinction sequence: by decreasing Trophic Level") +
+    theme_classic())
 
 # Topological results deleting by Degree
 #
