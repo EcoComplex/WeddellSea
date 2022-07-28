@@ -71,5 +71,16 @@ qr_IS_TL
 
 ## Degree ----
 
+ggplot(spp_attr_all, aes(x = Degree, y = AllStrength_mean)) +
+  geom_quantile(quantiles = q, size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
+  geom_point() +
+  # scale_y_log10() +
+  # scale_x_log10() +
+  labs(x = "Degree (log scale)", y = "Interaction strength (log scale)") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
 
 
