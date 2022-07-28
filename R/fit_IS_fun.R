@@ -58,6 +58,7 @@ aic.bic <- function(x){
 }
 
 IS_fit <- aic.bic(wedd_int$qRC)
+IS_fit
 
 descdist(wedd_int$qRC, discrete = TRUE)
 
