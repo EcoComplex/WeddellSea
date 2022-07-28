@@ -101,3 +101,15 @@ qr_IS_TS
 #
 ggplot(spp_attr_all, aes( x = log(AllStrength_mean))) + geom_density() + theme_bw() 
 ggplot(spp_attr_all, aes( x = log(AllStrength_mean))) + geom_histogram(bins=50) + theme_bw() 
+
+#
+# Kmeans to separate the two groups
+#
+km <- kmeans(log(spp_attr_all$AllStrength_mean),2)
+
+spp_attr_all$cluster <- km$cluster
+
+ggplot(spp_attr_all, aes( y = log(AllStrength_mean),x=cluster,color=cluster)) + geom_jitter() + theme_bw() + scale_color_viridis_c()
+ggplot(spp_attr_all, aes( x = log(AllStrength_mean),color=factor(cluster))) + geom_density() + theme_bw() + scale_color_viridis_d()
+
+save(all_int,g,spp_attr_all,wedd_df,wedd_int, file="Results/network_&_spp_attr.rda")
