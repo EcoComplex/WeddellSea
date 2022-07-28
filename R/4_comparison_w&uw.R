@@ -32,9 +32,9 @@ g_uw <- graph_from_data_frame(wedd_df %>% select(res_taxonomy, con_taxonomy),
 
 
 # Calculate interaction intensity ----
-# Using 'interaction_intensity' function from 'network_fun.r'
+# Using 'calc_interaction_intensity' function from 'network_fun.r'
 
-wedd_int <- interaction_intensity(wedd_df, res_mass_mean, con_mass_mean,
+wedd_int <- calc_interaction_intensity(wedd_df, res_mass_mean, con_mass_mean,
                                   interaction_dim)
 
 # Explore distribution of interaction intensity

@@ -1238,7 +1238,7 @@ plot_troph_level_mod <- function(redl,modulObj,groups,legendPos=""){
 #' @export
 #'
 #' @examples
-interaction_intensity <- function(da,res_mm,con_mm,int_dim) # alfa0 = alfa2D/3D Pa = exponente of alfa 2D/3D
+calc_interaction_intensity <- function(da,res_mm,con_mm,int_dim) # alfa0 = alfa2D/3D Pa = exponente of alfa 2D/3D
 {
   #  con_taxonomy            res_taxonomy              con_mass_mean res_mass_mean interaction_dim 
   #

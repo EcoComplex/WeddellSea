@@ -38,7 +38,7 @@ wedd_df <- read_delim("Data/Wedd_mass_complete.dat", delim = " ",col_types="dccd
 
 ## Calculate interaction intensity ----
 
-wedd_int <- interaction_intensity(wedd_df, res_mass_mean, con_mass_mean, interaction_dim)
+wedd_int <- calc_interaction_intensity(wedd_df, res_mass_mean, con_mass_mean, interaction_dim)
 
 # Explore distribution of interaction intensity (qRC)
 ggplot(wedd_int, aes(qRC)) + 
