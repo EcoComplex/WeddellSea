@@ -41,9 +41,10 @@ anova(QR_15, QR_85)  # test difference btw quantiles 15 & 85
 
 # Plot
 qr_IS_TL <- ggplot(spp_attr_all, aes(x = TLu, y = log(AllStrength_mean))) +
-  geom_point() + 
+  geom_point(shape=21, aes(fill = factor(cluster))) +
+  scale_fill_manual(values = c("red", "blue"), labels = c("A", "B")) +
   geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Trophic level", y = "mean Interaction Strength (log scale)", color = "Quantiles") +
+  labs(x = "Trophic level", y = "mean Interaction Strength (log scale)", color = "Quantiles", fill = "Cluster") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -63,9 +64,10 @@ anova(QRD_15, QRD_85)
 
 # Plot
 qr_IS_DEG <- ggplot(spp_attr_all, aes(x = Degree, y = log(AllStrength_mean))) +
-  geom_point() +
+  geom_point(shape=21, aes(fill = factor(cluster))) +
+  scale_fill_manual(values = c("red", "blue"), labels = c("A", "B")) +
   geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Degree", y = "Interaction strength (log scale)", color = "Quantiles") +
+  labs(x = "Degree", y = "Interaction strength (log scale)", color = "Quantiles", fill = "Cluster") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -85,9 +87,10 @@ anova(QRS_15, QRS_85)
 
 # Plot
 qr_IS_TS <- ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_mean))) +
-  geom_point() +
+  geom_point(shape=21, aes(fill = factor(cluster))) +
+  scale_fill_manual(values = c("red", "blue"), labels = c("A", "B")) +
   geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Mean Trophic Similitude", y = "Interaction strength (log scale)", color = "Quantiles") +
+  labs(x = "Mean Trophic Similarity", y = "Interaction strength (log scale)", color = "Quantiles", fill = "Cluster") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
