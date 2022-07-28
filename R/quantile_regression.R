@@ -5,7 +5,7 @@
 
 # Load packages ----
 
-packages <- c("SparseM", "quantreg", "ggplot2")
+packages <- c("quantreg", "ggplot2")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -18,6 +18,24 @@ ipak(packages)
 # Load data ----
 
 load("Results/network_&_spp_attr.rda")
+
+
+# Separate spp by Int str ----
+
+# Distribution of log IS
+#
+ggplot(spp_attr_all, aes( x = log(AllStrength_mean))) + geom_density() + theme_bw() 
+ggplot(spp_attr_all, aes( x = log(AllStrength_mean))) + geom_histogram(bins=50) + theme_bw() 
+
+#
+# Kmeans to separate the two groups
+#
+km <- kmeans(log(spp_attr_all$AllStrength_mean),2)
+
+spp_attr_all$cluster <- km$cluster
+
+ggplot(spp_attr_all, aes( y = log(AllStrength_mean),x=cluster,color=cluster)) + geom_jitter() + theme_bw() + scale_color_viridis_c()
+ggplot(spp_attr_all, aes( x = log(AllStrength_mean),color=factor(cluster))) + geom_density() + theme_bw() + scale_color_viridis_d()
 
 
 # Explore relationships ----
@@ -42,9 +60,9 @@ anova(QR_15, QR_85)  # test difference btw quantiles 15 & 85
 # Plot
 qr_IS_TL <- ggplot(spp_attr_all, aes(x = TLu, y = log(AllStrength_mean))) +
   geom_point(shape=21, aes(fill = factor(cluster))) +
-  scale_fill_manual(values = c("red", "blue"), labels = c("A", "B")) +
+  scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
   geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Trophic level", y = "mean Interaction Strength (log scale)", color = "Quantiles", fill = "Cluster") +
+  labs(x = "Trophic level", y = "mean Interaction Strength (log scale)", color = "Quantiles", fill = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -65,9 +83,9 @@ anova(QRD_15, QRD_85)
 # Plot
 qr_IS_DEG <- ggplot(spp_attr_all, aes(x = Degree, y = log(AllStrength_mean))) +
   geom_point(shape=21, aes(fill = factor(cluster))) +
-  scale_fill_manual(values = c("red", "blue"), labels = c("A", "B")) +
+  scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
   geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Degree", y = "Interaction strength (log scale)", color = "Quantiles", fill = "Cluster") +
+  labs(x = "Degree", y = "Interaction strength (log scale)", color = "Quantiles", fill = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -88,9 +106,9 @@ anova(QRS_15, QRS_85)
 # Plot
 qr_IS_TS <- ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_mean))) +
   geom_point(shape=21, aes(fill = factor(cluster))) +
-  scale_fill_manual(values = c("red", "blue"), labels = c("A", "B")) +
+  scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
   geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Mean Trophic Similarity", y = "Interaction strength (log scale)", color = "Quantiles", fill = "Cluster") +
+  labs(x = "Mean Trophic Similarity", y = "Interaction strength (log scale)", color = "Quantiles", fill = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -99,20 +117,31 @@ qr_IS_TS <- ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_m
 qr_IS_TS
 
 
-#
-# Distribution of log IS
-#
-ggplot(spp_attr_all, aes( x = log(AllStrength_mean))) + geom_density() + theme_bw() 
-ggplot(spp_attr_all, aes( x = log(AllStrength_mean))) + geom_histogram(bins=50) + theme_bw() 
+# Regression by groups ----
 
-#
-# Kmeans to separate the two groups
-#
-km <- kmeans(log(spp_attr_all$AllStrength_mean),2)
+## Trophic level ----
 
-spp_attr_all$cluster <- km$cluster
+str(spp_attr_all)
+spp_attr_all$cluster <- as.factor(spp_attr_all$cluster)
+str(spp_attr_all)
 
-ggplot(spp_attr_all, aes( y = log(AllStrength_mean),x=cluster,color=cluster)) + geom_jitter() + theme_bw() + scale_color_viridis_c()
-ggplot(spp_attr_all, aes( x = log(AllStrength_mean),color=factor(cluster))) + geom_density() + theme_bw() + scale_color_viridis_d()
+ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_mean), color = cluster)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_color_discrete(labels = c("High IS", "Low IS")) +
+  labs(x = "Mean Trophic Similarity", y = "Interaction strength (log scale)", color = "Group") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+cl_IS_TL
+
+
+
+
+
+
+# Save results ----
 
 save(all_int,g,spp_attr_all,wedd_df,wedd_int, file="Results/network_&_spp_attr.rda")
