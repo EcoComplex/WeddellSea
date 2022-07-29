@@ -19,15 +19,14 @@ load("Results/network_&_spp_attr.rda")
 
 # Explore distribution of interaction intensity (qRC) ----
 
-ggplot(wedd_int, aes(qRC)) + 
+ggplot(wedd_int, aes(log(qRC))) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   labs(x = "Interaction strength", y = "Frequency (log scale)") +
   theme_classic() +
   theme(axis.text.x = element_text(face="bold", size=14),
         axis.text.y = element_text(face="bold", size=14),
         axis.title.x = element_text(face="bold", size=18),
-        axis.title.y = element_text(face="bold", size=18)) +
-  scale_y_log10()
+        axis.title.y = element_text(face="bold", size=18))
 
 
 # Interaction Strength & spp attr. ---- 
