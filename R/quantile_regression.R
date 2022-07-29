@@ -5,7 +5,7 @@
 
 # Load packages ----
 
-packages <- c("ggplot2", "dplyr", "lsmeans")
+packages <- c("ggplot2", "dplyr", "lsmeans", "olsrr", "factoextra")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -31,11 +31,26 @@ ggplot(spp_attr_all, aes( x = log(AllStrength_mean))) + geom_histogram(bins=50) 
 # Kmeans to separate the two groups
 #
 km <- kmeans(log(spp_attr_all$AllStrength_mean), 2)
-
 spp_attr_all$cluster <- km$cluster
 
-ggplot(spp_attr_all, aes( y = log(AllStrength_mean),x=cluster,color=cluster)) + geom_jitter() + theme_bw() + scale_color_viridis_c()
-ggplot(spp_attr_all, aes( x = log(AllStrength_mean),color=factor(cluster))) + geom_density() + theme_bw() + scale_color_viridis_d()
+data.scaled <- scale(log(spp_attr_all$AllStrength_mean))
+fviz_nbclust(data.scaled, kmeans, method = "wss")
+library(cluster)
+gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
+                    K.max = 10, B = 500)
+print(gap_stat, method = "firstmax")
+fviz_gap_stat(gap_stat)
+
+
+# Plot 2 groups
+#ggplot(spp_attr_all, aes(y = log(AllStrength_mean),x=cluster,color=cluster)) + geom_jitter() + theme_bw() + scale_color_viridis_c()
+ggplot(spp_attr_all, aes(x = log(AllStrength_mean), color=cluster)) + 
+  geom_density() + 
+  labs(x = "log(mean Interaction strength)", y = "Density", color = "Group") +
+  theme_bw() +
+  theme(axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
 
 
 # Explore relationships ----
@@ -144,6 +159,8 @@ summary(TL_lm)
 TL_eq <- lstrends(TL_lm, "cluster", var="TLu")
 TL_eq
 pairs(TL_eq)  # significance btw group slopes
+ols_test_normality(TL_lm)  # check normality of residuals
+ols_plot_resid_qq(TL_lm)  # Q-Q plot
 
 
 ## Degree ----
@@ -166,6 +183,8 @@ summary(DEG_lm)
 DEG_eq <- lstrends(DEG_lm, "cluster", var="Degree")
 DEG_eq
 pairs(DEG_eq)  # significance btw group slopes
+ols_test_normality(DEG_lm)  # check normality of residuals
+ols_plot_resid_qq(DEG_lm)  # Q-Q plot
 
 
 ## Trophic similarity ----
@@ -188,7 +207,8 @@ summary(TS_lm)
 TS_eq <- lstrends(TS_lm, "cluster", var="meanTrophicSimil")
 TS_eq
 pairs(TS_eq)  # significance btw group slopes
-
+ols_test_normality(TS_lm)  # check normality of residuals
+ols_plot_resid_qq(TS_lm)  # Q-Q plot
 
 
 
