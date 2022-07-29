@@ -5,7 +5,7 @@
 
 # Load packages ----
 
-packages <- c("quantreg", "ggplot2")
+packages <- c("ggplot2", "dplyr", "lsmeans")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -30,7 +30,7 @@ ggplot(spp_attr_all, aes( x = log(AllStrength_mean))) + geom_histogram(bins=50) 
 #
 # Kmeans to separate the two groups
 #
-km <- kmeans(log(spp_attr_all$AllStrength_mean),2)
+km <- kmeans(log(spp_attr_all$AllStrength_mean), 2)
 
 spp_attr_all$cluster <- km$cluster
 
@@ -119,17 +119,18 @@ qr_IS_TS
 
 # Regression by groups ----
 
+# Rename clusters
+spp_attr_all["cluster"][spp_attr_all["cluster"] == "2"] <- "High"
+spp_attr_all["cluster"][spp_attr_all["cluster"] == "1"] <- "Low"
+
+
 ## Trophic level ----
 
-str(spp_attr_all)
-spp_attr_all$cluster <- as.factor(spp_attr_all$cluster)
-str(spp_attr_all)
-
-ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_mean), color = cluster)) +
+cl_IS_TL <- ggplot(spp_attr_all, aes(x = TLu, y = log(AllStrength_mean), color = cluster)) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_color_discrete(labels = c("High IS", "Low IS")) +
-  labs(x = "Mean Trophic Similarity", y = "Interaction strength (log scale)", color = "Group") +
+  labs(x = "Trophic level", y = "Interaction strength (log scale)", color = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -137,11 +138,61 @@ ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_mean), color 
         axis.text.y = element_text(size = 15))
 cl_IS_TL
 
+# Test regression significance by group
+TL_lm <- lm(log(AllStrength_mean) ~ TLu * cluster, data = spp_attr_all)
+summary(TL_lm)
+TL_eq <- lstrends(TL_lm, "cluster", var="TLu")
+TL_eq
+pairs(TL_eq)  # significance btw group slopes
 
+
+## Degree ----
+
+cl_IS_DEG <- ggplot(spp_attr_all, aes(x = Degree, y = log(AllStrength_mean), color = cluster)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_color_discrete(labels = c("High IS", "Low IS")) +
+  labs(x = "Degree", y = "Interaction strength (log scale)", color = "Group") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+cl_IS_DEG
+
+# Test regression significance by group
+DEG_lm <- lm(log(AllStrength_mean) ~ Degree * cluster, data = spp_attr_all)
+summary(DEG_lm)
+DEG_eq <- lstrends(DEG_lm, "cluster", var="Degree")
+DEG_eq
+pairs(DEG_eq)  # significance btw group slopes
+
+
+## Trophic similarity ----
+
+cl_IS_TS <- ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_mean), color = cluster)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_color_discrete(labels = c("High IS", "Low IS")) +
+  labs(x = "Trophic similarity", y = "Interaction strength (log scale)", color = "Group") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+cl_IS_TS
+
+# Test regression significance by group
+TS_lm <- lm(log(AllStrength_mean) ~ meanTrophicSimil * cluster, data = spp_attr_all)
+summary(TS_lm)
+TS_eq <- lstrends(TS_lm, "cluster", var="meanTrophicSimil")
+TS_eq
+pairs(TS_eq)  # significance btw group slopes
 
 
 
 
 # Save results ----
 
-save(all_int,g,spp_attr_all,wedd_df,wedd_int, file="Results/network_&_spp_attr.rda")
+save(all_int, g, spp_attr_all, wedd_df, wedd_int, 
+     file="Results/network_&_spp_attr.rda")
