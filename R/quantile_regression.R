@@ -5,7 +5,7 @@
 
 # Load packages ----
 
-packages <- c("ggplot2", "dplyr", "lsmeans", "olsrr", "factoextra")
+packages <- c("ggplot2", "dplyr", "lsmeans", "olsrr", "factoextra", "cluster")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -24,18 +24,17 @@ load("Results/network_&_spp_attr.rda")
 
 # Distribution of log IS
 #
-ggplot(spp_attr_all, aes( x = log(AllStrength_mean))) + geom_density() + theme_bw() 
-ggplot(spp_attr_all, aes( x = log(AllStrength_mean))) + geom_histogram(bins=50) + theme_bw() 
+ggplot(spp_attr_all, aes(x = log(AllStrength_mean))) + geom_density() + theme_bw() 
+ggplot(spp_attr_all, aes(x = log(AllStrength_mean))) + geom_histogram(bins=50) + theme_bw() 
 
 #
 # Kmeans to separate the two groups
 #
-km <- kmeans(log(spp_attr_all$AllStrength_mean), 2)
-spp_attr_all$cluster <- km$cluster
+#km <- kmeans(log(spp_attr_all$AllStrength_mean), 2)
+#spp_attr_all$cluster <- km$cluster
 
 data.scaled <- scale(log(spp_attr_all$AllStrength_mean))
 fviz_nbclust(data.scaled, kmeans, method = "wss")
-library(cluster)
 gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
                     K.max = 10, B = 500)
 print(gap_stat, method = "firstmax")
@@ -135,8 +134,8 @@ qr_IS_TS
 # Regression by groups ----
 
 # Rename clusters
-spp_attr_all["cluster"][spp_attr_all["cluster"] == "2"] <- "High"
-spp_attr_all["cluster"][spp_attr_all["cluster"] == "1"] <- "Low"
+#spp_attr_all["cluster"][spp_attr_all["cluster"] == "2"] <- "High"
+#spp_attr_all["cluster"][spp_attr_all["cluster"] == "1"] <- "Low"
 
 
 ## Trophic level ----
