@@ -99,7 +99,20 @@ ad_test <- kSamples::ad.test(maxre ~ network, data = emp %>% filter(network!="ma
 ad_test <- kSamples::ad.test(maxre ~ network, data = emp %>% filter(network!="meannull"))
 
 
-
+## Plots
 require(ggplot2)
-emp %>% filter(network!="maxnull") %>% ggplot(aes(maxre, color=network,fill=network)) + geom_density() + theme_bw()+ scale_fill_viridis_d() + scale_color_viridis_d() 
+
+p <- emp %>% filter(network != "maxnull") %>% 
+  ggplot(aes(maxre, color=network, fill=network)) + 
+  geom_density() +
+#  scale_fill_viridis_d() + scale_color_viridis_d() +
+  labs(x = "Maximum eigenvalue", y = "Density") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+p + guides(color = "none", fill = guide_legend("Network")) +
+  scale_fill_discrete(labels=c('Empirical', 'Null'))
+
 QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_histogram(bins=30) + theme_bw() + scale_fill_viridis_d()
