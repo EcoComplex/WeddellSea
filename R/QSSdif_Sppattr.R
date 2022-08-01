@@ -1,3 +1,9 @@
+#
+##
+#
+
+
+## Load packages
 
 library(dplyr)
 library(ggplot2)
@@ -55,22 +61,26 @@ ggplot(all_data, aes(x = KS_pvalue, y = Ad_pvalue)) +
 
 # By trophic level
 ggplot(all_data, aes(x = TLu, y = difQSS)) +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significat", "Non-significant"))) +
-  labs(color = "AD p-value", x = "Trophic level", y = "QSS difference") +
+  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  labs(color = "Group", shape = "QSS impact", x = "Trophic level", y = "QSS difference") +
   theme_classic()
+
 
 # By degree
 ggplot(all_data, aes(x = Degree, y = difQSS)) +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significat", "Non-significant"))) +
+  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_x_log10() +
-  labs(color = "AD p-value", x = "log Degree", y = "QSS difference") +
+  labs(color = "Group", shape = "QSS impact", x = "log(Degree)", y = "QSS difference") +
   theme_classic()
 
 # By mean interaction strength
 ggplot(all_data, aes(x = AllStrength_mean, y = difQSS)) +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significat", "Non-significant"))) +
+  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_x_log10() +
-  labs(color = "AD p-value", x = "log mean IS", y = "QSS difference") +
+  labs(color = "Group", shape = "QSS impact", x = "log(mean IS)", y = "QSS difference") +
   theme_classic()
 
 # By trophic similarity

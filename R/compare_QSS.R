@@ -113,6 +113,7 @@ p <- emp %>% filter(network != "maxnull") %>%
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 p + guides(color = "none", fill = guide_legend("Network")) +
-  scale_fill_discrete(labels=c('Empirical', 'Null'))
+  scale_fill_manual(values = c("#E69F00","#56B4E9"), labels=c('Empirical', 'Null')) +
+  scale_color_manual(values = c("#E69F00","#56B4E9"))
 
 QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_histogram(bins=30) + theme_bw() + scale_fill_viridis_d()
