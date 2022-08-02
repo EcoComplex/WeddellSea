@@ -64,44 +64,69 @@ ggplot(all_data, aes(x = TLu, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   labs(color = "Group", shape = "QSS impact", x = "Trophic level", y = "QSS difference") +
-  theme_classic()
-
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
 
 # By degree
 ggplot(all_data, aes(x = Degree, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_x_log10() +
-  labs(color = "Group", shape = "QSS impact", x = "log(Degree)", y = "QSS difference") +
-  theme_classic()
+  labs(color = "Group", shape = "QSS impact", x = "Degree (log scale)", y = "QSS difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
 
 # By mean interaction strength
-ggplot(all_data, aes(x = AllStrength_mean, y = difQSS)) +
+ggplot(all_data, aes(x = log(AllStrength_mean), y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  scale_x_log10() +
-  labs(color = "Group", shape = "QSS impact", x = "log(mean IS)", y = "QSS difference") +
-  theme_classic()
+  labs(color = "Group", shape = "QSS impact", x = "log(mean Interaction strength)", y = "QSS difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
 
 # By trophic similarity
 ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significat", "Non-significant"))) +
-  labs(color = "AD p-value", x = "Trophic similarity", y = "QSS difference") +
-  theme_classic()
+  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  labs(color = "Group", shape = "QSS impact", x = "Trophic similarity", y = "QSS difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
 
 # By omnivory
 ggplot(all_data, aes(x = Omnu, y = difQSS)) +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significat", "Non-significant"))) +
-  labs(color = "AD p-value", x = "Omnivory", y = "QSS difference") +
-  theme_classic()
+  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  labs(color = "Group", shape = "QSS impact", x = "Omnivory", y = "QSS difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
 
 # By habitat
 ggplot(all_data, aes(x = Habitat, y = difQSS)) +
-  geom_violin(fill = "orange") +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significat", "Non-significant"))) +
-  scale_color_manual(values = c("black", "blue")) +
-  labs(x = "Habitat", y = "QSS difference", color = "AD p-value") +
-  theme_classic()
+  geom_violin(fill = "gray") +
+  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  #scale_color_manual(values = c("black", "blue")) +
+  labs(color = "Group", shape = "QSS impact", x = "Habitat", y = "QSS difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 15))
 
 
 
