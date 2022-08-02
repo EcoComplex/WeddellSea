@@ -144,7 +144,7 @@ cl_IS_TL <- ggplot(spp_attr_all, aes(x = TLu, y = log(AllStrength_mean), color =
   geom_point() +
   geom_smooth(method = "lm") +
   scale_color_discrete(labels = c("High IS", "Low IS")) +
-  labs(x = "Trophic level", y = "Interaction strength (log scale)", color = "Group") +
+  labs(x = "Trophic level", y = "log(mean Interaction strength)", color = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -168,7 +168,7 @@ cl_IS_DEG <- ggplot(spp_attr_all, aes(x = Degree, y = log(AllStrength_mean), col
   geom_point() +
   geom_smooth(method = "lm") +
   scale_color_discrete(labels = c("High IS", "Low IS")) +
-  labs(x = "Degree", y = "Interaction strength (log scale)", color = "Group") +
+  labs(x = "Degree", y = "log(mean Interaction strength)", color = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -192,7 +192,7 @@ cl_IS_TS <- ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_m
   geom_point() +
   geom_smooth(method = "lm") +
   scale_color_discrete(labels = c("High IS", "Low IS")) +
-  labs(x = "Trophic similarity", y = "Interaction strength (log scale)", color = "Group") +
+  labs(x = "Trophic similarity", y = "log(mean Interaction strength)", color = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
