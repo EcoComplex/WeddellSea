@@ -1,19 +1,24 @@
 #
-##
+## Relationship btw QSS difference and spp properties
+# Positive values indicate spp that are destabilizers
+# Negative values indicate spp that are stabilizers
+
+
 #
-
-
 ## Load packages
 
 library(dplyr)
 library(ggplot2)
 
+
+#
 ## Load data
 
 load("Results/QSS_extinction_dif.rda")
 load("Results/network_&_spp_attr.rda")
 
 
+#
 ## Compare QSS empirical and null
 
 p <- ggplot(QSS_null_comp_raw, aes(x = maxre, fill = network, color = network)) +
@@ -23,6 +28,8 @@ p <- ggplot(QSS_null_comp_raw, aes(x = maxre, fill = network, color = network)) 
   theme_classic()
 p + guides(color = FALSE)
 
+
+#
 ## Merge QSS results with spp attributes
 
 # Habitat data
@@ -45,21 +52,9 @@ all_data <- QSS_data %>%
   left_join(hab_data_comp)
 
 
-## Relationship btw QSS difference and spp properties
-# Positive values indicate spp that are destabilizers
-# Negative values indicate spp that are stabilizers
+#
+## By trophic level
 
-# Subset sp with QSS difference significant (AD test p-value < 0.01)
-key_sp <- all_data %>% 
-  filter(., Ad_pvalue < 0.01)
-
-# Correlation p-values (Kolmogorov vs Anderson Darling)
-ggplot(all_data, aes(x = KS_pvalue, y = Ad_pvalue)) +
-  geom_point() +
-  labs(x = "Kolmogorov-Smirnov p-value", y = "Anderson-Darling p-value") +
-  theme_classic()
-
-# By trophic level
 ggplot(all_data, aes(x = TLu, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
@@ -70,7 +65,9 @@ ggplot(all_data, aes(x = TLu, y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
-# By degree
+#
+## By degree
+
 ggplot(all_data, aes(x = Degree, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
@@ -82,7 +79,9 @@ ggplot(all_data, aes(x = Degree, y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
-# By mean interaction strength
+#
+## By mean interaction strength
+
 ggplot(all_data, aes(x = log(AllStrength_mean), y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
@@ -93,7 +92,9 @@ ggplot(all_data, aes(x = log(AllStrength_mean), y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
-# By trophic similarity
+#
+## By trophic similarity
+
 ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
@@ -104,7 +105,9 @@ ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
-# By omnivory
+#
+## By omnivory
+
 ggplot(all_data, aes(x = Omnu, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
@@ -115,7 +118,9 @@ ggplot(all_data, aes(x = Omnu, y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
-# By habitat
+#
+## By habitat
+
 ggplot(all_data, aes(x = Habitat, y = difQSS)) +
   geom_violin(fill = "gray") +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
@@ -129,6 +134,26 @@ ggplot(all_data, aes(x = Habitat, y = difQSS)) +
         axis.text.y = element_text(size = 15))
 
 
+#
+## Statistical correlations 
 
+# p-values (Kolmogorov vs Anderson Darling)
+ggplot(all_data, aes(x = KS_pvalue, y = Ad_pvalue)) +
+  geom_point() +
+  labs(x = "Kolmogorov-Smirnov p-value", y = "Anderson-Darling p-value") +
+  theme_classic()
 
+# Subset sp with QSS difference significant (AD test p-value < 0.01)
+key_sp <- all_data %>% 
+  filter(., Ad_pvalue < 0.01)
+
+# p-values and QSS difference
+library(reshape2)
+comp_QSS_pvalue <- melt(all_data, measure.vars = c("Ad_pvalue", "KS_pvalue"))
+ggplot(comp_QSS_pvalue, aes(x = value, y = abs(difQSS), color = variable)) +
+  geom_point() +
+  geom_vline(xintercept = 0.01, linetype = "dashed", color = "red") +
+  scale_color_manual(values = c("#E69F00","#56B4E9"), labels = c('Anderson','Kolmogorov')) +
+  labs(x = "p-value", y = "abs(QSS difference)", color = "Test") +
+  theme_classic()
 
