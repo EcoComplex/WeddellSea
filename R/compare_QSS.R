@@ -76,6 +76,11 @@ QSS_null_comp_raw <- bind_rows(tibble(network="meannull", maxre=qss_null$maxre),
 save(QSS_null_comp,QSS_null_comp_raw,
      file = "Results/QSS_extinction_dif.rda")
 
+#
+# The QSS calculated with the mean interaction strength is not the mean of QSS calculate with a uniform distribution and the same mean IS
+#
+qss_mean <- calc_QSS(g, nsim=1, istrength = TRUE, returnRaw = TRUE)
+
 
 # Empirical 2 runs
 #
@@ -114,6 +119,6 @@ p <- emp %>% filter(network != "maxnull") %>%
         axis.text.y = element_text(size = 15))
 p + guides(color = "none", fill = guide_legend("Network")) +
   scale_fill_manual(values = c("#E69F00","#56B4E9"), labels=c('Empirical', 'Null')) +
-  scale_color_manual(values = c("#E69F00","#56B4E9"))
+  scale_color_manual(values = c("#E69F00","#56B4E9")) + geom_vline(xintercept = qss_mean$maxre, linetype="dashed")
 
 QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_histogram(bins=30) + theme_bw() + scale_fill_viridis_d()
