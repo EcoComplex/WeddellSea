@@ -62,3 +62,13 @@ IS_fit
 
 descdist(wedd_int$qRC, discrete = TRUE)
 
+#
+# Power law with exponential cutoff 
+#
+source("R/evaluate_distr.r")
+
+pdist <- evaluate_distr(wedd_int$qRC,est_xmin=FALSE,returnOBJ=TRUE)
+pdist1 <- evaluate_distr(wedd_int$qRC,est_xmin=FALSE,returnOBJ=FALSE)
+
+dist_manejo %>% filter(min(AICc)==AICc) %>% mutate(moda=exp(expo))
+
