@@ -9,6 +9,7 @@
 library(igraph)
 library(multiweb)
 library(dplyr)
+library(ggplot2)
 library(tictoc)
 
 ## Load data
@@ -86,7 +87,7 @@ qss_mean <- calc_QSS(g, nsim=1, istrength = TRUE, returnRaw = TRUE)
 #
 emp <- QSS_null_comp_raw %>% filter(grepl("empirical",network))
 ad_test <- kSamples::ad.test(maxre ~ network, data = emp)
-ks.test(maxre ~ network, data = emp )
+ks.test(maxre ~ network, data = emp)
 
 emp %>% ggplot(aes(maxre, color=network,fill=network)) + geom_density(alpha=0.5) + theme_bw()+ scale_fill_viridis_d() + scale_color_viridis_d() 
  
@@ -105,8 +106,8 @@ ad_test <- kSamples::ad.test(maxre ~ network, data = emp %>% filter(network!="me
 
 
 ## Plots
-require(ggplot2)
 
+emp <- QSS_null_comp_raw %>% filter(network != "empirical")
 p <- emp %>% filter(network != "maxnull") %>% 
   ggplot(aes(maxre, color=network, fill=network)) + 
   geom_density() +
@@ -119,6 +120,7 @@ p <- emp %>% filter(network != "maxnull") %>%
         axis.text.y = element_text(size = 15))
 p + guides(color = "none", fill = guide_legend("Network")) +
   scale_fill_manual(values = c("#E69F00","#56B4E9"), labels=c('Empirical', 'Null')) +
-  scale_color_manual(values = c("#E69F00","#56B4E9")) + geom_vline(xintercept = qss_mean$maxre, linetype="dashed")
+  scale_color_manual(values = c("#E69F00","#56B4E9")) + 
+  geom_vline(xintercept = qss_mean$maxre, linetype="dashed")
 
 QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_histogram(bins=30) + theme_bw() + scale_fill_viridis_d()
