@@ -133,14 +133,20 @@ especially the sections "Technical instructions for LaTeX" and
 "Manuscript composition". Please contact Daniel Nüst,
 `daniel.nuest@uni-muenster.de`, with any problems.
 
+The objective of this work is twofold: 1) estimate the interaction strength of the Weddell Sea food web, and 2) 
+determine key trophic species considering its influence on the stability of the network.
 
 # Methodology
 
 ## Study area
 
-Subsection text here.
+The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS with a length of approximately 450 km.
+Water depth varies from 200 to 500 m. Shallower areas are covered by continental ice, which forms the coastline
+along the eastern and southern part of the Weddell Sea. The shelf area contains a complex three-dimensional
+habitat with large biomass, intermediate to high diversity in comparison to benthic boreal communities and
+a spatially patchy distribution of organisms [@Dayton1990, @Teixido2002].
 
-### Subsubsection Heading Here
+## Data source
 
 Subsubsection text here.
 

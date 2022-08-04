@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.3)  3 AUG 2022 16:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.4)  4 AUG 2022 12:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -473,57 +473,67 @@ Overfull \hbox (164.30348pt too wide) in paragraph at lines 132--137
 [1
 
 {/Users/tomasmarina/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 191.
+(/Users/tomasmarina/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
 
-Package natbib Warning: Citation `Dirac1953888' on page 2 undefined on input line 201.
+Package natbib Warning: Citation `Dayton1990' on page 2 undefined on input line 198.
+
+
+Package natbib Warning: Citation `Teixido2002' on page 2 undefined on input line 198.
+
+
+Package natbib Warning: Citation `Dirac1953888' on page 2 undefined on input line 212.
 
 Package textcomp Info: Symbol \textasciigrave not provided by
 (textcomp)             font family pcr in TS1 encoding.
-(textcomp)             Default family used instead on input line 210.
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 210.
+(textcomp)             Default family used instead on input line 221.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 221.
 (/Users/tomasmarina/Library/TinyTeX/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 210.
+LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 221.
 (/Users/tomasmarina/Library/TinyTeX/texmf-dist/tex/latex/base/ts1cmtt.fd
 File: ts1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 Package textcomp Info: Symbol \textasciigrave not provided by
 (textcomp)             font family pcr in TS1 encoding.
-(textcomp)             Default family used instead on input line 210.
+(textcomp)             Default family used instead on input line 221.
 Package textcomp Info: Symbol \textasciigrave not provided by
 (textcomp)             font family pcr in TS1 encoding.
-(textcomp)             Default family used instead on input line 210.
+(textcomp)             Default family used instead on input line 221.
 [2] [3]
 <Nikolaus_Kopernikus.jpg, id=40, 206.7725pt x 240.9pt>
 File: Nikolaus_Kopernikus.jpg Graphic file (type jpg)
 <use Nikolaus_Kopernikus.jpg>
-Package pdftex.def Info: Nikolaus_Kopernikus.jpg  used on input line 256.
+Package pdftex.def Info: Nikolaus_Kopernikus.jpg  used on input line 267.
 (pdftex.def)             Requested size: 236.15796pt x 275.14345pt.
 File: Nikolaus_Kopernikus.jpg Graphic file (type jpg)
 <use Nikolaus_Kopernikus.jpg>
-Package pdftex.def Info: Nikolaus_Kopernikus.jpg  used on input line 264.
+Package pdftex.def Info: Nikolaus_Kopernikus.jpg  used on input line 275.
 (pdftex.def)             Requested size: 341.43306pt x 397.82806pt.
 [4
 
  <./Nikolaus_Kopernikus.jpg>] [5] [6]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 396.
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 407.
 [7]
 pdfTeX warning (ext4): destination with the same identifier (name{equation.6.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.430 \begin{reaction}
+l.441 \begin{reaction}
                       
 pdfTeX warning (ext4): destination with the same identifier (name{equation.6.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.433 \begin{reaction}
+l.444 \begin{reaction}
                       
 pdfTeX warning (ext4): destination with the same identifier (name{equation.6.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.436 \begin{reaction}
+l.447 \begin{reaction}
                        [8]
-Overfull \hbox (10.3438pt too wide) in paragraph at lines 497--497
+Overfull \hbox (10.3438pt too wide) in paragraph at lines 508--508
 \T1/ptm/m/n/9 original draft (lead); Writing -- review and editing (lead). SK: Conceptualization (lead); Formal analysis (supporting); Methodology (supporting);
  []
 
@@ -535,15 +545,15 @@ Package natbib Warning: There were undefined citations.
 
 (./Manuscript.aux) ) 
 Here is how much of TeX's memory you used:
- 12901 strings out of 479983
- 203480 string characters out of 5886721
+ 12926 strings out of 479983
+ 203880 string characters out of 5886721
  538389 words of memory out of 5000000
- 30780 multiletter control sequences out of 15000+600000
- 512347 words of font info for 99 fonts, out of 8000000 for 9000
+ 30801 multiletter control sequences out of 15000+600000
+ 512661 words of font info for 100 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 87i,8n,91p,325b,595s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 87i,8n,91p,325b,575s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/tomasmarina/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1000.600pk>{/Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}</Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Manuscript.pdf (10 pages, 182327 bytes).
+Output written on Manuscript.pdf (10 pages, 183092 bytes).
 PDF statistics:
  204 PDF objects out of 1000 (max. 8388607)
  160 compressed objects within 2 object streams
