@@ -180,24 +180,35 @@ especially the sections ``Technical instructions for LaTeX'' and
 ``Manuscript composition''. Please contact Daniel Nüst,
 \texttt{daniel.nuest@uni-muenster.de}, with any problems.
 
-\section{Content section one}
+The objective of this work is twofold: 1) estimate the interaction
+strength of the Weddell Sea food web, and 2) determine key trophic
+species considering its influence on the stability of the network.
 
-\subsection{Subsection Heading Here}
+\section{Methodology}
 
-Subsection text here.
+\subsection{Study area}
 
-\subsubsection{Subsubsection Heading Here}
+The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS
+with a length of approximately 450 km. Water depth varies from 200 to
+500 m. Shallower areas are covered by continental ice, which forms the
+coastline along the eastern and southern part of the Weddell Sea. The
+shelf area contains a complex three-dimensional habitat with large
+biomass, intermediate to high diversity in comparison to benthic boreal
+communities and a spatially patchy distribution of organisms
+\citep[\citet{Teixido2002}]{Dayton1990}.
+
+\subsection{Data source}
 
 Subsubsection text here.
 
-\section{Content section with citations}
+\section{Results}
 
 See the
 \href{http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html}{R
 Markdown docs for bibliographies and citations}.
 
 Copernicus supports biblatex and a sample bibliography is in file
-\texttt{sample.bib}. Read \citep{Feynman1963118}, and
+\texttt{WeddellSea.bib}. Read \citep{Pawar2012}, and
 \citep[see][]{Dirac1953888}.
 
 \section{Content section with R code chunks}
@@ -214,7 +225,7 @@ additional instructions.
 sum <- 1 + 41
 \end{verbatim}
 
-\section{Content section with list}
+\section{Discussion}
 
 If you want to insert a list, you must
 
@@ -380,6 +391,14 @@ need to be available through your preferred \LaTeX{} distribution. With
 TinyTeX (or TeX Live), you can do so by running
 \texttt{tinytex::tlmgr\_install(c("algorithms",\ "algorithmicx"))}
 
+\begin{verbatim}
+## tlmgr update --all --self
+\end{verbatim}
+
+\begin{verbatim}
+## tlmgr install algorithms algorithmicx
+\end{verbatim}
+
 Copernicus staff will no accept any additional packages from your LaTeX
 source code, so please stick to these two acceptable packages. They are
 needed to use the example below
@@ -438,16 +457,14 @@ example \(3.14\,\unit{km\,h^{-1}}\) (using LaTeX mode:
 or \unit{0.872\,m\,s^{-1}} (using only
 \texttt{\textbackslash{}unit\{0.872\textbackslash{},m\textbackslash{},s\^{}\{-1\}\}}).
 
+\clearpage
+
 \conclusions[Conclusions]
 
-The conclusion goes here. You can modify the section name with
-\texttt{\textbackslash{}conclusions{[}modified\ heading\ if\ necessary{]}}.
+The conclusion goes here.
 
 
 
-\codedataavailability{R code and data set used in this work is available
-at
-https://github.com/EcoComplex/WeddellSea} %% use this section when having data sets and software code available
 
 
 
@@ -520,7 +537,7 @@ Thanks to the rticles contributors!
 %% authors experienced with BibTeX only have to include the following two lines:
 %%
 \bibliographystyle{copernicus}
-\bibliography{WeddellSea.bib}
+\bibliography{../WeddellSea.bib}
 %%
 %% URLs and DOIs can be entered in your BibTeX file as:
 %%

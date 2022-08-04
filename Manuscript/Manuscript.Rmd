@@ -30,7 +30,7 @@ affiliation:
 abstract: |
   The abstract goes here.
   It can also be on _multiple lines_.
-bibliography: WeddellSea.bib
+bibliography: ../WeddellSea.bib
 running:
   title: New insights into the Weddell Sea food web
   author: Marina et al.
@@ -45,7 +45,7 @@ availability:
   #  use this to add a statement when having only data sets available
   #code: |
   #data: |
-  codedata: |
+codedata: |
     R code and data set used in this work is available at https://github.com/EcoComplex/WeddellSea
 #   sample: |
 # videosupplement: |
@@ -133,23 +133,30 @@ especially the sections "Technical instructions for LaTeX" and
 "Manuscript composition". Please contact Daniel Nüst,
 `daniel.nuest@uni-muenster.de`, with any problems.
 
-# Content section one
+The objective of this work is twofold: 1) estimate the interaction strength of the Weddell Sea food web, and 2) 
+determine key trophic species considering its influence on the stability of the network.
 
-## Subsection Heading Here
+# Methodology
 
-Subsection text here.
+## Study area
 
-### Subsubsection Heading Here
+The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS with a length of approximately 450 km.
+Water depth varies from 200 to 500 m. Shallower areas are covered by continental ice, which forms the coastline
+along the eastern and southern part of the Weddell Sea. The shelf area contains a complex three-dimensional
+habitat with large biomass, intermediate to high diversity in comparison to benthic boreal communities and
+a spatially patchy distribution of organisms [@Dayton1990, @Teixido2002].
+
+## Data source
 
 Subsubsection text here.
 
-# Content section with citations
+# Results
 
 See the [R Markdown docs for bibliographies and
 citations](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html).
 
 Copernicus supports biblatex and a sample bibliography is in file
-`sample.bib`. Read [@Feynman1963118], and [see @Dirac1953888].
+`WeddellSea.bib`. Read [@Pawar2012], and [see @Dirac1953888].
 
 # Content section with R code chunks
 
@@ -166,7 +173,7 @@ You can add verbatim code snippets without extra styles by using
 
     sum <- 1 + 41
 
-# Content section with list
+# Discussion
 
 If you want to insert a list, you must
 
@@ -387,7 +394,8 @@ the exponential notation, for example $3.14\,\unit{km\,h^{-1}}$ (using
 LaTeX mode: `\( 3.14\,\unit{...} \)`) or \unit{0.872\,m\,s^{-1}} (using
 only `\unit{0.872\,m\,s^{-1}}`).
 
+\clearpage
+
 \conclusions[Conclusions]
 
-The conclusion goes here. You can modify the section name with
-`\conclusions[modified heading if necessary]`.
+The conclusion goes here.
