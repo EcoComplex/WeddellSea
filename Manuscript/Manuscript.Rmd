@@ -133,22 +133,41 @@ especially the sections "Technical instructions for LaTeX" and
 "Manuscript composition". Please contact Daniel Nüst,
 `daniel.nuest@uni-muenster.de`, with any problems.
 
-The objective of this work is twofold: 1) estimate the interaction strength of the Weddell Sea food web, and 2) 
-determine key trophic species considering its influence on the stability of the network.
+The objective of this work was twofold: 1) estimate the strength for each interaction in the Weddell Sea food web, and 2) determine key trophic species considering weighted and unweighted properties and the influence on the stability of the network.
 
 # Methodology
 
 ## Study area
 
-The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS with a length of approximately 450 km.
-Water depth varies from 200 to 500 m. Shallower areas are covered by continental ice, which forms the coastline
-along the eastern and southern part of the Weddell Sea. The shelf area contains a complex three-dimensional
-habitat with large biomass, intermediate to high diversity in comparison to benthic boreal communities and
-a spatially patchy distribution of organisms [@Dayton1990, @Teixido2002].
+The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS with a length of approximately 450 km. Water depth varies from 200 to 500 m. Shallower areas are covered by continental ice, which forms the coastline along the eastern and southern part of the Weddell Sea. The shelf area contains a complex three-dimensional habitat with large biomass, intermediate to high diversity in comparison to benthic boreal communities and a spatially patchy distribution of organisms [@Dayton1990, @Teixido2002].
 
-## Data source
+Add Figure of map.
 
-Subsubsection text here.
+## Weddell Sea food web data set
+
+We obtained the data set of the Weddell Sea food web from the GlobAL daTabasE of traits and food Web Architecture (GATEWAy, version 1.0) of the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig [@Brose2018].
+This marine food web, which includes all the food web data available for the high Antarctic Weddell Sea collected 
+since 1983, is one of the most highly resolved marine food webs documented to date. It's noteworthy that it is a 
+summary network that ignores seasonal changes [@Jacob2011].
+
+## Data set analyses
+
+Text here.
+
+### Interaction strength estimation
+
+To estimate the strength of each interaction in the food web, we followed the methodology proposed by @Pawar2012.
+
+### Species properties
+
+In order to characterize the species, we considered weighted and unweighted properties. The former is based on the estimation of the interaction strength described in the previous section. The latter is related to properties commonly used in qualitative (presence/absence of interaction) food web studies [@Martinez1991, @Dunne2002, @Borrelli2014]. As weighted property we used the mean interaction strength, meaning the average strength of all species interactions. As unweighted properties we used: a) degree or the total number of trophic interactions taking into account in- and out-interactions (role as predator and prey, respectively); b) trophic level or the position in the food web relative to primary producers/detritus; and c) trophic similarity or the measurement of trophic overlap between species based on shared and unique resources and consumers.
+
+Add Figure of toy food web.
+
+### Stability and extinction simulations
+
+Quasi-Sign Stability (QSS) [@Allesina2008].
+After each species extinction, we calculated the QSS for the food web minus one species and compared it with the QSS for the whole network. We statistically analysed such difference applying the Anderson-Darling test [@Scholz1987].
 
 # Results
 
@@ -220,7 +239,7 @@ knitr::include_graphics("Nikolaus_Kopernikus.jpg")
 
 ## TABLES
 
-You can ad \LaTeX table in an R Markdown document to meet the template
+You can add \LaTeX table in an R Markdown document to meet the template
 requirements.
 
 ### ONE-COLUMN TABLE
