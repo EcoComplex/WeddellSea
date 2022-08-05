@@ -141,18 +141,28 @@ knitr::include_graphics("WeddellSea_map.jpg")
 
 ## Weddell Sea food web dataset
 
-We obtained the dataset of the Weddell Sea food web from the GlobAL daTabasE of traits and food Web Architecture (GATEWAy, version 1.0) of the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig [@Brose2018]. This open access database is a list of predator-prey interactions that describe several highly-resolved food webs, including biological data about the consumer and resource involved in each trophic interaction (i.e. mean mass). Furthermore, it incorporates information on the interaction itself, such as the dimensionality.
+We obtained the dataset of the Weddell Sea food web from the GlobAL daTabasE of traits and food Web Architecture (GATEWAy, version 1.0) of the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig [@Brose2018]. This open access database is a list of predator-prey interactions that contains several highly-resolved food webs, including biological data about the consumer and resource species involved in each trophic interaction (i.e. mean mass). Furthermore, it incorporates information on the interaction itself, such as the dimensionality.
 This marine food web compiles all the food web data available for the high Antarctic Weddell Sea collected 
 since 1983, and is one of the most highly-resolved marine food webs documented to date. It's noteworthy that it is a 
 summary network that ignores seasonal changes [@Jacob2011].
 
-## Data set analyses
+## Dataset analyses
 
-Text here.
+We studied the food web of the Weddell Sea by: a) estimating the strength of each interaction; b) analysing the properties of the species in a network approach; and c) comparing the stability of the food web after performing extinction simulations.
 
 ### Interaction strength estimation
 
-To estimate the strength of each interaction in the food web, we followed the methodology proposed by @Pawar2012.
+To estimate the strength of each interaction in the food web, we followed the methodology proposed by @Pawar2012. The minimum data requirements are: body mass of the consumer (predator) and resource (prey), and the interaction dimensionality classified as 2 or 3 dimensions. GATEWAy v.1.0 does provide information on the mean mass for consumers and resources for every interaction, but lacks the dimensionality for 924 interactions. To solve this issue, we used the information about movement type for consumer and resource. Then, we classified the interaction as 2D when both consumer and resource move in 2D (e.g., both are sessile or walking) or if a consumer moves in 3D and a resource in 2D (e.g., swimming consumer and sessile/walking resource). The interaction was classified as 3D when both consumer and resource move in 3D (e.g., both swimming) or if the consumer moves in 2D and resource in 3D (e.g., sessile/walking consumer, swimming resource) [@Pawar2012].
+
+The main equation for estimating the interaction strength IS is [@Pawar2012]:
+
+```{=tex}
+\begin{equation}
+IS = \alpha x_R \frac{m_R}{m_C}
+\end{equation}
+```
+
+where \vec{\alpha} is the search rate, \vec{x_R} is the density of the resource, and \vec{m_R} and \vec{m_C} are the body mass of the resource and the consumer, respectively. We obtained the search rate and the resource density from the relationship with the consumer and resource mass, respectively, suggested by @Pawar2012. Such relationship, a linear regression, varies with the interaction dimensionality.
 
 ### Species properties
 
