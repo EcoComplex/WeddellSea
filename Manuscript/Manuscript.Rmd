@@ -126,28 +126,24 @@ desirable to have syntax highlight available in preprints or for others
 reasons. Please see `?rmarkdown::pdf_document` for available options to
 activate highlighting.
 
-**Important**: Always double-check with the official manuscript
-preparation guidelines at
-<https://publications.copernicus.org/for_authors/manuscript_preparation.html>,
-especially the sections "Technical instructions for LaTeX" and
-"Manuscript composition". Please contact Daniel Nüst,
-`daniel.nuest@uni-muenster.de`, with any problems.
-
 The objective of this work was twofold: 1) estimate the strength for each interaction in the Weddell Sea food web, and 2) determine key trophic species considering weighted and unweighted properties and the influence on the stability of the network.
+
 
 # Methodology
 
 ## Study area
 
-The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS with a length of approximately 450 km. Water depth varies from 200 to 500 m. Shallower areas are covered by continental ice, which forms the coastline along the eastern and southern part of the Weddell Sea. The shelf area contains a complex three-dimensional habitat with large biomass, intermediate to high diversity in comparison to benthic boreal communities and a spatially patchy distribution of organisms [@Dayton1990, @Teixido2002].
+The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS with a length of approximately 450 km (Figure 1). Water depth varies from 200 to 500 m. Shallower areas are covered by continental ice, which forms the coastline along the eastern and southern part of the Weddell Sea. The shelf area contains a complex three-dimensional habitat with large biomass, intermediate to high diversity in comparison to benthic boreal communities and a spatially patchy distribution of organisms [@Dayton1990; @Teixido2002].
 
-Add Figure of map.
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Map of the Weddell Sea and Dronning Maud Land sector highlighting the high Antarctic shelf as a dashed-line contour. Modified from www.soos.aq."}
+knitr::include_graphics("WeddellSea_map.jpg")
+```
 
-## Weddell Sea food web data set
+## Weddell Sea food web dataset
 
-We obtained the data set of the Weddell Sea food web from the GlobAL daTabasE of traits and food Web Architecture (GATEWAy, version 1.0) of the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig [@Brose2018].
-This marine food web, which includes all the food web data available for the high Antarctic Weddell Sea collected 
-since 1983, is one of the most highly resolved marine food webs documented to date. It's noteworthy that it is a 
+We obtained the dataset of the Weddell Sea food web from the GlobAL daTabasE of traits and food Web Architecture (GATEWAy, version 1.0) of the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig [@Brose2018]. This open access database is a list of predator-prey interactions that describe several highly-resolved food webs, including biological data about the consumer and resource involved in each trophic interaction (i.e. mean mass). Furthermore, it incorporates information on the interaction itself, such as the dimensionality.
+This marine food web compiles all the food web data available for the high Antarctic Weddell Sea collected 
+since 1983, and is one of the most highly-resolved marine food webs documented to date. It's noteworthy that it is a 
 summary network that ignores seasonal changes [@Jacob2011].
 
 ## Data set analyses
@@ -160,9 +156,11 @@ To estimate the strength of each interaction in the food web, we followed the me
 
 ### Species properties
 
-In order to characterize the species, we considered weighted and unweighted properties. The former is based on the estimation of the interaction strength described in the previous section. The latter is related to properties commonly used in qualitative (presence/absence of interaction) food web studies [@Martinez1991, @Dunne2002, @Borrelli2014]. As weighted property we used the mean interaction strength, meaning the average strength of all species interactions. As unweighted properties we used: a) degree or the total number of trophic interactions taking into account in- and out-interactions (role as predator and prey, respectively); b) trophic level or the position in the food web relative to primary producers/detritus; and c) trophic similarity or the measurement of trophic overlap between species based on shared and unique resources and consumers.
+In order to characterize the species, we considered weighted and unweighted properties (Figure 2). The former is based on the estimation of the interaction strength described in the previous section. The latter is related to properties commonly used in qualitative (presence/absence of interaction) food web studies [@Martinez1991; @Dunne2002; @Borrelli2014]. As weighted property we used the mean interaction strength, meaning the average strength of all species interactions. As unweighted properties we used: a) degree or the total number of trophic interactions taking into account in- and out-interactions (role as predator and prey, respectively); b) trophic level or the position in the food web relative to primary producers/detritus; and c) trophic similarity or the measurement of trophic overlap between species based on shared and unique resources and consumers.
 
-Add Figure of toy food web.
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Scheme of a network showing the weighted and unweighted properties we used to characterize the species of the Weddell Sea food web."}
+knitr::include_graphics("ToyFoodWeb.jpg")
+```
 
 ### Stability and extinction simulations
 
@@ -171,11 +169,11 @@ After each species extinction, we calculated the QSS for the food web minus one 
 
 # Results
 
-See the [R Markdown docs for bibliographies and
-citations](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html).
+The Weddell Sea food web comprises 490 species and 16041 predator-prey interactions (Figure 3).
 
-Copernicus supports biblatex and a sample bibliography is in file
-`WeddellSea.bib`. Read [@Pawar2012], and [see @Dirac1953888].
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Graphic representation of the Weddell Sea food web. Species (nodes) are arranged verticaly and colored by trophic level. The diameter of the node indicates the total number of interactions. Predator-prey interactions are represented by the arrows, from the prey to the predator."}
+knitr::include_graphics("WeddellSea_net.jpg")
+```
 
 # Content section with R code chunks
 
@@ -194,22 +192,6 @@ You can add verbatim code snippets without extra styles by using
 
 # Discussion
 
-If you want to insert a list, you must
-
--   leave
-
--   empty lines
-
--   between each list item
-
-because the `\tightlist` format used by R Markdown is not supported in
-the Copernicus template. Example:
-
-    - leave
-
-    - empty lines
-
-    - between each list item
 
 # Examples from the official template
 
@@ -221,17 +203,12 @@ table and/or figure as well as between each table and/or figure.
 
 ### ONE-COLUMN FIGURES
 
-Include a 12cm width figure of Nikolaus Copernicus from
-[Wikipedia](https://en.wikipedia.org/wiki/File:Nikolaus_Kopernikus.jpg)
-with caption using R Markdown.
-
 ```{r, out.width = "8.3cm", echo = FALSE, fig.cap = "one column figure"}
 knitr::include_graphics("Nikolaus_Kopernikus.jpg")
 ```
 
 ### TWO-COLUMN FIGURES
 
-You can also include a larger figure.
 
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "two column figure"}
 knitr::include_graphics("Nikolaus_Kopernikus.jpg")
