@@ -155,9 +155,6 @@ file and are bespoke for Copernicus manuscripts:
   \end{itemize}
 \end{itemize}
 
-See the defaults and examples from the skeleton and the official
-Copernicus documentation for details.
-
 \textbf{Please note:} Per
 \href{https://publications.copernicus.org/for_authors/manuscript_preparation.html}{their
 guidelines}, Copernicus does not support additional \LaTeX{} packages or
@@ -225,18 +222,18 @@ followed the methodology proposed by \citet{Pawar2012}. The minimum data
 requirements are: body mass of the consumer (predator) and resource
 (prey), and the interaction dimensionality classified as 2 or 3
 dimensions. GATEWAy v.1.0 does provide information on the mean mass for
-consumers and resources for every interaction, but lacks the
-dimensionality for 924 interactions. To solve this issue, we used the
-information about movement type for consumer and resource. Then, we
-classified the interaction as 2D when both consumer and resource move in
-2D (e.g., both are sessile or walking) or if a consumer moves in 3D and
-a resource in 2D (e.g., swimming consumer and sessile/walking resource).
-The interaction was classified as 3D when both consumer and resource
-move in 3D (e.g., both swimming) or if the consumer moves in 2D and
-resource in 3D (e.g., sessile/walking consumer, swimming resource)
-\citep{Pawar2012}.
+consumers and resources (except for `detritus' and `sediment') for every
+interaction, but lacks the dimensionality for 924 interactions. To solve
+this issue, we used the information about movement type for consumer and
+resource. Then, we classified the interaction as 2D when both consumer
+and resource move in 2D (e.g., both are sessile or walking) or if a
+consumer moves in 3D and a resource in 2D (e.g., swimming consumer and
+sessile/walking resource). The interaction was classified as 3D when
+both consumer and resource move in 3D (e.g., both swimming) or if the
+consumer moves in 2D and resource in 3D (e.g., sessile/walking consumer,
+swimming resource) \citep{Pawar2012}.
 
-The main equation for estimating the interaction strength IS is
+The main equation we used for estimating the interaction strength IS is
 \citep{Pawar2012}:
 
 \begin{equation}
@@ -245,10 +242,22 @@ IS = \alpha x_R \frac{m_R}{m_C}
 
 where \vec{\alpha} is the search rate, \vec{x_R} is the density of the
 resource, and \vec{m_R} and \vec{m_C} are the body mass of the resource
-and the consumer, respectively. We obtained the search rate and the
-resource density from the relationship with the consumer and resource
-mass, respectively, suggested by \citet{Pawar2012}. Such relationship, a
-linear regression, varies with the interaction dimensionality.
+and the consumer, respectively.
+
+We obtained estimations for the resource density and the search rate
+from the scaling relationships with the resource and the consumer mass,
+respectively (\citet{Pawar2012}). The coefficients of such
+relationships, determined by ordinary least squares regression, vary
+with the interaction dimensionality. On one hand, resource density
+scales with resource mass as a power-law with exponents
+\vec{p = -0.79 \pm 0.09} in 2D and \vec{p = -0.86 \pm 0.06} in 3D. Since
+mean mass for resources `detritus' and `sediment' were not available in
+GATEWAy v.1.0, we calculated it considering the scaling relationship
+with consumer mass, also different in 2D and 3D (for details see
+equation S9 and figures 2c-d of Supplementary Information in
+\citet{Pawar2012}). On the other hand, search rate scales with consumer
+mass as a power-law with exponents \vec{p = 0.68 \pm 0.12} in 2D and
+\vec{p = 1.05 \pm 0.08} in 3D.
 
 \subsubsection{Species properties}
 
