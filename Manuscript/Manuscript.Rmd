@@ -82,47 +82,7 @@ editor_options:
 
 \introduction[Introduction]
 
-Introduction text goes here. You can change the name of the section if
-necessary using `\introduction[modified heading]`.
-
-The following settings can or must be configured in the header of this
-file and are bespoke for Copernicus manuscripts:
-
--   The `journal` you are submitting to using the official abbreviation.
-    You can use the function
-    `rticles::copernicus_journal_abbreviations(name = '...')` to search
-    the existing journals.
-
--   Specific sections of the manuscript:
-
-    -   `running` with `title` and `author`
-
-    -   `competinginterests`
-
-    -   `copyrightstatement` (optional)
-
-    -   `availability` (strongly recommended if any used), one of
-        `code`, `data`, or `codedata`
-
-    -   `authorcontribution`
-
-    -   `disclaimer`
-
-    -   `acknowledgements`
-
-
-**Please note:** Per [their
-guidelines](https://publications.copernicus.org/for_authors/manuscript_preparation.html),
-Copernicus does not support additional \LaTeX{} packages or new \LaTeX{}
-commands than those defined in their `.cls` file. This means that you
-cannot add any extra dependencies and a warning will be thrown if so.\
-This extends to syntax highlighting of source code. Therefore this
-template sets the parameter `highlight` in the YAML header to `NULL` to
-deactivate Pandoc syntax highlighter. This prevent addition of external
-packages for highlighting inserted by Pandoc. However, it might be
-desirable to have syntax highlight available in preprints or for others
-reasons. Please see `?rmarkdown::pdf_document` for available options to
-activate highlighting.
+Introduction text goes here.
 
 The objective of this work was twofold: 1) estimate the strength for each interaction in the Weddell Sea food web, and 2) determine key trophic species considering weighted and unweighted properties and the influence on the stability of the network.
 
@@ -147,12 +107,11 @@ This marine food web compiles all the food web data available for the high Antar
 
 We analysed the food web of the Weddell Sea by: a) estimating the strength of each interaction; b) studying the properties of the species in a network approach; and c) comparing the stability of the food web after performing extinction simulations.
 
-### Interaction strength estimation
+### Interaction strength estimation and distribution
 
 To estimate the strength of each interaction in the food web, we followed the methodology proposed by @Pawar2012. The minimum data requirements are: body mass of the consumer (predator) and resource (prey), and the interaction dimensionality classified as 2 or 3 dimensions. GATEWAy v.1.0 does provide information on the mean mass for consumers and resources (except for 'detritus' and 'sediment') for every interaction, but lacks the dimensionality for 924 interactions. To solve this issue, we used the information about movement type for consumer and resource. Then, we classified the interaction as 2D when both consumer and resource move in 2D (e.g., both are sessile or walking) or if a consumer moves in 3D and a resource in 2D (e.g., swimming consumer and sessile/walking resource). The interaction was classified as 3D when both consumer and resource move in 3D (e.g., both swimming) or if the consumer moves in 2D and resource in 3D (e.g., sessile/walking consumer, swimming resource) [@Pawar2012].
 
 The main equation we used for estimating the interaction strength IS is:
-
 ```{=tex}
 \begin{equation}
 IS = \alpha x_R \frac{m_R}{m_C}
@@ -163,9 +122,15 @@ where \vec{\alpha} is the search rate, \vec{x_R} is the density of the resource,
 
 We obtained estimations for the resource density and the search rate from the scaling relationships with the resource and the consumer mass, respectively (@Pawar2012). The coefficients of such relationships, determined by ordinary least squares regression, vary with the interaction dimensionality. On one hand, resource density scales with resource mass as a power-law with exponents \vec{p = -0.79 \pm 0.09} in 2D and \vec{p = -0.86 \pm 0.06} in 3D. Since mean mass for resources 'detritus' and 'sediment' were not available in GATEWAy v.1.0, we calculated it considering the scaling relationship with consumer mass, also different in 2D and 3D (for details see equation S9 and figures 2c-d of Supplementary Information in @Pawar2012). On the other hand, search rate scales with consumer mass as a power-law with exponents \vec{p = 0.68 \pm 0.12} in 2D and \vec{p = 1.05 \pm 0.08} in 3D.
 
+Finally, we fit the distribution of the interaction strengths of the food web considering six candidate models (Uniform, Normal, Exponential, Power-law, log-Normal and Gamma) using maximum likelihood [@McCallum2008], and selected the model performance by computing the Akaike Information Criterion [@Burnham2002].
+
 ### Species properties
 
-In order to individually characterize the species of the food web, we considered weighted and unweighted properties (Figure 2). The former is based on the estimation of the interaction strength described in the previous section. The latter is related to properties commonly used in qualitative (presence/absence of interaction) food web studies [@Martinez1991; @Dunne2002; @Borrelli2014]. As weighted property we took into account the mean interaction strength, meaning the average strength of all interactions. As unweighted properties we used: a) degree or the total number of trophic interactions, taking into account in- and out-interactions (role as predator and prey, respectively); b) trophic level or the position in the food web relative to primary producers/detritus; and c) trophic similarity or the trophic overlap between species based on shared and unique resources and consumers.
+In order to individually characterize the species of the food web, we considered weighted and unweighted properties (Figure 2). The former is based on the estimation of the interaction strength described in the previous section. The latter is related to properties commonly used in qualitative (presence/absence of interaction) food web studies [@Martinez1991; @Dunne2002; @Borrelli2014].
+
+As weighted property we took into account the mean interaction strength, meaning the average strength of all interactions. After exploring the distribution of the interaction strength among the species of the food web, we decided to apply the k-means clustering method, which aims to partition the species into k groups such that the sum of squares from points to the assigned cluster centres is minimized [@Hartigan1979].
+
+As unweighted properties we used: a) degree or the total number of trophic interactions, taking into account in- and out-interactions (role as predator and prey, respectively); b) trophic level or the position in the food web relative to primary producers/detritus; and c) trophic similarity or the trophic overlap between species based on shared and unique resources and consumers.
 
 Formulas used to obtain the mentioned species properties are described in Appendix A1.
 
@@ -178,20 +143,48 @@ knitr::include_graphics("ToyFoodWeb.jpg")
 Finally, we run extinction simulations and estimated its impact on the stability of the network. For this, we calculated a stability index called Quasi-Sign Stability (QSS), which is the proportion of stable networks using randomized Jacobians and keeping the predator-prey sign structure fixed [@Allesina2008]. With the aim of analysing the effect of each species on the food web's stability, we deleted one species at a time, so the network size was reduced by one. After each species extinction, we calculated the QSS for the food web minus one species (size = 489) and compared it with the QSS for the whole network (size = 490); we performed 1000 simulations for each species. Then we statistically analysed such difference with an Anderson-Darling test [@Scholz1987].
 The formula for the QSS is described in Appendix A2.
 
-All analyses were performed in R software, using packages igraph [@Csardi2005], cheddar [@Hudson2013], and multiweb [@Saravia2019]. The source code and data are available at https://github.com/EcoComplex/WeddellSea.
+All analyses were performed in R software, mainly using packages igraph [@Csardi2005], cheddar [@Hudson2013], and multiweb [@Saravia2019]. The source code and data are available at https://github.com/EcoComplex/WeddellSea.
 
 # Results
 
-The Weddell Sea food web comprises 490 species and 16041 predator-prey interactions (Figure 3).
+## Interaction strength
+
+In this work we have estimated the interaction strength for the most highly-resolved marine food web to date, which comprises 490 species and 16041 predator-prey interactions (Figure 3).
 
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "Graphic representation of the Weddell Sea food web. Species (nodes) are arranged verticaly and colored by trophic level. The diameter of the node indicates the total number of interactions. Predator-prey interactions are represented by the arrows, from the prey to the predator."}
 knitr::include_graphics("WeddellSea_net.jpg")
 ```
 
-## Interaction strength
+The distribution of the interaction strength best fit to a log-Normal model, which indicates that there is a prevalent skew towards weaker interactions (Figure 4, Table 1). Regarding the distribution of the mean interaction strength among the species of the food web, the clustering method shows that species can be classified in two groups: 'High' and 'Low' interaction strength.
 
-Figure of distribution IS
-Model fit
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Frequency distribution of interaction strengths for the Weddell Sea food web (n = 490)."}
+knitr::include_graphics("IS_dist.jpg")
+```
+
+```{=tex}
+\begin{table}[t]
+\caption{Model comparison for the distribution of interaction strengths of the Weddell Sea food web. According to AIC, log-Normal is the best model.}
+\begin{tabular}{l c c c}
+\tophline
+
+Model & df & AIC & deltaAIC \\
+\middlehline
+log-Normal & 2 & -356579 & 0 \\
+\middlehline
+Gamma & 2 & -352575 & 4004 \\
+\middlehline
+Power-law & 2 & -347646 & 8933 \\
+\middlehline
+Exponential & 1 & -262852 & 93726 \\
+\middlehline
+Normal & 2 & -222785 & 133793 \\
+\middlehline
+Uniform & 2 & -178001 & 178578 \\
+
+\bottomhline
+\end{tabular}
+\end{table}
+```
 
 ## Species properties and stability
 
@@ -202,6 +195,7 @@ Biplots btw QSS difference and weighted and unweighted prop.
 
 # Discussion
 
+"Low functional redundancy at key trophic levels makes these ecosystems (polar pelagic) particularly sensitive to change". [@Murphy2016]
 
 # Examples from the official template
 
