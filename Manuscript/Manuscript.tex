@@ -262,8 +262,9 @@ effect of each species on the food web's stability, we deleted one
 species at a time, so the network size was reduced by one. After each
 species extinction, we calculated the QSS for the food web minus one
 species (size = 489) and compared it with the QSS for the whole network
-(size = 490); we performed 1000 simulations for each species. Then we
-statistically analysed such difference with an Anderson-Darling test
+(size = 490); we performed 1000 simulations for each species extinction.
+Then we statistically analysed such difference in QSS with an
+Anderson-Darling test considering a p-value \textless{} 0.01
 \citep{Scholz1987}. The formula for the QSS is described in
 Supplementary Material.
 
@@ -283,27 +284,30 @@ interaction strength best fit to a log-Normal model, which indicates
 that there is a prevalent skew towards weaker interactions (Figure 4,
 Table 1).
 
-\subsection{Species properties and stability}
+\subsection{Species properties}
 
 Regarding the distribution of the species mean interaction strength, the
 clustering method showed that species do form two distinct groups:
 `High' and `Low' interaction strength (Appendix Fig. A1). The so-called
-`High IS' and `Low IS' groups of species, exhibited different and for
-some cases opposite relationships with unweighted properties. It's
+`High IS' and `Low IS' groups of species exhibited different and, in
+some cases, opposite relationships with unweighted properties. It's
 noteworthy that only the relationship with trophic level revealed a
 similar trend in the regression analysis for both groups: mean
 interaction strength increases with trophic level (Figure 5A). On the
 contrary, the linear regressions with degree and trophic similarity
-showed opposite relationships between groups. This means that in species
-with relatively higher interaction strength, `High IS', such strength
-decreases when the number of interactions (degree) increases; the
-opposite occurs in species with relatively lower interaction strength
-`Low IS' (Figure 5B). Regarding trophic similarity, the interaction
-strength decreases in `High IS' species while increases in `Low IS'
-species (Figure 5C).
+showed opposite relationships comparing groups. These mean that in
+species with relatively higher mean interaction strength, `High IS',
+such strength decreases when the number of interactions (degree)
+increases; the opposite occurs in species with relatively lower
+interaction strength `Low IS' (Figure 5B). Regarding trophic similarity,
+the interaction strength decreases in `High IS' species while increases
+in `Low IS' species (Figure 5C).
 
-Linear regressions btw IS (weighted) and unweighted prop. Biplots btw
-QSS difference and weighted and unweighted prop.
+\subsection{Stability and extinction simulations}
+
+Figure 6
+
+Biplots btw QSS difference and weighted and unweighted prop.
 
 \section{Discussion}
 
@@ -342,7 +346,13 @@ The conclusion goes here.
 \clearpage
 
 \begin{figure}
-\includegraphics[width=12cm]{Regressions} \caption{Relationships between weighted (interaction strength) and unweighted species properties. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C).}\label{fig:unnamed-chunk-5}
+\includegraphics[width=12cm]{Regressions} \caption{Relationships between weighted (interaction strength) and unweighted species properties. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C) for each group: 'High IS' and 'Low IS'. All regression slopes are significant and statistically different among groups (p < 0.01).}\label{fig:unnamed-chunk-5}
+\end{figure}
+
+\clearpage
+
+\begin{figure}
+\includegraphics[width=12cm]{QSS_dif} \caption{Quasi-Sign Stability (QSS) difference between the whole Weddell Sea food web (n = 490) and the food web minus one species (n = 489), considering weighted (interaction strength) and unweighted species properties, and species habitat. Each point represents a species, where color represents 'High IS' and 'Low IS' groups. Shape indicates the impact on the QSS; if significant the extinction of that species altered the stability of the food web.}\label{fig:unnamed-chunk-6}
 \end{figure}
 
 \clearpage
@@ -374,7 +384,7 @@ Uniform & 2 & -178001 & 178578 \\
 \clearpage
 
 \begin{figure}
-\includegraphics[width=12cm]{Clus_meanIS} \caption{A) Frequency distribution for the mean interaction strength of the species of Weddell Sea food web. B) Visualization of the optimal number of clusters applying the Gap statistic.}\label{fig:unnamed-chunk-6}
+\includegraphics[width=12cm]{Clus_meanIS} \caption{A) Frequency distribution for the mean interaction strength of the species of Weddell Sea food web. B) Visualization of the optimal number of clusters applying the Gap statistic.}\label{fig:unnamed-chunk-7}
 \end{figure}
 
 

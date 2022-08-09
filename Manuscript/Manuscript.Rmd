@@ -135,8 +135,11 @@ Formulas used to obtain the above species properties are described in Supplement
 
 ### Stability and extinction simulations
 
-Finally, we run extinction simulations and estimated its impact on the stability of the network. For this, we calculated a stability index called Quasi-Sign Stability (QSS), which is the proportion of stable networks using randomized Jacobians and keeping the predator-prey sign structure fixed [@Allesina2008]. With the aim of analysing the effect of each species on the food web's stability, we deleted one species at a time, so the network size was reduced by one. After each species extinction, we calculated the QSS for the food web minus one species (size = 489) and compared it with the QSS for the whole network (size = 490); we performed 1000 simulations for each species. Then we statistically analysed such difference with an Anderson-Darling test [@Scholz1987].
-The formula for the QSS is described in Supplementary Material.
+Finally, we run extinction simulations and estimated its impact on the stability of the network. For this, we calculated a stability index called Quasi-Sign Stability (QSS), which is the proportion of stable networks using randomized Jacobians and keeping the predator-prey sign structure fixed [@Allesina2008]. If this proportion is zero, then one should take into account the real part of the maximum eigenvalue of the Jacobian matrix, which is also a measure of stability [@Grilli2016].
+
+With the aim of analysing the effect of each species on the food web's stability we deleted one species at a time, so the network size was reduced by one. After each species extinction, we calculated the stability for the food web minus one species (size = 489) and compared it with that of the whole network (size = 490); we performed 1000 simulations for each species extinction. At last we statistically analysed such difference with an Anderson-Darling test considering a p-value < 0.01 [@Scholz1987]. If the difference was positive, then the stability of the food web was impacted positively (higher stability) when that species become extinct, and viceversa. Details for the stability calculations are described in Supplementary Material.
+
+Once we had the results for the impact on stability for each species extinction, we plotted them considering weighted (interaction strength) and unweighted properties, and species habitat.
 
 All analyses were performed in R software, mainly using packages igraph [@Csardi2005], cheddar [@Hudson2013], and multiweb [@Saravia2019]. The source code and data are available at https://github.com/EcoComplex/WeddellSea.
 
@@ -146,11 +149,16 @@ All analyses were performed in R software, mainly using packages igraph [@Csardi
 
 In this work we have estimated the interaction strength for the most highly-resolved marine food web to date, which comprises 490 species and 16041 predator-prey interactions (Figure 3). The distribution of the interaction strength best fit to a log-Normal model, which indicates that there is a prevalent skew towards weaker interactions (Figure 4, Table 1).
 
-## Species properties and stability
+## Species properties
 
-Regarding the distribution of the species mean interaction strength, the clustering method showed that species do form two distinct groups: 'High' and 'Low' interaction strength (Appendix Fig. A1). The so-called 'High IS' and 'Low IS' groups of species, exhibited different and for some cases opposite relationships with unweighted properties. It's noteworthy that only the relationship with trophic level revealed a similar trend in the regression analysis for both groups: mean interaction strength increases with trophic level (Figure 5A). On the contrary, the linear regressions with degree and trophic similarity showed opposite relationships between groups. This means that in species with relatively higher interaction strength, 'High IS', such strength decreases when the number of interactions (degree) increases; the opposite occurs in species with relatively lower interaction strength 'Low IS' (Figure 5B). Regarding trophic similarity, the interaction strength decreases in 'High IS' species while increases in 'Low IS' species (Figure 5C).
+Regarding the distribution of the species mean interaction strength, the clustering method showed that species do form two distinct groups: 'High' and 'Low' interaction strength (Appendix Fig. A1). The so-called 'High IS' and 'Low IS' groups of species exhibited different and, in some cases, opposite relationships with unweighted properties. It's noteworthy that only the relationship with trophic level revealed a similar trend in the regression analysis for both groups: mean interaction strength increases with trophic level (Figure 5A). On the contrary, the linear regressions with degree and trophic similarity showed opposite relationships comparing groups. These mean that in species with relatively higher mean interaction strength, 'High IS', such strength decreases when the number of interactions (degree) increases; the opposite occurs in species with relatively lower interaction strength 'Low IS' (Figure 5B). Regarding trophic similarity, the interaction strength decreases in 'High IS' species while increases in 'Low IS' species (Figure 5C).
 
-Linear regressions btw IS (weighted) and unweighted prop.
+## Stability and extinction simulations
+
+First of all, it's important to note that since the proportion of Jacobians that are locally stable is zero for the Weddell Sea food web, we considered the real part of the maximum eigenvalue as the stability index. Our results showed that the majority of the species had no significant impact on the stability of the food web when extinct (Anderson-Darling test p-value > 0.01 for QSS difference). This is clearly observed in Figure 6 A-D, where most of the points lie around the zero value of the 'QSS difference' axis. This means that the stability for the food web minus a given species is similar to the stability for the whole network.
+
+When plotting 
+
 Biplots btw QSS difference and weighted and unweighted prop.
 
 
@@ -189,8 +197,14 @@ knitr::include_graphics("IS_dist.jpg")
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (interaction strength) and unweighted species properties. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C). All regression slopes are statistically significant as well as group's slopes (p < 0.05)."}
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (interaction strength) and unweighted species properties. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C) for each group: 'High IS' and 'Low IS'. All regression slopes are significant and statistically different among groups (p < 0.01)."}
 knitr::include_graphics("Regressions.jpg")
+```
+
+\clearpage
+
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Quasi-Sign Stability (QSS) difference between the whole Weddell Sea food web (n = 490) and the food web minus one species (n = 489), considering weighted (interaction strength) and unweighted species properties, and species habitat. Each point represents a species, where color represents 'High IS' and 'Low IS' groups. Shape indicates the impact on the QSS; if significant the extinction of that species altered the stability of the food web."}
+knitr::include_graphics("QSS_dif.jpg")
 ```
 
 \clearpage
