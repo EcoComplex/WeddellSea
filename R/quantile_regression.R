@@ -45,7 +45,7 @@ fviz_gap_stat(gap_stat)
 #ggplot(spp_attr_all, aes(y = log(AllStrength_mean),x=cluster,color=cluster)) + geom_jitter() + theme_bw() + scale_color_viridis_c()
 ggplot(spp_attr_all, aes(x = log(AllStrength_mean), color=cluster)) + 
   geom_density() + 
-  labs(x = "log(mean Interaction strength)", y = "Density", color = "Group") +
+  labs(x = "log(mean Interaction strength)", y = "Frequency", color = "Cluster") +
   theme_bw() +
   theme(axis.title = element_text(size = 18, face = "bold"),
         axis.text.x = element_text(size = 15),
