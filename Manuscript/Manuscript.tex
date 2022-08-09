@@ -140,10 +140,6 @@ large biomass, intermediate to high diversity in comparison to benthic
 boreal communities and a spatially patchy distribution of organisms
 \citep{Dayton1990, Teixido2002}.
 
-\begin{figure}
-\includegraphics[width=12cm]{WeddellSea_map} \caption{Map of the Weddell Sea and Dronning Maud Land sector highlighting the high Antarctic shelf as a dashed-line contour. Modified from www.soos.aq.}\label{fig:unnamed-chunk-1}
-\end{figure}
-
 \subsection{Weddell Sea food web dataset}
 
 We obtained the dataset of the Weddell Sea food web from the GlobAL
@@ -229,25 +225,31 @@ qualitative (presence/absence of interaction) food web studies
 
 As weighted property we took into account the mean interaction strength,
 meaning the average strength of all interactions. After exploring the
-distribution of the interaction strength among the species of the food
-web, we decided to apply the k-means clustering method, which aims to
-partition the species into k groups such that the sum of squares from
-points to the assigned cluster centres is minimized
-\citep{Hartigan1979}.
+distribution of the species log(mean interaction strength), we decided
+to apply the k-means clustering method, which aims to partition the
+species into k groups such that the sum of squares from points to the
+assigned cluster centres is minimized \citep{Hartigan1979}. Then we
+tested the goodness of this clustering measure with the Gap statistic,
+which compares log(W(k)) with E*{[}log(W(k)){]} where the latter is
+defined via bootstraping \citep{Tibshirani2001}.
 
-As unweighted properties we used: a) degree or the total number of
-trophic interactions, taking into account in- and out-interactions (role
-as predator and prey, respectively); b) trophic level or the position in
-the food web relative to primary producers/detritus; and c) trophic
-similarity or the trophic overlap between species based on shared and
-unique resources and consumers.
+On the other hand, we considered the following unweighted properties: a)
+degree or the total number of trophic interactions, taking into account
+in- and out-interactions (role as predator and prey, respectively); b)
+trophic level or the position in the food web relative to primary
+producers/detritus; and c) trophic similarity or the trophic overlap
+between species based on shared and unique resources and consumers.
 
-Formulas used to obtain the mentioned species properties are described
-in Appendix A1.
+With the aim of studying the relationship between the interaction
+strength of the species and its unweighted properties, we performed
+linear regression analyses between the log(mean interaction strength)
+and each of the mentioned unweighted properties. The statistical
+significance of the fitted slopes was tested, as well as the difference
+between the groups' slopes applying least-squares means
+\citep{Harvey1960}.
 
-\begin{figure}
-\includegraphics[width=12cm]{ToyFoodWeb} \caption{Scheme of a network showing the weighted and unweighted properties we used to characterize the species of the Weddell Sea food web.}\label{fig:unnamed-chunk-2}
-\end{figure}
+Formulas used to obtain the above species properties are described in
+Supplementary Material.
 
 \subsubsection{Stability and extinction simulations}
 
@@ -262,7 +264,8 @@ species extinction, we calculated the QSS for the food web minus one
 species (size = 489) and compared it with the QSS for the whole network
 (size = 490); we performed 1000 simulations for each species. Then we
 statistically analysed such difference with an Anderson-Darling test
-\citep{Scholz1987}. The formula for the QSS is described in Appendix A2.
+\citep{Scholz1987}. The formula for the QSS is described in
+Supplementary Material.
 
 All analyses were performed in R software, mainly using packages igraph
 \citep{Csardi2005}, cheddar \citep{Hudson2013}, and multiweb
@@ -275,25 +278,77 @@ https://github.com/EcoComplex/WeddellSea.
 
 In this work we have estimated the interaction strength for the most
 highly-resolved marine food web to date, which comprises 490 species and
-16041 predator-prey interactions (Figure 3).
+16041 predator-prey interactions (Figure 3). The distribution of the
+interaction strength best fit to a log-Normal model, which indicates
+that there is a prevalent skew towards weaker interactions (Figure 4,
+Table 1).
+
+\subsection{Species properties and stability}
+
+Regarding the distribution of the species mean interaction strength, the
+clustering method showed that species do form two distinct groups:
+`High' and `Low' interaction strength (Appendix Fig. A1). The so-called
+`High IS' and `Low IS' groups of species, exhibited different and for
+some cases opposite relationships with unweighted properties. It's
+noteworthy that only the relationship with trophic level revealed a
+similar trend in the regression analysis for both groups: mean
+interaction strength increases with trophic level (Figure 5A). On the
+contrary, the linear regressions with degree and trophic similarity
+showed opposite relationships between groups. This means that in species
+with relatively higher interaction strength, `High IS', such strength
+decreases when the number of interactions (degree) increases; the
+opposite occurs in species with relatively lower interaction strength
+`Low IS' (Figure 5B). Regarding trophic similarity, the interaction
+strength decreases in `High IS' species while increases in `Low IS'
+species (Figure 5C).
+
+Linear regressions btw IS (weighted) and unweighted prop. Biplots btw
+QSS difference and weighted and unweighted prop.
+
+\section{Discussion}
+
+``Low functional redundancy at key trophic levels makes these ecosystems
+(polar pelagic) particularly sensitive to change''. \citep{Murphy2016}
+
+\clearpage
+\conclusions[Conclusions]
+
+The conclusion goes here.
+
+\clearpage
+
+\begin{figure}
+\includegraphics[width=12cm]{WeddellSea_map} \caption{Map of the Weddell Sea and Dronning Maud Land sector highlighting the high Antarctic shelf as a dashed-line contour. Modified from www.soos.aq.}\label{fig:unnamed-chunk-1}
+\end{figure}
+
+\clearpage
+
+\begin{figure}
+\includegraphics[width=12cm]{ToyFoodWeb} \caption{Scheme of a network showing the weighted and unweighted properties we used to characterize the species of the Weddell Sea food web.}\label{fig:unnamed-chunk-2}
+\end{figure}
+
+\clearpage
 
 \begin{figure}
 \includegraphics[width=12cm]{WeddellSea_net} \caption{Graphic representation of the Weddell Sea food web. Species (nodes) are arranged verticaly and colored by trophic level. The diameter of the node indicates the total number of interactions. Predator-prey interactions are represented by the arrows, from the prey to the predator.}\label{fig:unnamed-chunk-3}
 \end{figure}
 
-The distribution of the interaction strength best fit to a log-Normal
-model, which indicates that there is a prevalent skew towards weaker
-interactions (Figure 4, Table 1). Regarding the distribution of the mean
-interaction strength among the species of the food web, the clustering
-method shows that species can be classified in two groups: `High' and
-`Low' interaction strength.
+\clearpage
 
 \begin{figure}
 \includegraphics[width=12cm]{IS_dist} \caption{Frequency distribution of interaction strengths for the Weddell Sea food web (n = 490).}\label{fig:unnamed-chunk-4}
 \end{figure}
 
+\clearpage
+
+\begin{figure}
+\includegraphics[width=12cm]{Regressions} \caption{Relationships between weighted (interaction strength) and unweighted species properties. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C).}\label{fig:unnamed-chunk-5}
+\end{figure}
+
+\clearpage
+
 \begin{table}[t]
-\caption{Model comparison (AIC) for the distribution of interaction strengths of the Weddell Sea food web.}
+\caption{Model comparison for the distribution of interaction strengths of the Weddell Sea food web. According to AIC, log-Normal is the best model.}
 \begin{tabular}{l c c c}
 \tophline
 
@@ -315,224 +370,12 @@ Uniform & 2 & -178001 & 178578 \\
 \end{tabular}
 \end{table}
 
-\subsection{Species properties and stability}
-
-Clustering in 2 groups: high and low IS Linear regressions btw IS
-(weighted) and unweighted prop. Biplots btw QSS difference and weighted
-and unweighted prop.
-
-\section{Discussion}
-
-``Low functional redundancy at key trophic levels makes these ecosystems
-(polar pelagic) particularly sensitive to change''. \citep{Murphy2016}
-
-\section{Examples from the official template}
-
-\subsection{FIGURES}
-
-When figures and tables are placed at the end of the MS (article in
-one-column style), please add \clearpage between bibliography and first
-table and/or figure as well as between each table and/or figure.
-
-\subsubsection{ONE-COLUMN FIGURES}
-
-\begin{figure}
-\includegraphics[width=8.3cm]{Nikolaus_Kopernikus} \caption{one column figure}\label{fig:unnamed-chunk-5}
-\end{figure}
-
-\subsubsection{TWO-COLUMN FIGURES}
-
-\begin{figure}
-\includegraphics[width=12cm]{Nikolaus_Kopernikus} \caption{two column figure}\label{fig:unnamed-chunk-6}
-\end{figure}
-
-\subsection{TABLES}
-
-You can add \LaTeX table in an R Markdown document to meet the template
-requirements.
-
-\subsubsection{ONE-COLUMN TABLE}
-
-\begin{table}[t]
-\caption{TEXT}
-\begin{tabular}{l c r}
-\tophline
-
-a & b & c \\
-\middlehline
-1 & 2 & 3 \\
-
-\bottomhline
-\end{tabular}
-\belowtable{Table Footnotes}
-\end{table}
-
-\subsubsection{TWO-COLUMN TABLE}
-
-\begin{table*}[t]
-\caption{TEXT}
-\begin{tabular}{l c r}
-\tophline
-
-a & b & c \\
-\middlehline
-1 & 2 & 3 \\
-
-\bottomhline
-\end{tabular}
-\belowtable{Table footnotes}
-\end{table*}
-
-\subsection{MATHEMATICAL EXPRESSIONS}
-
-All papers typeset by Copernicus Publications follow the math
-typesetting regulations given by the IUPAC Green Book (IUPAC:
-Quantities, Units and Symbols in Physical Chemistry, 2nd Edn., Blackwell
-Science, available at:
-\url{http://old.iupac.org/publications/books/gbook/green_book_2ed.pdf},
-1993).
-
-Physical quantities/variables are typeset in italic font (t for time, T
-for Temperature)
-
-Indices which are not defined are typeset in italic font (x, y, z, a, b,
-c)
-
-Items/objects which are defined are typeset in roman font (Car A, Car B)
-
-Descriptions/specifications which are defined by itself are typeset in
-roman font (abs, rel, ref, tot, net, ice)
-
-Abbreviations from 2 letters are typeset in roman font (RH, LAI)
-
-Vectors are identified in bold italic font using \vec{x}
-
-Matrices are identified in bold roman font
-
-Multiplication signs are typeset using the LaTeX commands
-\texttt{\textbackslash{}times} (for vector products, grids, and
-exponential notations) or \texttt{\textbackslash{}cdot}
-
-The character * should not be applied as mutliplication sign
-
-\subsection{EQUATIONS}
-
-\subsubsection{Single-row equation}
-
-Unnumbered equations (i.e.~using \texttt{\$\$} and getting inline
-preview in RStudio) are not supported by Copernicus.
-
-\begin{equation}
-1 \times 1 \cdot 1 = 42
-\end{equation}
-
-\begin{equation}
-A = \pi r^2
-\end{equation}
-
-\begin{equation}
-x=\frac{2b\pm\sqrt{b^{2}-4ac}}{2c}.  
-\end{equation}
-
-\subsubsection{Multiline equation}
-
-\begin{align}
-& 3 + 5 = 8\\
-& 3 + 5 = 8\\
-& 3 + 5 = 8
-\end{align}
-
-\subsection{MATRICES}
-
-\[
-\begin{matrix}
-x & y & z\\
-x & y & z\\
-x & y & z\\
-\end{matrix}
-\]
-
-\subsection{ALGORITHM/PROGRAMMING CODE}
-
-If you want to use algorithms, you need to make sure yourself that the
-\LaTeX packages \texttt{algorithms} and \texttt{algorithmicx} are
-installed so that \texttt{algorithm.sty} respectively
-\texttt{algorithmic.sty} can be loaded by the Copernicus template. Both
-need to be available through your preferred \LaTeX{} distribution. With
-TinyTeX (or TeX Live), you can do so by running
-\texttt{tinytex::tlmgr\_install(c("algorithms",\ "algorithmicx"))}
-
-\begin{verbatim}
-## tlmgr update --all --self
-\end{verbatim}
-
-\begin{verbatim}
-## tlmgr install algorithms algorithmicx
-\end{verbatim}
-
-Copernicus staff will no accept any additional packages from your LaTeX
-source code, so please stick to these two acceptable packages. They are
-needed to use the example below
-
-\begin{algorithm}
-\caption{Algorithm Caption}
-\label{a1}
-\begin{algorithmic}
-\STATE $i\gets 10$
-\IF {$i\geq 5$} 
-        \STATE $i\gets i-1$
-\ELSE
-        \IF {$i\leq 3$}
-                \STATE $i\gets i+2$
-        \ENDIF
-\ENDIF
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{CHEMICAL FORMULAS AND REACTIONS}
-
-For formulas embedded in the text, please use
-\texttt{\textbackslash{}chem\{\}}, e.g. \chem{A \rightarrow B}.
-
-The reaction environment creates labels including the letter R, i.e.
-(R1), (R2), etc.
-
-\begin{itemize}
-\item
-  \texttt{\textbackslash{}rightarrow} should be used for normal
-  (one-way) chemical reactions
-\item
-  \texttt{\textbackslash{}rightleftharpoons} should be used for
-  equilibria
-\item
-  \texttt{\textbackslash{}leftrightarrow} should be used for resonance
-  structures
-\end{itemize}
-
-\begin{reaction}
-A \rightarrow B \\
-\end{reaction}
-\begin{reaction}
-Coper \rightleftharpoons nicus \\
-\end{reaction}
-\begin{reaction}
-Publi \leftrightarrow cations
-\end{reaction}
-
-\subsection{PHYSICAL UNITS}
-
-Please use \texttt{\textbackslash{}unit\{\}} (allows to save the
-math/\texttt{\$} environment) and apply the exponential notation, for
-example \(3.14\,\unit{km\,h^{-1}}\) (using LaTeX mode:
-\texttt{\textbackslash{}(\ 3.14\textbackslash{},\textbackslash{}unit\{...\}\ \textbackslash{})})
-or \unit{0.872\,m\,s^{-1}} (using only
-\texttt{\textbackslash{}unit\{0.872\textbackslash{},m\textbackslash{},s\^{}\{-1\}\}}).
-
+\appendixfigures
 \clearpage
 
-\conclusions[Conclusions]
-
-The conclusion goes here.
+\begin{figure}
+\includegraphics[width=12cm]{Clus_meanIS} \caption{A) Frequency distribution for the mean interaction strength of the species of Weddell Sea food web. B) Visualization of the optimal number of clusters applying the Gap statistic.}\label{fig:unnamed-chunk-6}
+\end{figure}
 
 
 
@@ -543,31 +386,6 @@ The conclusion goes here.
 %% optional
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\appendix
-\section{Figures and tables in appendices}
-\subsection{Option 1}
-
-If you sorted all figures and tables into the sections of the text,
-please also sort the appendix figures and appendix tables into the
-respective appendix sections. They will be correctly named
-automatically.
-
-\subsection{Option 2}
-
-If you put all figures after the reference list, please insert appendix
-tables and figures after the normal tables and figures.
-
-\texttt{\textbackslash{}appendixfigures} needs to be added in front of
-appendix figures \texttt{\textbackslash{}appendixtables} needs to be
-added in front of appendix tables
-
-Please add \texttt{\textbackslash{}clearpage} between each table and/or
-figure. Further guidelines on figures and tables can be found below.
-Regarding figures and tables in appendices, the following two options
-are possible depending on your general handling of figures and tables in
-the manuscript environment: To rename them correctly to A1, A2, etc.,
-please add the following commands in front of them:
-\noappendix
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \authorcontribution{TIM and LAS: Conceptualization (lead); Data curation
