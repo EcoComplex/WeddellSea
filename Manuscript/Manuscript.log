@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.9)  10 AUG 2022 12:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.9)  10 AUG 2022 16:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -465,74 +465,86 @@ File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 
 {/Users/tomasmarina/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 
-Package natbib Warning: Citation `McCallum2008' on page 2 undefined on input line 214.
+Package natbib Warning: Citation `McCallum2008' on page 2 undefined on input line 215.
 
 
-Package natbib Warning: Citation `Burnham2002' on page 2 undefined on input line 215.
+Package natbib Warning: Citation `Burnham2002' on page 2 undefined on input line 216.
 
 [2]
 
-Package natbib Warning: Citation `Hartigan1979' on page 3 undefined on input line 231.
+Package natbib Warning: Citation `Hartigan1979' on page 3 undefined on input line 233.
 
 
-Package natbib Warning: Citation `Tibshirani2001' on page 3 undefined on input line 234.
+Package natbib Warning: Citation `Tibshirani2001' on page 3 undefined on input line 236.
 
 
-Package natbib Warning: Citation `Harvey1960' on page 3 undefined on input line 249.
+Package natbib Warning: Citation `Dunne2002a' on page 3 undefined on input line 250.
 
 
-Package natbib Warning: Citation `Grilli2016' on page 3 undefined on input line 263.
+Package natbib Warning: Citation `Cirtwill2018a' on page 3 undefined on input line 250.
+
+
+Package natbib Warning: Citation `Cirtwill2018a' on page 3 undefined on input line 254.
+
+
+Package natbib Warning: Citation `Williams2000' on page 3 undefined on input line 257.
+
+
+Package natbib Warning: Citation `Harvey1960' on page 3 undefined on input line 265.
+
+
+Package natbib Warning: Citation `Grilli2016' on page 3 undefined on input line 279.
 
 [3] [4]
 
-Package natbib Warning: Citation `Murphy2016' on page 5 undefined on input line 350.
+Package natbib Warning: Citation `Murphy2016' on page 5 undefined on input line 366.
 
 [5] [6
 
 ]
-<WeddellSea_map.jpg, id=102, 1027.84pt x 770.88pt>
+<WeddellSea_map.jpg, id=104, 1027.84pt x 770.88pt>
 File: WeddellSea_map.jpg Graphic file (type jpg)
 <use WeddellSea_map.jpg>
-Package pdftex.def Info: WeddellSea_map.jpg  used on input line 360.
+Package pdftex.def Info: WeddellSea_map.jpg  used on input line 376.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 [7 <./WeddellSea_map.jpg>]
-<ToyFoodWeb.jpg, id=109, 1027.84pt x 770.88pt>
+<ToyFoodWeb.jpg, id=111, 1027.84pt x 770.88pt>
 File: ToyFoodWeb.jpg Graphic file (type jpg)
 <use ToyFoodWeb.jpg>
-Package pdftex.def Info: ToyFoodWeb.jpg  used on input line 366.
+Package pdftex.def Info: ToyFoodWeb.jpg  used on input line 382.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 [8 <./ToyFoodWeb.jpg>]
-<WeddellSea_net.jpg, id=115, 1027.84pt x 770.88pt>
+<WeddellSea_net.jpg, id=117, 1027.84pt x 770.88pt>
 File: WeddellSea_net.jpg Graphic file (type jpg)
 <use WeddellSea_net.jpg>
-Package pdftex.def Info: WeddellSea_net.jpg  used on input line 372.
+Package pdftex.def Info: WeddellSea_net.jpg  used on input line 388.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 [9 <./WeddellSea_net.jpg>]
-<IS_dist.jpg, id=121, 718.685pt x 603.25375pt>
+<IS_dist.jpg, id=123, 718.685pt x 603.25375pt>
 File: IS_dist.jpg Graphic file (type jpg)
 <use IS_dist.jpg>
-Package pdftex.def Info: IS_dist.jpg  used on input line 378.
+Package pdftex.def Info: IS_dist.jpg  used on input line 394.
 (pdftex.def)             Requested size: 341.43306pt x 286.60373pt.
 [10 <./IS_dist.jpg>]
-<Regressions.jpg, id=127, 1027.84pt x 770.88pt>
+<Regressions.jpg, id=129, 1027.84pt x 770.88pt>
 File: Regressions.jpg Graphic file (type jpg)
 <use Regressions.jpg>
-Package pdftex.def Info: Regressions.jpg  used on input line 384.
+Package pdftex.def Info: Regressions.jpg  used on input line 400.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 [11 <./Regressions.jpg>]
-<QSS_dif.jpg, id=133, 1027.84pt x 770.88pt>
+<QSS_dif.jpg, id=135, 1027.84pt x 770.88pt>
 File: QSS_dif.jpg Graphic file (type jpg)
 <use QSS_dif.jpg>
-Package pdftex.def Info: QSS_dif.jpg  used on input line 390.
+Package pdftex.def Info: QSS_dif.jpg  used on input line 406.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 [12 <./QSS_dif.jpg>] [13] [14]
-<Clus_meanIS.jpg, id=151, 1027.84pt x 770.88pt>
+<Clus_meanIS.jpg, id=153, 1027.84pt x 770.88pt>
 File: Clus_meanIS.jpg Graphic file (type jpg)
 <use Clus_meanIS.jpg>
-Package pdftex.def Info: Clus_meanIS.jpg  used on input line 461.
+Package pdftex.def Info: Clus_meanIS.jpg  used on input line 477.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 
-Overfull \hbox (10.3438pt too wide) in paragraph at lines 481--481
+Overfull \hbox (10.3438pt too wide) in paragraph at lines 497--497
 \T1/ptm/m/n/9 original draft (lead); Writing -- review and editing (lead). SK: Conceptualization (lead); Formal analysis (supporting); Methodology (supporting);
  []
 
@@ -560,10 +572,10 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  87i,8n,91p,593b,470s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}</Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Manuscript.pdf (16 pages, 1701134 bytes).
+Output written on Manuscript.pdf (16 pages, 1701719 bytes).
 PDF statistics:
- 238 PDF objects out of 1000 (max. 8388607)
- 191 compressed objects within 2 object streams
+ 240 PDF objects out of 1000 (max. 8388607)
+ 193 compressed objects within 2 object streams
  61 named destinations out of 1000 (max. 500000)
  36 words of extra memory for PDF output out of 10000 (max. 10000000)
 
