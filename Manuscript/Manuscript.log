@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.9)  9 AUG 2022 15:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.9)  10 AUG 2022 12:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -480,60 +480,63 @@ Package natbib Warning: Citation `Tibshirani2001' on page 3 undefined on input l
 
 Package natbib Warning: Citation `Harvey1960' on page 3 undefined on input line 249.
 
-[3]
 
-Package natbib Warning: Citation `Murphy2016' on page 4 undefined on input line 315.
+Package natbib Warning: Citation `Grilli2016' on page 3 undefined on input line 263.
 
-[4] [5
+[3] [4]
+
+Package natbib Warning: Citation `Murphy2016' on page 5 undefined on input line 350.
+
+[5] [6
 
 ]
-<WeddellSea_map.jpg, id=98, 1027.84pt x 770.88pt>
+<WeddellSea_map.jpg, id=102, 1027.84pt x 770.88pt>
 File: WeddellSea_map.jpg Graphic file (type jpg)
 <use WeddellSea_map.jpg>
-Package pdftex.def Info: WeddellSea_map.jpg  used on input line 325.
+Package pdftex.def Info: WeddellSea_map.jpg  used on input line 360.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
-[6 <./WeddellSea_map.jpg>]
-<ToyFoodWeb.jpg, id=104, 1027.84pt x 770.88pt>
+[7 <./WeddellSea_map.jpg>]
+<ToyFoodWeb.jpg, id=109, 1027.84pt x 770.88pt>
 File: ToyFoodWeb.jpg Graphic file (type jpg)
 <use ToyFoodWeb.jpg>
-Package pdftex.def Info: ToyFoodWeb.jpg  used on input line 331.
+Package pdftex.def Info: ToyFoodWeb.jpg  used on input line 366.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
-[7 <./ToyFoodWeb.jpg>]
-<WeddellSea_net.jpg, id=111, 1027.84pt x 770.88pt>
+[8 <./ToyFoodWeb.jpg>]
+<WeddellSea_net.jpg, id=115, 1027.84pt x 770.88pt>
 File: WeddellSea_net.jpg Graphic file (type jpg)
 <use WeddellSea_net.jpg>
-Package pdftex.def Info: WeddellSea_net.jpg  used on input line 337.
+Package pdftex.def Info: WeddellSea_net.jpg  used on input line 372.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
-[8 <./WeddellSea_net.jpg>]
-<IS_dist.jpg, id=117, 718.685pt x 603.25375pt>
+[9 <./WeddellSea_net.jpg>]
+<IS_dist.jpg, id=121, 718.685pt x 603.25375pt>
 File: IS_dist.jpg Graphic file (type jpg)
 <use IS_dist.jpg>
-Package pdftex.def Info: IS_dist.jpg  used on input line 343.
+Package pdftex.def Info: IS_dist.jpg  used on input line 378.
 (pdftex.def)             Requested size: 341.43306pt x 286.60373pt.
-[9 <./IS_dist.jpg>]
-<Regressions.jpg, id=123, 1027.84pt x 770.88pt>
+[10 <./IS_dist.jpg>]
+<Regressions.jpg, id=127, 1027.84pt x 770.88pt>
 File: Regressions.jpg Graphic file (type jpg)
 <use Regressions.jpg>
-Package pdftex.def Info: Regressions.jpg  used on input line 349.
+Package pdftex.def Info: Regressions.jpg  used on input line 384.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
-[10 <./Regressions.jpg>]
-<QSS_dif.jpg, id=129, 1027.84pt x 770.88pt>
+[11 <./Regressions.jpg>]
+<QSS_dif.jpg, id=133, 1027.84pt x 770.88pt>
 File: QSS_dif.jpg Graphic file (type jpg)
 <use QSS_dif.jpg>
-Package pdftex.def Info: QSS_dif.jpg  used on input line 355.
+Package pdftex.def Info: QSS_dif.jpg  used on input line 390.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
-[11 <./QSS_dif.jpg>] [12]
-<Clus_meanIS.jpg, id=140, 1027.84pt x 770.88pt>
+[12 <./QSS_dif.jpg>] [13] [14]
+<Clus_meanIS.jpg, id=151, 1027.84pt x 770.88pt>
 File: Clus_meanIS.jpg Graphic file (type jpg)
 <use Clus_meanIS.jpg>
-Package pdftex.def Info: Clus_meanIS.jpg  used on input line 387.
+Package pdftex.def Info: Clus_meanIS.jpg  used on input line 461.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 
-Overfull \hbox (10.3438pt too wide) in paragraph at lines 407--407
+Overfull \hbox (10.3438pt too wide) in paragraph at lines 481--481
 \T1/ptm/m/n/9 original draft (lead); Writing -- review and editing (lead). SK: Conceptualization (lead); Formal analysis (supporting); Methodology (supporting);
  []
 
-(./Manuscript.bbl [13
+(./Manuscript.bbl [15
 
 
 
@@ -542,24 +545,25 @@ Overfull \hbox (10.3438pt too wide) in paragraph at lines 407--407
 
 
 
- <./Clus_meanIS.jpg>]) [14]
+
+ <./Clus_meanIS.jpg>]) [16]
 
 Package natbib Warning: There were undefined citations.
 
 (./Manuscript.aux) ) 
 Here is how much of TeX's memory you used:
- 12905 strings out of 479638
- 203501 string characters out of 5877521
- 540265 words of memory out of 5000000
+ 12908 strings out of 479638
+ 203522 string characters out of 5877521
+ 543266 words of memory out of 5000000
  31147 multiletter control sequences out of 15000+600000
  511137 words of font info for 95 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  87i,8n,91p,593b,470s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}</Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Manuscript.pdf (14 pages, 1706532 bytes).
+Output written on Manuscript.pdf (16 pages, 1701134 bytes).
 PDF statistics:
- 228 PDF objects out of 1000 (max. 8388607)
- 183 compressed objects within 2 object streams
- 58 named destinations out of 1000 (max. 500000)
+ 238 PDF objects out of 1000 (max. 8388607)
+ 191 compressed objects within 2 object streams
+ 61 named destinations out of 1000 (max. 500000)
  36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

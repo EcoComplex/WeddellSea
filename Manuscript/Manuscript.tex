@@ -257,16 +257,27 @@ Finally, we run extinction simulations and estimated its impact on the
 stability of the network. For this, we calculated a stability index
 called Quasi-Sign Stability (QSS), which is the proportion of stable
 networks using randomized Jacobians and keeping the predator-prey sign
-structure fixed \citep{Allesina2008}. With the aim of analysing the
-effect of each species on the food web's stability, we deleted one
-species at a time, so the network size was reduced by one. After each
-species extinction, we calculated the QSS for the food web minus one
-species (size = 489) and compared it with the QSS for the whole network
-(size = 490); we performed 1000 simulations for each species extinction.
-Then we statistically analysed such difference in QSS with an
-Anderson-Darling test considering a p-value \textless{} 0.01
-\citep{Scholz1987}. The formula for the QSS is described in
-Supplementary Material.
+structure fixed \citep{Allesina2008}. If this proportion is zero, then
+one should take into account the real part of the maximum eigenvalue of
+the Jacobian matrix, which is also a measure of stability
+\citep{Grilli2016}.
+
+With the aim of analysing the effect of each species on the food web's
+stability we deleted one species at a time, so the network size was
+reduced by one. After each species extinction, we calculated the
+stability for the food web minus one species (size = 489) and compared
+it with that of the whole network (size = 490). We performed 1000
+simulations for each species extinction and obtained a mean QSS and
+maximum eigenvalue. At last we statistically analysed such difference
+with an Anderson-Darling test considering a p-value \textless{} 0.01
+\citep{Scholz1987}. If the difference was positive, then the stability
+of the food web was impacted positively (higher stability) when that
+species become extinct, and viceversa. Details for the stability
+calculations are described in Supplementary Material.
+
+Once we had the results for the impact on stability for each species
+extinction, we plotted them considering weighted (interaction strength)
+and unweighted properties, and species habitat.
 
 All analyses were performed in R software, mainly using packages igraph
 \citep{Csardi2005}, cheddar \citep{Hudson2013}, and multiweb
@@ -305,9 +316,33 @@ in `Low IS' species (Figure 5C).
 
 \subsection{Stability and extinction simulations}
 
-Figure 6
+It's important to note that since the proportion of Jacobians that are
+locally stable or QSS was zero for the Weddell Sea food web, we
+considered the mean maximum eigenvalue as the stability index. Our
+results showed that the majority of the species had no significant
+impact on the stability of the food web when extinct (Anderson-Darling
+test p-value \textgreater{} 0.01). This is clearly observed in Figure 6
+A-D, where most of the points lie around the zero value of the
+`Stability difference' axis. This means that the stability for the food
+web minus a given species is similar to the stability for the whole
+network. However, there were few species that when become extinct
+generated positive significant differences in the stability of the food
+web, meaning that they increased the network's stability when deleted.
+There is an exception, Pagetopsis macropterus (demersal fish), that when
+deleted decreased the stability. In total, 13 out of 490 species
+(2.65\%) gave rise to significant changes in the network's stability.
 
-Biplots btw QSS difference and weighted and unweighted prop.
+When plotting the stability difference against species properties and
+the previous results regarding clustering, interesting insights arose
+(Figure 6). In the first place, all species with a significant impact on
+the stability belong to the `High IS' group, denoting a high mean
+interaction strength (Figure 6A). Secondly, these species are positioned
+in high trophic levels (TL \textgreater{} 3.7) (Figure 6B). Thirdly,
+they have a relatively high number of interactions or degree (Degree
+\textgreater{} 25) (Figure 6C). Regarding trophic similarity, species
+have mid to low values (TS \textless{} 0.13) (Figure 6D). Habitat wise,
+species live in all the habitats, except for are benthic (Figure 6E).
+Table 2 shows these results per species.
 
 \section{Discussion}
 
@@ -358,11 +393,11 @@ The conclusion goes here.
 \clearpage
 
 \begin{table}[t]
-\caption{Model comparison for the distribution of interaction strengths of the Weddell Sea food web. According to AIC, log-Normal is the best model.}
+\caption{Model comparison for the distribution of interaction strengths of the Weddell Sea food web. Order by best fit. References: df = degrees of freedom, AIC = Akaike Information Criterion, deltaAIC = difference with best fit. Log-Normal is the best model.}
 \begin{tabular}{l c c c}
 \tophline
 
-Model & df & AIC & deltaAIC \\
+\textbf{Model} & \textbf{df} & \textbf{AIC} & \textbf{deltaAIC} \\
 \middlehline
 log-Normal & 2 & -356579 & 0 \\
 \middlehline
@@ -375,6 +410,45 @@ Exponential & 1 & -262852 & 93726 \\
 Normal & 2 & -222785 & 133793 \\
 \middlehline
 Uniform & 2 & -178001 & 178578 \\
+
+\bottomhline
+\end{tabular}
+\end{table}
+
+\clearpage
+
+\begin{table}[t]
+\caption{Properties of the species that when become extinct generated a significant impact on the stability of the Weddell Sea food web, ordered by significance (Anderson-Darling p value). All species belong to the 'High IS' group.  References: meanIS = mean interaction strength, TL = trophic level, Deg = degree, TS = trophic similarity, StabDif = stability difference, ADvalue = Anderson-Darling p value.}
+\begin{tabular}{l c c c c c c c}
+\tophline
+
+\textbf{Species} & \textbf{meanIS} & \textbf{TL} & \textbf{Deg} & \textbf{TS} & \textbf{Habitat} & \textbf{StabDif} & \textbf{ADvalue}\\
+\middlehline
+Orcinus orca & 0.00163 & 5.03 & 26 & 0.037 & Benthopelagic & 0.00040 & 1.38e-51 \\
+\middlehline
+Macrourus holotrachys & 0.00074 & 4.70 & 85 & 0.112 & Benthopelagic & 0.00027 & 2.75e-18 \\
+\middlehline
+Abyssorchomene nodimanus & 0.00022 & 4.21 & 137 & 0.130 & Benthopelagic & 0.00024 & 1.02e-15 \\
+\middlehline
+Dissostichus mawsoni & 0.00069 & 4.12 & 87 & 0.126 & Pelagic & 0.00018 & 1.06e-10 \\
+\middlehline
+Pagetopsis macropterus & 0.00063 & 4.64 & 76 & 0.113 & Demersal & -0.00017 & 1.66e- 9 \\
+\middlehline
+Macrourus whitsoni & 0.00064 & 4.55 & 92 & 0.124 & Benthopelagic & 0.00012 & 4.97e- 8 \\
+\middlehline
+Hydrurga leptonyx & 0.00092 & 4.72 & 67 & 0.094 & Land-based & 0.00014 & 5.59e- 6 \\
+\middlehline
+Mesonychoteuthis hamiltoni & 0.00161 & 4.41 & 29 & 0.028 & Pelagic & 0.00013 & 6.53e- 6 \\
+\middlehline
+Notothenia marmorata & 0.00073 & 4.09 & 44 & 0.091 & Demersal & 0.00014 & 2.10e- 5 \\
+\middlehline
+Champsocephalus gunnari & 0.00068 & 3.72 & 46 & 0.086 & Pelagic & 0.00010 & 7.97e- 5 \\
+\middlehline
+Arctocephalus gazella & 0.00083 & 4.67 & 61 & 0.093 & Land-based & 0.00011 & 9.52e- 5 \\
+\middlehline
+Ommatophoca rossii & 0.00093 & 4.87 & 56 & 0.080 & Land-based & 0.00009 & 1.20e- 3 \\
+\middlehline
+Notothenia coriiceps & 0.00044 & 4.27 & 130 & 0.126 & Demersal & 0.00012 & 1.33e- 3 \\
 
 \bottomhline
 \end{tabular}
