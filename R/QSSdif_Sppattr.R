@@ -58,7 +58,7 @@ all_data <- QSS_data %>%
 ggplot(all_data, aes(x = TLu, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  labs(color = "Group", shape = "QSS impact", x = "Trophic level", y = "QSS difference") +
+  labs(color = "Group", shape = "Stability impact", x = "Trophic level", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -72,7 +72,7 @@ ggplot(all_data, aes(x = Degree, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_x_log10() +
-  labs(color = "Group", shape = "QSS impact", x = "Degree (log scale)", y = "QSS difference") +
+  labs(color = "Group", shape = "Stability impact", x = "Degree (log scale)", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -85,7 +85,7 @@ ggplot(all_data, aes(x = Degree, y = difQSS)) +
 ggplot(all_data, aes(x = log(AllStrength_mean), y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  labs(color = "Group", shape = "QSS impact", x = "log(mean Interaction strength)", y = "QSS difference") +
+  labs(color = "Group", shape = "Stability impact", x = "log(mean Interaction strength)", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -98,7 +98,7 @@ ggplot(all_data, aes(x = log(AllStrength_mean), y = difQSS)) +
 ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  labs(color = "Group", shape = "QSS impact", x = "Trophic similarity", y = "QSS difference") +
+  labs(color = "Group", shape = "Stability impact", x = "Trophic similarity", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -111,7 +111,7 @@ ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
 ggplot(all_data, aes(x = Omnu, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  labs(color = "Group", shape = "QSS impact", x = "Omnivory", y = "QSS difference") +
+  labs(color = "Group", shape = "Stability impact", x = "Omnivory", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -126,7 +126,7 @@ ggplot(all_data, aes(x = Habitat, y = difQSS)) +
   geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   #scale_color_manual(values = c("black", "blue")) +
-  labs(color = "Group", shape = "QSS impact", x = "Habitat", y = "QSS difference") +
+  labs(color = "Group", shape = "Stability impact", x = "Habitat", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -145,7 +145,10 @@ ggplot(all_data, aes(x = KS_pvalue, y = Ad_pvalue)) +
 
 # Subset sp with QSS difference significant (AD test p-value < 0.01)
 key_sp <- all_data %>% 
-  filter(., Ad_pvalue < 0.01)
+  filter(., Ad_pvalue < 0.01) %>% 
+  dplyr::select(TrophicSpecies, AllStrength_mean, TLu, Degree, meanTrophicSimil,
+                Habitat, difQSS, Ad_pvalue) %>% 
+  arrange(Ad_pvalue)
 
 # p-values and QSS difference
 library(reshape2)
