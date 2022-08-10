@@ -54,3 +54,20 @@ changing distribution is already perturbing the krill-centred
 food web 6 and may affect biogeochemical cycling 7,8 . Rapid
 climate change, with associated nonlinear adjustments in the
 roles of keystone species, poses challenges for the management of valuable polar ecosystems 3 .
+
+
+----
+
+@Grilli2016
+
+We want to study the effect of modularity on stability. Therefore, we contrast the value for the real part of the ‘rightmost’ eigenvalue of M, Re(lM,1), with Reðl ~ M;1Þ, the value found for e M, a matrix with exactly the same coefficients, but re-arranged according to a random network structure (Q ¼ 0). Re(lM,1), is a measure of stability, as it expresses the amount of self-regulation we would need to stabilize the equilibrium
+
+----
+@Allesina2015a
+
+In the next section, we will see that this was an excellent idea, as the actual details of the distribution do not matter in the limit of S large (Tao et al. 2010). The only important quantities in this case are the mean and the variance of the distribution.
+
+When an equilibrium point becomes unstable, however, the system could respond in different manners: it could start cycling, move towards another attractor, lose a few species through a transcritical bifurcation, or experience more dramatic changes—such as in the case of a ‘‘fold’’ bifurcation. May’s results would be more of a paradox if bifurcations were invariably to lead to large effects on biodiversity. On the other hand, if most bifurcations were to have small effects on the number of species, we could have systems persisting at the stability/ instability boundary, as hypothesized by Sole ́ et al. (2002). The immigration of new species would trigger limited extinctions, setting the system again close to the bifurcation. In this scenario, the stability criteria would accurately predict the number of extant species.
+
+The distribution of species abundances, typically showing a large number of rare species (Magurran 2003), remains an important problem in ecology, and this generalized Lotka–Volterra model shows that the particular shape of the distribution is going to affect the stability of the ecological community.
+
