@@ -35,32 +35,18 @@ ggplot(wedd_int, aes(qRC)) +
   scale_y_log10()
 
 
-# Function to fit distribution & test it
-aic.bic <- function(x){
-  
-  # Akaike's Information Criterion
-  aic.result <- c(AIC(mlunif(x), mlexp(x), mlpower(x), mllnorm(x), mlnorm(x), mlgamma(x)))
-  
-  # Schwarz's Bayesian criterion
-  bic.result <- c(BIC(mlunif(x), mlexp(x), mlpower(x), mllnorm(x), mlnorm(x), mlgamma(x)))
-  
-  aic.result <- aic.result$AIC
-  bic.result <- bic.result$BIC
-  names(aic.result) <- c("uniform", "exp", "power", "lnorm", "norm", "gamma")
-  names(bic.result) <- c("uniform", "exp", "power", "lnorm", "norm", "gamma")
-  
-  result <- bind_rows(aic.result, bic.result) %>% 
-    mutate(Statistic = c("AIC", "BIC"), 
-           BestFit = c(names(aic.result)[which.min(aic.result)], names(bic.result)[which.min(bic.result)])) %>% 
-    dplyr::select(Statistic, everything())
-  
-  return(result)
-}
+# Distribution fit
 
-IS_fit <- aic.bic(wedd_int$qRC)
+x <- wedd_int$qRC
+aic.result <- c(AIC(mlunif(x), mlexp(x), mlpower(x), mllnorm(x), mlnorm(x), mlgamma(x)))
+IS_fit <- bind_cols(aic.result) %>% 
+  mutate(Model = c("Uniform", "Exponential", "Power-law", "log-Normal", "Normal", "Gamma"),
+         deltaAIC = AIC - min(AIC)) %>% 
+  arrange(deltaAIC) %>% 
+  dplyr::select(Model, df, AIC, deltaAIC)
+
 IS_fit
 
-descdist(wedd_int$qRC, discrete = TRUE)
 
 #
 # Power law with exponential cutoff 
