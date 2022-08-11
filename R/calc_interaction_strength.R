@@ -1,11 +1,12 @@
-## Estimate interaction strength
-# Author: LAS, TIM
-# Date: August 2022
+#
+## Estimate interaction strength following Pawar et al. (2012)
+## 'multiweb' package
+#
 
 
-## Load packages ----
+# Load packages ----
 
-packages <- c("dplyr", "readr", "multiweb")
+packages <- c("dplyr", "readr", "multiweb", "ggplot2")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -15,7 +16,7 @@ ipak <- function(pkg){
 ipak(packages)
 
 
-## Load food web database ----
+# Load food web database ----
 
 # Read and check data available on GATEWAy about Weddell Sea
 # Read the original database
@@ -31,7 +32,7 @@ wedd_df <- wedd_df %>%
   dplyr::select(con_taxonomy, res_taxonomy, con_mass_mean,res_mass_mean, interaction_dim)
 
 
-## Completing missing interaction dimensionality ----
+# Completing missing interaction dimensionality ----
 
 # Following Pawar et al. 2012 criteria:
 # benthic resource (R) and benthic consumer (C) = 2D
@@ -60,7 +61,7 @@ weddell_dim_fill <- weddell_dim_fill %>%
 write.table(weddell_dim_fill, file = "Data/Wedd_mass_complete.dat")
 
 
-## Estimation of interaction strength ----
+# Estimation of interaction strength ----
 
 # Read the updated database
 # We completed missing interaction dimensionality following Pawar et al. (2012)
@@ -76,8 +77,19 @@ wedd_df_pd <- wedd_df_comp %>%
 # Estimate interaction strength
 wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res_mass_mean, con_mass_mean, interaction_dim)
 
+# Explore distribution of interaction intensity (qRC)
+ggplot(wedd_int_pd, aes(qRC)) + 
+  geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
+  scale_y_log10() +
+  labs(x = "Interaction strength", y = "Frequency (log scale)") +
+  theme_classic() +
+  theme(axis.text.x = element_text(face="bold", size=14),
+        axis.text.y = element_text(face="bold", size=14),
+        axis.title.x = element_text(face="bold", size=18),
+        axis.title.y = element_text(face="bold", size=18))
 
-## Save ----
+
+# Save results ----
 
 save(wedd_df_pd, wedd_int_pd,
      file = "Results/interaction_estimation.rda")
