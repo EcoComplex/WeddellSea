@@ -20,7 +20,7 @@ ipak(packages)
 load("Results/interaction_estimation.rda")
 
 
-## Add interaction strength per species ----
+## Obtain interaction strength per species ----
 
 # Select interaction strength for Consumers (incoming)
 con_int <- wedd_int_pd %>% 
@@ -31,17 +31,6 @@ con_int <- wedd_int_pd %>%
 res_int <- wedd_int_pd %>% 
   dplyr::select(res_taxonomy, qRC) %>% 
   dplyr::rename(TrophicSpecies = res_taxonomy, IS = qRC)
-
-# Cannibalistic interactions
-# canib_int <- wedd_int %>% 
-#   dplyr::filter(duplicated(cbind(con_taxonomy, res_taxonomy)))
-# canib_count <- wedd_int %>% 
-#   group_by(con_taxonomy, res_taxonomy) %>% 
-#   mutate(Canibal = n() > 1)
-# 
-# is_simple(g)
-# any_loop(g)
-# loops <- length(which_multiple(g) = TRUE)  # not run
 
 # Bind interaction strengths for each species
 # Calculate mean, Q1 & Q3
@@ -56,11 +45,6 @@ total_int <- bind_rows(con_int, res_int) %>%
                    IS_max = max(IS),
             Check_NumbInt = n())
 
-
-# Unweighted properties ----
-
-## Load data ----
-
 # Convert interaction list to an igraph with weights
 g <- graph_from_data_frame(wedd_int_pd %>% 
                              dplyr::select(res_taxonomy, con_taxonomy, qRC) %>% 
@@ -71,6 +55,11 @@ V(g)$IS_sum_in <- strength(g, mode = "in")
 V(g)$IS_sum_out <- strength(g, mode = "out")
 vertex_attr_names(g)
 
+
+# Unweighted properties ----
+
+## Load data ----
+g
 
 ## Calculate properties ----
 
@@ -130,8 +119,22 @@ spp_all_prop <- spp_uw_prop %>%
   dplyr::select(TrophicSpecies, TotalDegree, InDegree, OutDegree, TL, Omn, meanTrophicSimil,
                 IS_mean, IS_median, IS_max, IS_Q1, IS_Q3, IS_sum_tot, IS_sum_in, IS_sum_out)
 
+# Load & include Habitat
+hab_data <- read.csv(file = "Data/WeddellSeaHabitat.csv")
+hab_data_inc <- hab_data %>% 
+  dplyr::select(species, Environment) %>% 
+  rename(TrophicSpecies = species, Habitat = Environment)
+hab_data_comp <- hab_data_inc %>% 
+  add_row(TrophicSpecies = "Phytodetritus", Habitat = "Benthic") %>%            # missing species
+  add_row(TrophicSpecies = "Sediment", Habitat = "Benthic") %>%                 # missing species
+  add_row(TrophicSpecies = "Iphimediella  cyclogena", Habitat = "Benthic") %>%  # missing species
+  mutate(Habitat = case_when(Habitat == "Bathydemersal" ~ "Demersal", TRUE ~ Habitat))  # replace 'Bathydemersal' with 'Demersal'
+
+spp_all_prop <- spp_all_prop %>% 
+  left_join(hab_data_comp)
+
 
 # Save results ----
 
-save(g, spp_w_prop, spp_uw_prop,
+save(g, spp_w_prop, spp_uw_prop, spp_all_prop,
      file = "Results/net_&_spp_prop.rda")
