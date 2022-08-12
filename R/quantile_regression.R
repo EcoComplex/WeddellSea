@@ -1,5 +1,5 @@
 #
-## Quantile regression for relationships btw interaction strength and spp attributes
+## Quantile regression for relationships btw interaction strength and spp properties
 #
 
 
@@ -17,28 +17,40 @@ ipak(packages)
 
 # Load data ----
 
-load("Results/network_&_spp_attr.rda")
+load("Results/net_&_spp_prop.rda")
 
 
-# Separate spp by Int str ----
+# Species IS distribution ----
 
 # Distribution of log IS
-#
-ggplot(spp_attr_all, aes(x = log(AllStrength_mean))) + geom_density() + theme_bw() 
-ggplot(spp_attr_all, aes(x = log(AllStrength_mean))) + geom_histogram(bins=50) + theme_bw() 
+ggplot(spp_all_prop, aes(x = log(IS_mean))) + geom_density() + theme_bw() 
+ggplot(spp_all_prop, aes(x = log(IS_mean))) + geom_histogram(bins=50) + theme_bw()  # mean
+ggplot(spp_all_prop, aes(x = log(IS_median))) + geom_histogram(bins=50) + theme_bw()  # median
+ggplot(spp_all_prop, aes(x = log(IS_max))) + geom_histogram(bins=50) + theme_bw()  # max
+ggplot(spp_all_prop, aes(x = log(IS_sum_tot))) + geom_histogram(bins=50) + theme_bw()  # total sum
+ggplot(spp_all_prop, aes(x = log(IS_sum_in))) + geom_histogram(bins=50) + theme_bw()  # in sum
+ggplot(spp_all_prop, aes(x = log(IS_sum_out))) + geom_histogram(bins=50) + theme_bw()  # out sum
 
-#
-# Kmeans to separate the two groups
-#
-#km <- kmeans(log(spp_attr_all$AllStrength_mean), 2)
-#spp_attr_all$cluster <- km$cluster
-
-data.scaled <- scale(log(spp_attr_all$AllStrength_mean))
+# Explore clustering by IS (K-means & Gap statistic)
+data.scaled <- scale(log(spp_all_prop$IS_max))
 fviz_nbclust(data.scaled, kmeans, method = "wss")
+# calculate gap statistic based on number of clusters
 gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
                     K.max = 10, B = 500)
-print(gap_stat, method = "firstmax")
+# plot number of clusters vs. gap statistic
 fviz_gap_stat(gap_stat)
+# perform k-means clustering with k = predicted clusters (gap_stat)
+km <- kmeans(data.scaled, centers = 3, nstart = 25)
+
+# add cluster assignment to original data
+cluster_data <- cbind(spp_all_prop, cluster_sum_tot = km$cluster)
+cluster_data$cluster_mean <- km$cluster
+cluster_data$cluster_median <- km$cluster
+cluster_data$cluster_max <- km$cluster
+
+save(cluster_data, file = "Results/cluster_data.rds")
+
+# 
 
 
 # Plot 2 groups
@@ -72,11 +84,11 @@ QR_85 <- rq(log(AllStrength_mean) ~ TLu, tau=0.85, data=spp_attr_all)
 anova(QR_15, QR_85)  # test difference btw quantiles 15 & 85
 
 # Plot
-qr_IS_TL <- ggplot(spp_attr_all, aes(x = TLu, y = log(AllStrength_mean))) +
-  geom_point(shape=21, aes(fill = factor(cluster))) +
-  scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
-  geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Trophic level", y = "mean Interaction Strength (log scale)", color = "Quantiles", fill = "Group") +
+qr_IS_TL <- ggplot(spp_all_prop, aes(x = TL, y = log(IS_mean))) +
+  geom_point() +  # shape=21, aes(fill = factor(cluster))
+  # scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
+  # geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5) + # aes(colour = as.factor(..quantile..))
+  labs(x = "Trophic level", y = "median Interaction Strength (log scale)") +  # , color = "Quantiles", fill = "Group"
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
