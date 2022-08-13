@@ -41,7 +41,6 @@ total_int <- bind_rows(con_int, res_int) %>%
                    IS_median = median(IS),
                    IS_Q1 = quantile(IS, 0.25),
                    IS_Q3 = quantile(IS, 0.75),
-                   IS_sum_tot = sum(IS),
                    IS_max = max(IS),
             Check_NumbInt = n())
 
@@ -53,6 +52,7 @@ E(g)$weight
 # Add sum of in & out interaction strengths per species
 V(g)$IS_sum_in <- strength(g, mode = "in")
 V(g)$IS_sum_out <- strength(g, mode = "out")
+V(g)$IS_sum_tot <- strength(g, mode = "total")
 vertex_attr_names(g)
 
 
@@ -77,8 +77,8 @@ V(g)$OutDeg <- degree(g, mode = "out")
 vertex_attr_names(g)
 
 # Trophic similarity
-source("R/igraph_cheddar.R")  # load function to convert igraph to cheddar object
-igraph_to_cheddar(g)
+# source("R/igraph_cheddar.R")  # load function to convert igraph to cheddar object
+# igraph_to_cheddar(g)
 
 cc <- LoadCommunity("Community")
 ts <- TrophicSimilarity(cc)
@@ -92,9 +92,12 @@ spp_IS_sum_in <- data.frame(V(g)$name, V(g)$IS_sum_in)
 colnames(spp_IS_sum_in) <- c("TrophicSpecies", "IS_sum_in")
 spp_IS_sum_out <- data.frame(V(g)$name, V(g)$IS_sum_out)
 colnames(spp_IS_sum_out) <- c("TrophicSpecies", "IS_sum_out")
+spp_IS_sum_tot <- data.frame(V(g)$name, V(g)$IS_sum_tot)
+colnames(spp_IS_sum_tot) <- c("TrophicSpecies", "IS_sum_tot")
 spp_w_prop <- total_int %>% 
   left_join(spp_IS_sum_in) %>% 
-  left_join(spp_IS_sum_out)
+  left_join(spp_IS_sum_out) %>% 
+  left_join(spp_IS_sum_tot)
 
 # Unweighted
 spp_name <- as.data.frame(V(g)$name)

@@ -31,8 +31,13 @@ ggplot(spp_all_prop, aes(x = log(IS_sum_tot))) + geom_histogram(bins=50) + theme
 ggplot(spp_all_prop, aes(x = log(IS_sum_in))) + geom_histogram(bins=50) + theme_bw()  # in sum
 ggplot(spp_all_prop, aes(x = log(IS_sum_out))) + geom_histogram(bins=50) + theme_bw()  # out sum
 
+
+# Clustering ----
+
 # Explore clustering by IS (K-means & Gap statistic)
-data.scaled <- scale(log(spp_all_prop$IS_max))
+# by 'IS_mean', 'IS_median', 'IS_max', 'IS_sum_tot'
+
+data.scaled <- scale(log(spp_all_prop$IS_sum_tot))
 fviz_nbclust(data.scaled, kmeans, method = "wss")
 # calculate gap statistic based on number of clusters
 gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
@@ -40,24 +45,30 @@ gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
 # plot number of clusters vs. gap statistic
 fviz_gap_stat(gap_stat)
 # perform k-means clustering with k = predicted clusters (gap_stat)
-km <- kmeans(data.scaled, centers = 3, nstart = 25)
+km <- kmeans(data.scaled, centers = 2, nstart = 25)
 
 # add cluster assignment to original data
-cluster_data <- cbind(spp_all_prop, cluster_sum_tot = km$cluster)
-cluster_data$cluster_mean <- km$cluster
+cluster_data <- cbind(spp_all_prop, cluster_mean = km$cluster)
 cluster_data$cluster_median <- km$cluster
 cluster_data$cluster_max <- km$cluster
+cluster_data$cluster_sum_tot <- km$cluster
 
+# Save cluster results
 save(cluster_data, file = "Results/cluster_data.rds")
 
-# 
+
+# Load cluster data
+
+load("Results/cluster_data.rds")
 
 
-# Plot 2 groups
-#ggplot(spp_attr_all, aes(y = log(AllStrength_mean),x=cluster,color=cluster)) + geom_jitter() + theme_bw() + scale_color_viridis_c()
-ggplot(spp_attr_all, aes(x = log(AllStrength_mean), color=cluster)) + 
+# Plot groups
+ggplot(cluster_data, aes(y = log(IS_sum_tot), x=cluster_sum_tot, color=cluster_sum_tot)) + 
+  geom_jitter() + theme_bw() + scale_color_viridis_c()
+
+ggplot(cluster_data, aes(x = log(IS_median), color = cluster_median)) + 
   geom_density() + 
-  labs(x = "log(mean Interaction strength)", y = "Frequency", color = "Cluster") +
+  labs(x = "log(median Interaction strength)", y = "Frequency", color = "Cluster") +
   theme_bw() +
   theme(axis.title = element_text(size = 18, face = "bold"),
         axis.text.x = element_text(size = 15),
@@ -65,30 +76,30 @@ ggplot(spp_attr_all, aes(x = log(AllStrength_mean), color=cluster)) +
 
 
 # Explore relationships ----
-# btw interaction strength & spp attributes
+# btw interaction strength (mean, median, sum_tot) & spp properties
 
-attach(spp_attr_all)
-datatable <- data.frame(Degree, TLu, Omnu, meanTrophicSimil, 
-                        AllStrength_sum, AllStrength_mean)
-cor(datatable)
+attach(cluster_data)
+datatable <- data.frame(TotalDegree, TL, Omn, meanTrophicSimil, 
+                        IS_mean, IS_median, IS_sum_tot)
+cor(datatable, method = "spearman")
 pairs(datatable, col="blue", main="Scatterplots")
 
 
 ## Trophic level ----
 
 # Test
-QR <- rq(log(AllStrength_mean) ~ TLu, tau=c(0.15, 0.85), data=spp_attr_all)
-summary(QR, se= "boot")
-QR_15 <- rq(log(AllStrength_mean) ~ TLu, tau=0.15, data=spp_attr_all)
-QR_85 <- rq(log(AllStrength_mean) ~ TLu, tau=0.85, data=spp_attr_all)
-anova(QR_15, QR_85)  # test difference btw quantiles 15 & 85
+# QR <- rq(log(AllStrength_mean) ~ TLu, tau=c(0.15, 0.85), data=spp_attr_all)
+# summary(QR, se= "boot")
+# QR_15 <- rq(log(AllStrength_mean) ~ TLu, tau=0.15, data=spp_attr_all)
+# QR_85 <- rq(log(AllStrength_mean) ~ TLu, tau=0.85, data=spp_attr_all)
+# anova(QR_15, QR_85)  # test difference btw quantiles 15 & 85
 
 # Plot
-qr_IS_TL <- ggplot(spp_all_prop, aes(x = TL, y = log(IS_mean))) +
-  geom_point() +  # shape=21, aes(fill = factor(cluster))
-  # scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
-  # geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5) + # aes(colour = as.factor(..quantile..))
-  labs(x = "Trophic level", y = "median Interaction Strength (log scale)") +  # , color = "Quantiles", fill = "Group"
+qr_IS_TL <- ggplot(cluster_data, aes(x = TL, y = log(IS_sum_tot))) +
+  geom_point(shape=21, aes(fill = factor(cluster_sum_tot))) +
+  scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
+  #geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
+  labs(x = "Trophic level", y = "log(sum Interaction Strength)", fill = "Group") +  # , color = "Quantiles"
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -100,18 +111,19 @@ qr_IS_TL
 ## Degree ----
 
 # Test
-QRD <- rq(log(AllStrength_mean) ~ Degree, tau=c(0.15, 0.85), data=spp_attr_all)
-summary(QRD, se= "boot")
-QRD_15 <- rq(log(AllStrength_mean) ~ Degree, tau=0.15, data=spp_attr_all)
-QRD_85 <- rq(log(AllStrength_mean) ~ Degree, tau=0.85, data=spp_attr_all)
-anova(QRD_15, QRD_85)
+# QRD <- rq(log(AllStrength_mean) ~ Degree, tau=c(0.15, 0.85), data=spp_attr_all)
+# summary(QRD, se= "boot")
+# QRD_15 <- rq(log(AllStrength_mean) ~ Degree, tau=0.15, data=spp_attr_all)
+# QRD_85 <- rq(log(AllStrength_mean) ~ Degree, tau=0.85, data=spp_attr_all)
+# anova(QRD_15, QRD_85)
 
 # Plot
-qr_IS_DEG <- ggplot(spp_attr_all, aes(x = Degree, y = log(AllStrength_mean))) +
-  geom_point(shape=21, aes(fill = factor(cluster))) +
+qr_IS_DEG <- ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_sum_tot))) +
+  geom_point(shape=21, aes(fill = factor(cluster_sum_tot))) +
   scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
-  geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Degree", y = "Interaction strength (log scale)", color = "Quantiles", fill = "Group") +
+  scale_x_log10() +
+  #geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
+  labs(x = "Degree (log scale)", y = "log(sum Interaction Strength)", fill = "Group") +  # , color = "Quantiles"
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -123,18 +135,18 @@ qr_IS_DEG
 ## Trophic Simil ----
 
 # Test
-QRTS <- rq(log(AllStrength_mean) ~ meanTrophicSimil, tau=c(0.15,0.5, 0.85), data=spp_attr_all)
-summary(QRTS, se= "boot")
-QRS_15 <- rq(log(AllStrength_mean) ~ meanTrophicSimil, tau=0.15, data=spp_attr_all)
-QRS_85 <- rq(log(AllStrength_mean) ~ meanTrophicSimil, tau=0.85, data=spp_attr_all)
-anova(QRS_15, QRS_85)
+# QRTS <- rq(log(AllStrength_mean) ~ meanTrophicSimil, tau=c(0.15,0.5, 0.85), data=spp_attr_all)
+# summary(QRTS, se= "boot")
+# QRS_15 <- rq(log(AllStrength_mean) ~ meanTrophicSimil, tau=0.15, data=spp_attr_all)
+# QRS_85 <- rq(log(AllStrength_mean) ~ meanTrophicSimil, tau=0.85, data=spp_attr_all)
+# anova(QRS_15, QRS_85)
 
 # Plot
-qr_IS_TS <- ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_mean))) +
-  geom_point(shape=21, aes(fill = factor(cluster))) +
+qr_IS_TS <- ggplot(cluster_data, aes(x = meanTrophicSimil, y = log(IS_sum_tot))) +
+  geom_point(shape=21, aes(fill = factor(cluster_sum_tot))) +
   scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
-  geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Mean Trophic Similarity", y = "Interaction strength (log scale)", color = "Quantiles", fill = "Group") +
+  #geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
+  labs(x = "Mean Trophic Similarity", y = "log(sum Interaction Strength)", fill = "Group") +  # , color = "Quantiles"
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -145,18 +157,21 @@ qr_IS_TS
 
 # Regression by groups ----
 
-# Rename clusters
-#spp_attr_all["cluster"][spp_attr_all["cluster"] == "2"] <- "High"
-#spp_attr_all["cluster"][spp_attr_all["cluster"] == "1"] <- "Low"
+# Rename clusters by relative IS
+cluster_data["cluster_sum_tot"][cluster_data["cluster_sum_tot"] == "1"] <- "High"  # 'cluster_mean'
+cluster_data["cluster_sum_tot"][cluster_data["cluster_sum_tot"] == "2"] <- "Low"  # 'cluster_mean'
 
+cluster_data["cluster_median"][cluster_data["cluster_median"] == "1"] <- "High"
+cluster_data["cluster_median"][cluster_data["cluster_median"] == "3"] <- "Medium"
+cluster_data["cluster_median"][cluster_data["cluster_median"] == "2"] <- "Low"
 
 ## Trophic level ----
 
-cl_IS_TL <- ggplot(spp_attr_all, aes(x = TLu, y = log(AllStrength_mean), color = cluster)) +
+cl_IS_TL <- ggplot(cluster_data, aes(x = TL, y = log(IS_median), color = cluster_median)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  scale_color_discrete(labels = c("High IS", "Low IS")) +
-  labs(x = "Trophic level", y = "log(mean Interaction strength)", color = "Group") +
+  scale_color_discrete(labels = c("High IS", "Low IS", "Medium IS")) +
+  labs(x = "Trophic level", y = "log(median Interaction Strength)", color = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -165,9 +180,9 @@ cl_IS_TL <- ggplot(spp_attr_all, aes(x = TLu, y = log(AllStrength_mean), color =
 cl_IS_TL
 
 # Test regression significance by group
-TL_lm <- lm(log(AllStrength_mean) ~ TLu * cluster, data = spp_attr_all)
+TL_lm <- lm(log(IS_median) ~ TL * cluster_median, data = cluster_data)
 summary(TL_lm)
-TL_eq <- lstrends(TL_lm, "cluster", var="TLu")
+TL_eq <- lstrends(TL_lm, "cluster_median", var="TL")
 TL_eq
 pairs(TL_eq)  # significance btw group slopes
 ols_test_normality(TL_lm)  # check normality of residuals
@@ -176,11 +191,12 @@ ols_plot_resid_qq(TL_lm)  # Q-Q plot
 
 ## Degree ----
 
-cl_IS_DEG <- ggplot(spp_attr_all, aes(x = Degree, y = log(AllStrength_mean), color = cluster)) +
+cl_IS_DEG <- ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_median), color = cluster_median)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  scale_color_discrete(labels = c("High IS", "Low IS")) +
-  labs(x = "Degree", y = "log(mean Interaction strength)", color = "Group") +
+  scale_x_log10() +
+  scale_color_discrete(labels = c("High IS", "Low IS", "Medium IS")) +
+  labs(x = "Degree (log scale)", y = "log(median Interaction Strength)", color = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -189,9 +205,9 @@ cl_IS_DEG <- ggplot(spp_attr_all, aes(x = Degree, y = log(AllStrength_mean), col
 cl_IS_DEG
 
 # Test regression significance by group
-DEG_lm <- lm(log(AllStrength_mean) ~ Degree * cluster, data = spp_attr_all)
+DEG_lm <- lm(log(IS_median) ~ TotalDegree * cluster_median, data = cluster_data)
 summary(DEG_lm)
-DEG_eq <- lstrends(DEG_lm, "cluster", var="Degree")
+DEG_eq <- lstrends(DEG_lm, "cluster_median", var="TotalDegree")
 DEG_eq
 pairs(DEG_eq)  # significance btw group slopes
 ols_test_normality(DEG_lm)  # check normality of residuals
@@ -200,11 +216,11 @@ ols_plot_resid_qq(DEG_lm)  # Q-Q plot
 
 ## Trophic similarity ----
 
-cl_IS_TS <- ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_mean), color = cluster)) +
+cl_IS_TS <- ggplot(cluster_data, aes(x = meanTrophicSimil, y = log(IS_median), color = cluster_median)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  scale_color_discrete(labels = c("High IS", "Low IS")) +
-  labs(x = "Trophic similarity", y = "log(mean Interaction strength)", color = "Group") +
+  scale_color_discrete(labels = c("High IS", "Low IS", "Medium IS")) +
+  labs(x = "Trophic similarity", y = "log(median Interaction Strength)", color = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -213,17 +229,29 @@ cl_IS_TS <- ggplot(spp_attr_all, aes(x = meanTrophicSimil, y = log(AllStrength_m
 cl_IS_TS
 
 # Test regression significance by group
-TS_lm <- lm(log(AllStrength_mean) ~ meanTrophicSimil * cluster, data = spp_attr_all)
+TS_lm <- lm(log(IS_median) ~ meanTrophicSimil * cluster_median, data = cluster_data)
 summary(TS_lm)
-TS_eq <- lstrends(TS_lm, "cluster", var="meanTrophicSimil")
+TS_eq <- lstrends(TS_lm, "cluster_median", var="meanTrophicSimil")
 TS_eq
 pairs(TS_eq)  # significance btw group slopes
 ols_test_normality(TS_lm)  # check normality of residuals
 ols_plot_resid_qq(TS_lm)  # Q-Q plot
 
 
+## Habitat ----
+
+ggplot(cluster_data, aes(x = Habitat, y = log(IS_sum_tot))) +
+  geom_violin() +
+  geom_point(aes(color = cluster_sum_tot)) +
+  labs(x = "Habitat", y = "log(sum Interaction Strength)", color = "Group") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+
 
 # Save results ----
 
 save(all_int, g, spp_attr_all, wedd_df, wedd_int, 
-     file="Results/network_&_spp_attr.rda")
+     file="Results/net_&_spp_prop.rda")
