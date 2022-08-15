@@ -37,7 +37,7 @@ ggplot(spp_all_prop, aes(x = log(IS_sum_out))) + geom_histogram(bins=50) + theme
 # Explore clustering by IS (K-means & Gap statistic)
 # by 'IS_mean', 'IS_median', 'IS_max', 'IS_sum_tot'
 
-data.scaled <- scale(log(spp_all_prop$IS_sum_tot))
+data.scaled <- scale(spp_all_prop$IS_sum_tot)
 fviz_nbclust(data.scaled, kmeans, method = "wss")
 # calculate gap statistic based on number of clusters
 gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
@@ -45,7 +45,7 @@ gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
 # plot number of clusters vs. gap statistic
 fviz_gap_stat(gap_stat)
 # perform k-means clustering with k = predicted clusters (gap_stat)
-km <- kmeans(data.scaled, centers = 2, nstart = 25)
+km <- kmeans(data.scaled, centers = 5, nstart = 25)
 
 # add cluster assignment to original data
 cluster_data <- cbind(spp_all_prop, cluster_mean = km$cluster)
@@ -95,11 +95,12 @@ pairs(datatable, col="blue", main="Scatterplots")
 # anova(QR_15, QR_85)  # test difference btw quantiles 15 & 85
 
 # Plot
-qr_IS_TL <- ggplot(cluster_data, aes(x = TL, y = log(IS_sum_tot))) +
-  geom_point(shape=21, aes(fill = factor(cluster_sum_tot))) +
-  scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
+qr_IS_TL <- ggplot(cluster_data, aes(x = TotalDegree, y = IS_mean)) +
+  #scale_x_log10() +
+  geom_point() +  # shape=21, aes(fill = factor(cluster_sum_tot))
+  #scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
   #geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Trophic level", y = "log(sum Interaction Strength)", fill = "Group") +  # , color = "Quantiles"
+  labs(x = "Degree", y = "mean Interaction Strength") +  # , fill = "Group", color = "Quantiles"
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
@@ -118,12 +119,12 @@ qr_IS_TL
 # anova(QRD_15, QRD_85)
 
 # Plot
-qr_IS_DEG <- ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_sum_tot))) +
-  geom_point(shape=21, aes(fill = factor(cluster_sum_tot))) +
+qr_IS_DEG <- ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_mean))) +
+  geom_point(shape=21, aes(fill = factor(cluster_mean))) +
   scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
   scale_x_log10() +
   #geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Degree (log scale)", y = "log(sum Interaction Strength)", fill = "Group") +  # , color = "Quantiles"
+  labs(x = "Degree (log scale)", y = "log(mean Interaction Strength)", fill = "Group") +  # , color = "Quantiles"
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
