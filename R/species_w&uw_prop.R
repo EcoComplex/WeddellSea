@@ -137,6 +137,15 @@ spp_all_prop <- spp_all_prop %>%
   left_join(hab_data_comp)
 
 
+# Total food web IS & proportion of spp
+spp_attr <- spp_all_prop %>% 
+  mutate(IS_cumsum = order_by(-IS_sum_tot, cumsum(IS_sum_tot)),
+         IS_prop = IS_cumsum/(sum(IS_sum_tot))) %>% 
+  mutate(rank_sp = dense_rank(desc(IS_sum_tot)),
+         sp_prop = rank_sp/nrow(spp_all_prop)) %>% 
+  dplyr::select(TrophicSpecies, IS_sum_tot, IS_cumsum, IS_prop, sp_prop, rank_sp)
+
+
 # Save results ----
 
 save(g, spp_w_prop, spp_uw_prop, spp_all_prop,
