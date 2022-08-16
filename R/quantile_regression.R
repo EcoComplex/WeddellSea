@@ -37,7 +37,7 @@ ggplot(spp_all_prop, aes(x = log(IS_sum_out))) + geom_histogram(bins=50) + theme
 # Explore clustering by IS (K-means & Gap statistic)
 # by 'IS_mean', 'IS_median', 'IS_max', 'IS_sum_tot'
 
-data.scaled <- scale(spp_all_prop$IS_sum_tot)
+data.scaled <- scale(log(spp_all_prop$IS_max))
 fviz_nbclust(data.scaled, kmeans, method = "wss")
 # calculate gap statistic based on number of clusters
 gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
@@ -45,13 +45,14 @@ gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
 # plot number of clusters vs. gap statistic
 fviz_gap_stat(gap_stat)
 # perform k-means clustering with k = predicted clusters (gap_stat)
-km <- kmeans(data.scaled, centers = 5, nstart = 25)
+km <- kmeans(data.scaled, centers = 1, nstart = 25)
 
 # add cluster assignment to original data
 cluster_data <- cbind(spp_all_prop, cluster_mean = km$cluster)
+
 cluster_data$cluster_median <- km$cluster
-cluster_data$cluster_max <- km$cluster
 cluster_data$cluster_sum_tot <- km$cluster
+cluster_data$cluster_max <- km$cluster
 
 # Save cluster results
 save(cluster_data, file = "Results/cluster_data.rds")
@@ -63,16 +64,17 @@ load("Results/cluster_data.rds")
 
 
 # Plot groups
-ggplot(cluster_data, aes(y = log(IS_sum_tot), x=cluster_sum_tot, color=cluster_sum_tot)) + 
+ggplot(cluster_data, aes(y = log(IS_mean), x=cluster_mean, color=cluster_mean)) + 
   geom_jitter() + theme_bw() + scale_color_viridis_c()
 
-ggplot(cluster_data, aes(x = log(IS_median), color = cluster_median)) + 
-  geom_density() + 
-  labs(x = "log(median Interaction strength)", y = "Frequency", color = "Cluster") +
+p <- ggplot(cluster_data, aes(x = log(IS_median))) + 
+  geom_density(aes(group=as.factor(cluster_median), color=as.factor(cluster_median), fill=as.factor(cluster_median)), alpha=0.3) + 
+  labs(x = "log(median Interaction strength)", y = "Frequency", fill = "Cluster") +
   theme_bw() +
   theme(axis.title = element_text(size = 18, face = "bold"),
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
+p + guides(color = "none")
 
 
 # Explore relationships ----
@@ -80,7 +82,7 @@ ggplot(cluster_data, aes(x = log(IS_median), color = cluster_median)) +
 
 attach(cluster_data)
 datatable <- data.frame(TotalDegree, TL, Omn, meanTrophicSimil, 
-                        IS_mean, IS_median, IS_sum_tot)
+                        log(IS_mean), log(IS_median), log(IS_sum_tot))
 cor(datatable, method = "spearman")
 pairs(datatable, col="blue", main="Scatterplots")
 
@@ -95,12 +97,12 @@ pairs(datatable, col="blue", main="Scatterplots")
 # anova(QR_15, QR_85)  # test difference btw quantiles 15 & 85
 
 # Plot
-qr_IS_TL <- ggplot(cluster_data, aes(x = TotalDegree, y = IS_mean)) +
-  #scale_x_log10() +
-  geom_point() +  # shape=21, aes(fill = factor(cluster_sum_tot))
-  #scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
+qr_IS_TL <- ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_mean))) +
+  scale_x_log10() +
+  geom_point(shape=21, aes(fill = factor(cluster_mean))) +
+  scale_fill_manual(values = c("red", "blue"), labels = c("High IS", "Low IS")) +
   #geom_quantile(quantiles = c(0.15, 0.85), size = 2, alpha = 0.5, aes(colour = as.factor(..quantile..))) +
-  labs(x = "Degree", y = "mean Interaction Strength") +  # , fill = "Group", color = "Quantiles"
+  labs(x = "Degree (log scale)", y = "log(mean Interaction Strength)", fill = "Group", color = "Quantiles") + 
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 18, face = "bold"),
