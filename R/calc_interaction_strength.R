@@ -89,6 +89,45 @@ ggplot(wedd_int_pd, aes(qRC)) +
         axis.title.y = element_text(face="bold", size=18))
 
 
+# Dependence of IS estimation ----
+
+# On mR/mC
+plot <- wedd_int_pd %>% 
+  mutate(mR_mC = res_mass_mean/con_mass_mean) %>% 
+  ggplot(., aes(x = xR, y = qRC)) +
+  geom_point()
+plot
+
+# On mR & mC 3D
+require(plotly)
+plot_3D <- wedd_int_pd %>% 
+  mutate(mR_mC = res_mass_mean/con_mass_mean) %>%
+  filter(interaction_dim == "3D") %>% 
+  plot_ly(data=., x=~res_mass_mean, y=~con_mass_mean, 
+                   z=~log(qRC), type="scatter3d", mode="markers", 
+                   color="black", marker = list(size = 5), hoverinfo = "text",
+                   text = ~paste('<br>Res_mass:', res_mass_mean, '<br>Con_mass:', con_mass_mean, 
+                                 '<br>Interaction strength:', round(qRC,5))) %>%  
+  layout(scene = list(xaxis=list(title = "Res_mass"),
+                      yaxis=list(title = "Con_mass"),
+                      zaxis=list(title = "log Interaction strength", color = "red")))
+plot_3D
+
+# On mR & mC 2D
+plot_2D <- wedd_int_pd %>% 
+  mutate(mR_mC = res_mass_mean/con_mass_mean) %>%
+  filter(interaction_dim == "2D") %>% 
+  plot_ly(data=., x=~res_mass_mean, y=~con_mass_mean, 
+          z=~log(qRC), type="scatter3d", mode="markers", 
+          color="black", marker = list(size = 5), hoverinfo = "text",
+          text = ~paste('<br>Res_mass:', res_mass_mean, '<br>Con_mass:', con_mass_mean, 
+                        '<br>Interaction strength:', round(qRC,5))) %>%  
+  layout(scene = list(xaxis=list(title = "Res_mass"),
+                      yaxis=list(title = "Con_mass"),
+                      zaxis=list(title = "log Interaction strength", color = "red")))
+plot_2D
+
+
 # Save results ----
 
 save(wedd_df_pd, wedd_int_pd,
