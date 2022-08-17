@@ -8,7 +8,7 @@ library(tictoc)
 # source("R/extinction_fun.R")
 
 ## Load data
-load("Results/network_&_spp_attr.rda")
+load("Results/net_&_spp_prop.rda")
 load("Results/QSS_extinction_dif.rda")
 
 

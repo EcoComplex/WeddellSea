@@ -13,7 +13,7 @@ library(ggplot2)
 library(tictoc)
 
 ## Load data
-load("Results/network_&_spp_attr.rda")
+load("Results/net_&_spp_prop.rda")
 load("Results/QSS_extinction_dif.rda")
 
 #
@@ -21,7 +21,7 @@ load("Results/QSS_extinction_dif.rda")
 #
 # using 2*mean interaction strength for the null gives a mean value identical to the mean interaction strength
 #
-QSS_null_comp_raw <- QSS_null_comp_raw %>% mutate(network=if_else(network=='null', 'maxnull', network))
+QSS_null_comp_raw <- tibble()
 
 #
 # Compare weighted QSS against randomized QSS with the same max weight
@@ -74,7 +74,7 @@ QSS_null_comp_raw <- bind_rows(tibble(network="meannull", maxre=qss_null$maxre),
                                tibble(network="maxnull", maxre=qss_null1$maxre) )
 
 #saveRDS(QSS_null_comp, "Results/QSS_null_comp.rds")
-save(QSS_null_comp,QSS_null_comp_raw,
+save(QSS_null_comp_raw,
      file = "Results/QSS_extinction_dif.rda")
 
 #
@@ -123,4 +123,4 @@ p + guides(color = "none", fill = guide_legend("Network")) +
   scale_color_manual(values = c("#E69F00","#56B4E9")) + 
   geom_vline(xintercept = qss_mean$maxre, linetype="dashed")
 
-QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_histogram(bins=30) + theme_bw() + scale_fill_viridis_d()
+QSS_null_comp_raw %>% ggplot(aes(maxre, color=network,fill=network)) + geom_density() + theme_bw() + scale_fill_viridis_d()

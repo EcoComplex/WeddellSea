@@ -12,13 +12,13 @@ library(dplyr)
 library(tictoc)
 
 ## Load data
-load("Results/network_&_spp_attr.rda")
+load("Results/net_&_spp_prop.rda")
 load("Results/QSS_extinction_dif.rda")
 
 
 
-sp_list <- arrange(spp_attr_all, desc(AllStrength_mean)) %>% 
-  dplyr::select(TrophicSpecies, AllStrength_mean)
+sp_list <- arrange(spp_all_prop, desc(IS_mean)) %>% 
+  dplyr::select(TrophicSpecies, IS_mean)
 sp_list <- sp_list$TrophicSpecies
 
 #grep("Euphausia",sp_list, value=TRUE)
@@ -34,7 +34,7 @@ toc()
 
 QSS_extinction_dif <- as_tibble(QSS_extinction_dif)
 
-save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
+save(QSS_null_comp_raw,QSS_extinction_dif,
      file = "Results/QSS_extinction_dif.rda")
 
 
