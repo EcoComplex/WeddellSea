@@ -5,32 +5,33 @@
 
 
 #
-## Load packages
+# Load packages ----
 
 library(dplyr)
 library(ggplot2)
 
 
 #
-## Load data
+# Load data ----
 
 load("Results/QSS_extinction_dif.rda")
-load("Results/network_&_spp_attr.rda")
+load("Results/net_&_spp_prop.rda")
+load("Results/cluster_data.rds")
 
 
 #
-## Compare QSS empirical and null
+# Compare QSS empirical-null ----
 
 p <- ggplot(QSS_null_comp_raw, aes(x = maxre, fill = network, color = network)) +
   geom_density(alpha = 0.5) +
   scale_fill_viridis_d() +
   labs(x = "QSS eigenvalues", y = "Frequency", fill = "Network") +
   theme_classic()
-p + guides(color = FALSE)
+p + guides(color = "none")
 
 
 #
-## Merge QSS results with spp attributes
+# Merge QSS w/ spp prop ----
 
 # Habitat data
 hab_data <- read.csv(file = "Data/WeddellSeaHabitat.csv")
@@ -43,21 +44,48 @@ hab_data_comp <- hab_data_inc %>%
   add_row(TrophicSpecies = "Iphimediella  cyclogena", Habitat = "Benthic") %>%  # missing species
   mutate(Habitat = case_when(Habitat == "Bathydemersal" ~ "Demersal", TRUE ~ Habitat))  # replace 'Bathydemersal' with 'Demersal'
 
-# Join extinction results (QSS), Habitat & spp properties
+# Join extinction results (QSS), Habitat, clustering & spp properties
 QSS_data <- QSS_extinction_dif
+
+# Rename clusters by relative IS
+cluster_data["cluster_mean"][cluster_data["cluster_mean"] == "1"] <- "High"
+cluster_data["cluster_mean"][cluster_data["cluster_mean"] == "2"] <- "Low"
+
+cluster_data["cluster_median"][cluster_data["cluster_median"] == "1"] <- "High"
+cluster_data["cluster_median"][cluster_data["cluster_median"] == "3"] <- "Medium"
+cluster_data["cluster_median"][cluster_data["cluster_median"] == "2"] <- "Low"
+
+cluster_data["cluster_sum_tot"][cluster_data["cluster_sum_tot"] == "1"] <- "High"
+cluster_data["cluster_sum_tot"][cluster_data["cluster_sum_tot"] == "2"] <- "Low"
 
 all_data <- QSS_data %>% 
   rename(TrophicSpecies = Deleted) %>% 
-  left_join(spp_attr_all) %>% 
-  left_join(hab_data_comp)
+  left_join(hab_data_comp) %>% 
+  left_join(cluster_data) %>% 
+  left_join(spp_all_prop)
 
 
-#
-## By trophic level
+# QSS vs spp prop ----
 
-ggplot(all_data, aes(x = TLu, y = difQSS)) +
-  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+## By mean interaction strength ----
+
+ggplot(all_data, aes(x = log(IS_sum_tot), y = difQSS)) +
+  geom_point(aes(color = cluster_sum_tot,  # 'cluster_median' or 'cluster_sum_tot'
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  labs(color = "Group", shape = "Stability impact", x = "log(sum Interaction strength)", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+
+## By trophic level ----
+
+ggplot(all_data, aes(x = TL, y = difQSS)) +
+  geom_point(aes(color = cluster_sum_tot,   # 'cluster_median' or 'cluster_sum_tot'
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
   labs(color = "Group", shape = "Stability impact", x = "Trophic level", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
@@ -65,12 +93,12 @@ ggplot(all_data, aes(x = TLu, y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
-#
-## By degree
+## By degree ----
 
-ggplot(all_data, aes(x = Degree, y = difQSS)) +
-  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+ggplot(all_data, aes(x = TotalDegree, y = difQSS)) +
+  geom_point(aes(color = cluster_sum_tot,  # 'cluster_median' or 'cluster_sum_tot'
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
   scale_x_log10() +
   labs(color = "Group", shape = "Stability impact", x = "Degree (log scale)", y = "Stability difference") +
   theme_bw() +
@@ -79,25 +107,12 @@ ggplot(all_data, aes(x = Degree, y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
-#
-## By mean interaction strength
-
-ggplot(all_data, aes(x = log(AllStrength_mean), y = difQSS)) +
-  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
-                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  labs(color = "Group", shape = "Stability impact", x = "log(mean Interaction strength)", y = "Stability difference") +
-  theme_bw() +
-  theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
-
-#
-## By trophic similarity
+## By trophic similarity ----
 
 ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
-  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+  geom_point(aes(color = cluster_sum_tot, 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
   labs(color = "Group", shape = "Stability impact", x = "Trophic similarity", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
@@ -105,12 +120,12 @@ ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
-#
-## By omnivory
+## By omnivory ----
 
-ggplot(all_data, aes(x = Omnu, y = difQSS)) +
-  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+ggplot(all_data, aes(x = Omn, y = difQSS)) +
+  geom_point(aes(color = ifelse(cluster_mean == "High", "High IS", "Low IS"), 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
   labs(color = "Group", shape = "Stability impact", x = "Omnivory", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
@@ -118,14 +133,13 @@ ggplot(all_data, aes(x = Omnu, y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
-#
-## By habitat
+## By habitat ----
 
 ggplot(all_data, aes(x = Habitat, y = difQSS)) +
   geom_violin(fill = "gray") +
-  geom_point(aes(color = ifelse(cluster == "High", "High IS", "Low IS"), 
+  geom_point(aes(color = cluster_sum_tot,  # 'cluster_median' or 'cluster_sum_tot'
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  #scale_color_manual(values = c("black", "blue")) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
   labs(color = "Group", shape = "Stability impact", x = "Habitat", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
@@ -134,8 +148,7 @@ ggplot(all_data, aes(x = Habitat, y = difQSS)) +
         axis.text.y = element_text(size = 15))
 
 
-#
-## Statistical correlations 
+# Statistical correlations ----
 
 # p-values (Kolmogorov vs Anderson Darling)
 ggplot(all_data, aes(x = KS_pvalue, y = Ad_pvalue)) +
@@ -146,11 +159,14 @@ ggplot(all_data, aes(x = KS_pvalue, y = Ad_pvalue)) +
 # Subset sp with QSS difference significant (AD test p-value < 0.01)
 key_sp <- all_data %>% 
   filter(., Ad_pvalue < 0.01) %>% 
-  dplyr::select(TrophicSpecies, AllStrength_mean, TLu, Degree, meanTrophicSimil,
-                Habitat, difQSS, Ad_pvalue) %>% 
+  left_join(cluster_data) %>% 
+  dplyr::select(TrophicSpecies, IS_mean, IS_median, IS_sum_tot, TL, TotalDegree, meanTrophicSimil,
+                Habitat, difQSS, Ad_pvalue, cluster_mean, cluster_median, cluster_sum_tot) %>% 
   arrange(Ad_pvalue)
 
-# p-values and QSS difference
+
+# p-value - QSS difference ----
+
 library(reshape2)
 comp_QSS_pvalue <- melt(all_data, measure.vars = c("Ad_pvalue", "KS_pvalue"))
 ggplot(comp_QSS_pvalue, aes(x = value, y = abs(difQSS), color = variable)) +
