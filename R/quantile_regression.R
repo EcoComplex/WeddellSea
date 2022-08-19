@@ -64,12 +64,12 @@ load("Results/cluster_data.rds")
 
 
 # Plot groups
-ggplot(cluster_data, aes(y = log(IS_mean), x=cluster_mean, color=cluster_mean)) + 
-  geom_jitter() + theme_bw() + scale_color_viridis_c()
+ggplot(cluster_data, aes(y = log(IS_max), x=cluster_max, color=cluster_max)) + 
+  geom_jitter() + theme_bw() + scale_color_manual(values = c("#3a5e8cFF"))  # + scale_color_viridis_c()
 
-p <- ggplot(cluster_data, aes(x = log(IS_median))) + 
-  geom_density(aes(group=as.factor(cluster_median), color=as.factor(cluster_median), fill=as.factor(cluster_median)), alpha=0.3) + 
-  labs(x = "log(median Interaction strength)", y = "Frequency", fill = "Cluster") +
+p <- ggplot(cluster_data, aes(x = log(IS_max))) + 
+  geom_density(aes(group=as.factor(cluster_max), color=as.factor(cluster_max), fill=as.factor(cluster_max)), alpha=0.3) + 
+  labs(x = "log(max Interaction strength)", y = "Frequency", fill = "Cluster") +
   theme_bw() +
   theme(axis.title = element_text(size = 18, face = "bold"),
         axis.text.x = element_text(size = 15),
@@ -82,7 +82,7 @@ p + guides(color = "none")
 
 attach(cluster_data)
 datatable <- data.frame(TotalDegree, TL, Omn, meanTrophicSimil, 
-                        log(IS_mean), log(IS_median), log(IS_sum_tot))
+                        log(IS_mean), log(IS_median), log(IS_sum_tot), log(IS_max))
 cor(datatable, method = "spearman")
 pairs(datatable, col="blue", main="Scatterplots")
 
@@ -170,6 +170,18 @@ ggplot(cluster_data, aes(x = Habitat, y = log(IS_sum_tot))) +
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 15))
 
+# For IS_max
+ggplot(cluster_data, aes(x = Habitat, y = log(IS_max), color = cluster_max)) +
+  geom_violin(fill = "grey70", alpha = 0.5) +
+  geom_point() +
+  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
+  labs(x = "Habitat", y = "log(max Interaction Strength)", color = "Group") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 15))
+
 
 # Regression by groups ----
 
@@ -180,6 +192,8 @@ cluster_data["cluster_mean"][cluster_data["cluster_mean"] == "2"] <- "Low"  # 'c
 cluster_data["cluster_median"][cluster_data["cluster_median"] == "1"] <- "High"
 cluster_data["cluster_median"][cluster_data["cluster_median"] == "3"] <- "Medium"
 cluster_data["cluster_median"][cluster_data["cluster_median"] == "2"] <- "Low"
+
+cluster_data["cluster_max"][cluster_data["cluster_max"] == "1"] <- "Cluster"
 
 ## Trophic level ----
 
@@ -194,6 +208,18 @@ cl_IS_TL <- ggplot(cluster_data, aes(x = TL, y = log(IS_sum_tot), color = cluste
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 cl_IS_TL
+
+# For IS_max
+ggplot(cluster_data, aes(x = TL, y = log(IS_max), color = cluster_max)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
+  labs(x = "Trophic level", y = "log(max Interaction Strength)", color = "Group") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
 
 # Test regression significance by group
 TL_lm <- lm(log(IS_sum_tot) ~ TL * cluster_sum_tot, data = cluster_data)
@@ -220,6 +246,19 @@ cl_IS_DEG <- ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_sum_tot), colo
         axis.text.y = element_text(size = 15))
 cl_IS_DEG
 
+# For IS_max
+ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_max), color = cluster_max)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_x_log10() +
+  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
+  labs(x = "Degree (log scale)", y = "log(max Interaction Strength)", color = "Group") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+
 # Test regression significance by group
 DEG_lm <- lm(log(IS_sum_tot) ~ TotalDegree * cluster_sum_tot, data = cluster_data)
 summary(DEG_lm)
@@ -243,6 +282,18 @@ cl_IS_TS <- ggplot(cluster_data, aes(x = meanTrophicSimil, y = log(IS_sum_tot), 
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 cl_IS_TS
+
+# For IS_max
+ggplot(cluster_data, aes(x = meanTrophicSimil, y = log(IS_max), color = cluster_max)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
+  labs(x = "Trophic similarity", y = "log(max Interaction Strength)", color = "Group") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
 
 # Test regression significance by group
 TS_lm <- lm(log(IS_sum_tot) ~ meanTrophicSimil * cluster_sum_tot, data = cluster_data)
