@@ -224,8 +224,8 @@ ggplot(all_data, aes(x = KS_pvalue, y = Ad_pvalue)) +
 key_sp <- all_data %>% 
   filter(., Ad_pvalue < 0.01) %>% 
   left_join(cluster_data) %>% 
-  dplyr::select(TrophicSpecies, IS_mean, IS_median, IS_sum_tot, IS_max, TL, TotalDegree, meanTrophicSimil,
-                Habitat, difQSS, Ad_pvalue, cluster_mean, cluster_median, cluster_sum_tot) %>% 
+  dplyr::select(TrophicSpecies, IS_mean, TL, TotalDegree, meanTrophicSimil,
+                Habitat, difQSS, Ad_pvalue) %>% 
   arrange(Ad_pvalue)
 
 
