@@ -58,6 +58,8 @@ cluster_data["cluster_median"][cluster_data["cluster_median"] == "2"] <- "Low"
 cluster_data["cluster_sum_tot"][cluster_data["cluster_sum_tot"] == "1"] <- "High"
 cluster_data["cluster_sum_tot"][cluster_data["cluster_sum_tot"] == "2"] <- "Low"
 
+cluster_data["cluster_max"][cluster_data["cluster_max"] == "1"] <- "Single"
+
 all_data <- QSS_data %>% 
   rename(TrophicSpecies = Deleted) %>% 
   left_join(hab_data_comp) %>% 
@@ -80,12 +82,36 @@ ggplot(all_data, aes(x = log(IS_sum_tot), y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
+# For IS_max
+ggplot(all_data, aes(x = log(IS_max), y = difQSS)) +
+  geom_point(aes(color = cluster_max,  # 'cluster_median' or 'cluster_sum_tot'
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
+  labs(color = "Group", shape = "Stability impact", x = "log(max Interaction strength)", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+
 ## By trophic level ----
 
 ggplot(all_data, aes(x = TL, y = difQSS)) +
   geom_point(aes(color = cluster_sum_tot,   # 'cluster_median' or 'cluster_sum_tot'
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  labs(color = "Group", shape = "Stability impact", x = "Trophic level", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+
+# For IS_max
+ggplot(all_data, aes(x = TL, y = difQSS)) +
+  geom_point(aes(color = cluster_max,  # 'cluster_median' or 'cluster_sum_tot'
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
   labs(color = "Group", shape = "Stability impact", x = "Trophic level", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
@@ -107,12 +133,37 @@ ggplot(all_data, aes(x = TotalDegree, y = difQSS)) +
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
 
+# For IS_max
+ggplot(all_data, aes(x = TotalDegree, y = difQSS)) +
+  geom_point(aes(color = cluster_max,  # 'cluster_median' or 'cluster_sum_tot'
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
+  scale_x_log10() +
+  labs(color = "Group", shape = "Stability impact", x = "Degree (log scale)", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+
 ## By trophic similarity ----
 
 ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
   geom_point(aes(color = cluster_sum_tot, 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  labs(color = "Group", shape = "Stability impact", x = "Trophic similarity", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15))
+
+# For IS_max
+ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
+  geom_point(aes(color = cluster_max,  # 'cluster_median' or 'cluster_sum_tot'
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
   labs(color = "Group", shape = "Stability impact", x = "Trophic similarity", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
@@ -147,6 +198,19 @@ ggplot(all_data, aes(x = Habitat, y = difQSS)) +
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 15))
 
+# For IS_max
+ggplot(all_data, aes(x = Habitat, y = difQSS)) +
+  geom_violin(fill = "gray") +
+  geom_point(aes(color = cluster_max,  # 'cluster_median' or 'cluster_sum_tot'
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
+  labs(color = "Group", shape = "Stability impact", x = "Habitat", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 15))
+
 
 # Statistical correlations ----
 
@@ -160,7 +224,7 @@ ggplot(all_data, aes(x = KS_pvalue, y = Ad_pvalue)) +
 key_sp <- all_data %>% 
   filter(., Ad_pvalue < 0.01) %>% 
   left_join(cluster_data) %>% 
-  dplyr::select(TrophicSpecies, IS_mean, IS_median, IS_sum_tot, TL, TotalDegree, meanTrophicSimil,
+  dplyr::select(TrophicSpecies, IS_mean, IS_median, IS_sum_tot, IS_max, TL, TotalDegree, meanTrophicSimil,
                 Habitat, difQSS, Ad_pvalue, cluster_mean, cluster_median, cluster_sum_tot) %>% 
   arrange(Ad_pvalue)
 
