@@ -202,12 +202,14 @@ determined by ordinary least squares regression, vary with the
 interaction dimensionality. On one hand, resource density scales with
 resource mass as a power-law with exponents \vec{p = -0.79 \pm 0.09} in
 2D and \vec{p = -0.86 \pm 0.06} in 3D. Since mean mass for resources
-`detritus' and `sediment' were not available in GATEWAy, we estimated it
-considering the scaling relationship with consumer mass, also different
-in 2D and 3D (for details see equation S9 and figures 2c-d of
-Supplementary Information in \citet{Pawar2012}). On the other hand,
-search rate scales with consumer mass as a power-law with exponents
-\vec{p = 0.68 \pm 0.12} in 2D and \vec{p = 1.05 \pm 0.08} in 3D.
+`phytodetritus' and `sediment' were not available in GATEWAy, we
+considered the body mass of the smallest phytoplankton species
+(`Fragilariopsis cylindrus') as a proxy. This is justified by the fact
+that `phytodetritus' and `sediment' are mainly composed by dead or
+senescent phytoplankton reaching the seabed (\citet{Wolanski2011}). On
+the other hand, search rate scales with consumer mass as a power-law
+with exponents \vec{p = 0.68 \pm 0.12} in 2D and \vec{p = 1.05 \pm 0.08}
+in 3D.
 
 After this, we fit the distribution of the interaction strengths of the
 food web considering six candidate models (Uniform, Normal, Exponential,
@@ -256,12 +258,21 @@ similarity measures the similarity of one of the most important aspect
 of species' niches, the trophic niche, and functional aspects of
 biodiversity \citep{Martinez1991, Williams2000}.
 
+Furthermore, we took into account the species' habitat, which describes
+the physical position of a species within the environment. These data
+was taken from \citet{Jacob2011}. The species were categorized as: 1)
+benthic, if the species lives on the seafloor; 2) pelagic, if the
+species lives close to the surface; 3) benthopelagic, if it moves
+between and connects the mentioned environments; 4) demersal, lives and
+feeds on or near the bottom of the sea; and 5) land-based, if the
+consumer is not aquatic but feeds predominantly in the marine realm.
+
 With the aim of studying the relationship between the interaction
-strength of the species and its unweighted properties, we performed
-linear regression analyses between the log(mean interaction strength)
-and each of the mentioned unweighted properties. The statistical
-significance of the fitted slopes was tested, as well as the difference
-between the groups' slopes applying least-squares means
+strength of the species and its unweighted properties and habitat, we
+performed linear regression analyses between the log(mean interaction
+strength) and each of the mentioned unweighted properties. The
+statistical significance of the fitted slopes was tested, as well as the
+difference between the groups' slopes applying least-squares means
 \citep{Harvey1960}.
 
 Formulas used to obtain the above species properties are described in
@@ -440,31 +451,37 @@ Uniform & 2 & -178001 & 178578 \\
 
 \textbf{Species} & \textbf{meanIS} & \textbf{TL} & \textbf{Deg} & \textbf{TS} & \textbf{Habitat} & \textbf{StabDif} & \textbf{ADvalue}\\
 \middlehline
-Orcinus orca & 0.00163 & 5.03 & 26 & 0.037 & Benthopelagic & 0.00040 & 1.38e-51 \\
+Orcinus orca & 0.00163 & 5.03 & 26 & 0.037 & Benthopelagic & 0.00040 & 1.89e-63 \\
 \middlehline
-Macrourus holotrachys & 0.00074 & 4.70 & 85 & 0.112 & Benthopelagic & 0.00027 & 2.75e-18 \\
+Macrourus holotrachys & 0.00074 & 4.70 & 85 & 0.112 & Benthopelagic & 0.00027 & 1.86e-21 \\
 \middlehline
-Abyssorchomene nodimanus & 0.00022 & 4.21 & 137 & 0.130 & Benthopelagic & 0.00024 & 1.02e-15 \\
+Abyssorchomene nodimanus & 0.00022 & 4.21 & 137 & 0.130 & Benthopelagic & 0.00023 & 2.64e-16 \\
 \middlehline
-Dissostichus mawsoni & 0.00069 & 4.12 & 87 & 0.126 & Pelagic & 0.00018 & 1.06e-10 \\
+Dissostichus mawsoni & 0.00069 & 4.12 & 87 & 0.126 & Pelagic & 0.00020 & 1.74e-11 \\
 \middlehline
-Pagetopsis macropterus & 0.00063 & 4.64 & 76 & 0.113 & Demersal & -0.00017 & 1.66e- 9 \\
+Macrourus whitsoni & 0.00064 & 4.55 & 92 & 0.124 & Benthopelagic & 0.00015 & 3.98e- 9 \\
 \middlehline
-Macrourus whitsoni & 0.00064 & 4.55 & 92 & 0.124 & Benthopelagic & 0.00012 & 4.97e- 8 \\
+Notothenia marmorata & 0.00074 & 4.09 & 44 & 0.091 & Demersal & 0.00016 & 1.90e- 7 \\
 \middlehline
-Hydrurga leptonyx & 0.00092 & 4.72 & 67 & 0.094 & Land-based & 0.00014 & 5.59e- 6 \\
+Pagetopsis macropterus & 0.00063 & 4.64 & 76 & 0.113 & Demersal & -0.00014 & 6.64e- 7 \\
 \middlehline
-Mesonychoteuthis hamiltoni & 0.00161 & 4.41 & 29 & 0.028 & Pelagic & 0.00013 & 6.53e- 6 \\
+Champsocephalus gunnari & 0.00068 & 3.72 & 46 & 0.086 & Pelagic & 0.00017 & 1.33e- 6 \\
 \middlehline
-Notothenia marmorata & 0.00073 & 4.09 & 44 & 0.091 & Demersal & 0.00014 & 2.10e- 5 \\
+Notothenia coriiceps & 0.00044 & 4.27 & 130 & 0.126 & Demersal & 0.00012 & 2.45e- 6 \\
 \middlehline
-Champsocephalus gunnari & 0.00068 & 3.72 & 46 & 0.086 & Pelagic & 0.00010 & 7.97e- 5 \\
+Hydrurga leptonyx & 0.00092 & 4.72 & 67 & 0.094 & Land-based & 0.00013 & 4.15e- 6 \\
 \middlehline
-Arctocephalus gazella & 0.00083 & 4.67 & 61 & 0.093 & Land-based & 0.00011 & 9.52e- 5 \\
+Mesonychoteuthis hamiltoni & 0.00161 & 4.41 & 29 & 0.028 & Pelagic & 0.00013 & 2.99e- 5 \\
 \middlehline
-Ommatophoca rossii & 0.00093 & 4.87 & 56 & 0.080 & Land-based & 0.00009 & 1.20e- 3 \\
+Arctocephalus gazella & 0.00083 & 4.67 & 61 & 0.093 & Land-based & 0.00014 & 5.14e- 5 \\
 \middlehline
-Notothenia coriiceps & 0.00044 & 4.27 & 130 & 0.126 & Demersal & 0.00012 & 1.33e- 3 \\
+Gonatus antarcticus & 0.00080 & 4.31 & 36 & 0.046 & Pelagic & 0.00012 & 5.90e- 4 \\
+\middlehline
+Psychroteuthis glacialis & 0.00047 & 3.91 & 23 & 0.054 & Pelagic & 0.00011 & 1.66e- 3 \\
+\middlehline
+Mirounga leonina & 0.00107 & 4.87 & 56 & 0.080 & Land-based & 0.00009 & 3.50e- 3 \\
+\middlehline
+Dacodraco hunteri & 0.00064 & 4.80 & 65 & 0.101 & Demersal & 0.00006 & 7.51e- 3 \\
 
 \bottomhline
 \end{tabular}
