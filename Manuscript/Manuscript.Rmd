@@ -95,7 +95,7 @@ The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS with a len
 
 ## Weddell Sea food web dataset
 
-We obtained the dataset of the Weddell Sea food web from the GlobAL daTabasE of traits and food Web Architecture (GATEWAy, version 1.0) of the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig [@Brose2018]. This open access database is a list of predator-prey interactions that contains several highly-resolved food webs, including biological data about the consumer and resource species involved in each trophic interaction (i.e. mean mass). Furthermore, it incorporates information on the interaction itself, such as the dimensionality.
+We obtained the dataset of the Weddell Sea food web from the GlobAL daTabasE of traits and food Web Architecture (GATEWAy, version 1.0) of the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig [@Brose2018]. This open access database is a list of predator-prey interactions that contains several highly-resolved food webs, including biological data about the consumer and resource species involved in each trophic interaction (i.e. mean mass). Furthermore, it incorporates information on the interaction itself, such as the dimensionality (2 or 3 dimensions).
 
 This marine food web compiles all the food web data available for the high Antarctic Weddell Sea collected since 1983, and is one of the most highly-resolved marine food webs documented to date. It's noteworthy that it is a summary network that ignores seasonal changes [@Jacob2011].
 
