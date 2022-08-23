@@ -157,32 +157,6 @@ qr_IS_TS <- ggplot(cluster_data, aes(x = meanTrophicSimil, y = log(IS_sum_tot)))
 qr_IS_TS
 
 
-## Habitat ----
-
-ggplot(cluster_data, aes(x = Habitat, y = log(IS_sum_tot))) +
-  geom_violin(fill = "grey70", alpha = 0.5) +
-  geom_point(shape=21, aes(fill = factor(cluster_sum_tot))) +
-  scale_fill_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  labs(x = "Habitat", y = "log(sum Interaction Strength)", fill = "Group") +
-  theme_bw() +
-  theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 15))
-
-# For IS_max
-ggplot(cluster_data, aes(x = Habitat, y = log(IS_max), color = cluster_max)) +
-  geom_violin(fill = "grey70", alpha = 0.5) +
-  geom_point() +
-  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
-  labs(x = "Habitat", y = "log(max Interaction Strength)", color = "Group") +
-  theme_bw() +
-  theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 15))
-
-
 # Regression by groups ----
 
 # Rename clusters by relative IS
@@ -197,16 +171,16 @@ cluster_data["cluster_max"][cluster_data["cluster_max"] == "1"] <- "Cluster"
 
 ## Trophic level ----
 
-cl_IS_TL <- ggplot(cluster_data, aes(x = TL, y = log(IS_sum_tot), color = cluster_sum_tot)) +
+cl_IS_TL <- ggplot(cluster_data, aes(x = TL, y = log(IS_mean), color = cluster_mean)) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  labs(x = "Trophic level", y = "log(sum Interaction Strength)", color = "Group") +
+  labs(x = "Trophic level", y = "log(mean Interaction Strength)", color = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
 cl_IS_TL
 
 # For IS_max
@@ -233,17 +207,17 @@ ols_plot_resid_qq(TL_lm)  # Q-Q plot
 
 ## Degree ----
 
-cl_IS_DEG <- ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_sum_tot), color = cluster_sum_tot)) +
+cl_IS_DEG <- ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_mean), color = cluster_mean)) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_x_log10() +
   scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  labs(x = "Degree (log scale)", y = "log(sum Interaction Strength)", color = "Group") +
+  labs(x = "Degree (log scale)", y = "log(mean Interaction Strength)", color = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
 cl_IS_DEG
 
 # For IS_max
@@ -271,16 +245,16 @@ ols_plot_resid_qq(DEG_lm)  # Q-Q plot
 
 ## Trophic similarity ----
 
-cl_IS_TS <- ggplot(cluster_data, aes(x = meanTrophicSimil, y = log(IS_sum_tot), color = cluster_sum_tot)) +
+cl_IS_TS <- ggplot(cluster_data, aes(x = meanTrophicSimil, y = log(IS_mean), color = cluster_mean)) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
   labs(x = "Trophic similarity", y = "log(sum Interaction Strength)", color = "Group") +
   theme_bw() +
   theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
 cl_IS_TS
 
 # For IS_max
@@ -304,3 +278,44 @@ pairs(TS_eq)  # significance btw group slopes
 ols_test_normality(TS_lm)  # check normality of residuals
 ols_plot_resid_qq(TS_lm)  # Q-Q plot
 
+
+## Habitat ----
+
+cl_IS_HAB <- ggplot(cluster_data, aes(x = Habitat, y = log(IS_mean))) +
+  geom_violin(fill = "grey70", alpha = 0.5) +
+  geom_point(shape=21, aes(fill = factor(cluster_sum_tot))) +
+  scale_fill_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  labs(x = "Habitat", y = "log(mean Interaction Strength)", fill = "Group") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 12))
+cl_IS_HAB
+
+# For IS_max
+ggplot(cluster_data, aes(x = Habitat, y = log(IS_max), color = cluster_max)) +
+  geom_violin(fill = "grey70", alpha = 0.5) +
+  geom_point() +
+  scale_color_manual(values = c("#3a5e8cFF"), labels = c("Single")) +
+  labs(x = "Habitat", y = "log(max Interaction Strength)", color = "Group") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 15))
+
+
+## Figure 5 ----
+
+Fig5_Reg <- ggarrange(cl_IS_TL + rremove("ylab"), cl_IS_DEG + rremove("ylab"), 
+                      cl_IS_TS + rremove("ylab"), cl_IS_HAB + rremove("ylab"), 
+                      common.legend = TRUE, legend = "bottom",
+                      labels = c("A", "B", "C", "D"),
+                      ncol=2, nrow=2)
+Fig5_Reg <- annotate_figure(Fig5_Reg, left = text_grob("log(mean Interaction Strength)", rot = 90, 
+                                                       vjust = 1, size = 18))
+Fig5_Reg
+
+ggsave(filename = "Manuscript/Fig.5_Reg.png", plot = Fig5_Reg, 
+       width = 10, units = "in", dpi = 600, bg = "white")
