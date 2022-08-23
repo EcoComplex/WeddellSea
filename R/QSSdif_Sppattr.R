@@ -71,16 +71,19 @@ all_data <- QSS_data %>%
 
 ## By mean interaction strength ----
 
-ggplot(all_data, aes(x = log(IS_sum_tot), y = difQSS)) +
-  geom_point(aes(color = cluster_sum_tot,  # 'cluster_median' or 'cluster_sum_tot'
+IS_QSS <- ggplot(all_data, aes(x = log(IS_mean), y = difQSS)) +
+  geom_point(aes(color = cluster_mean,  # 'cluster_median' or 'cluster_sum_tot'
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  labs(color = "Group", shape = "Stability impact", x = "log(sum Interaction strength)", y = "Stability difference") +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
+  labs(color = "Group", shape = "Stability impact", x = "log(mean Interaction strength)", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
+        legend.position = "none",
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
+IS_QSS
 
 # For IS_max
 ggplot(all_data, aes(x = log(IS_max), y = difQSS)) +
@@ -96,16 +99,19 @@ ggplot(all_data, aes(x = log(IS_max), y = difQSS)) +
 
 ## By trophic level ----
 
-ggplot(all_data, aes(x = TL, y = difQSS)) +
-  geom_point(aes(color = cluster_sum_tot,   # 'cluster_median' or 'cluster_sum_tot'
+TL_QSS <- ggplot(all_data, aes(x = TL, y = difQSS)) +
+  geom_point(aes(color = cluster_mean,   # 'cluster_median' or 'cluster_sum_tot'
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   labs(color = "Group", shape = "Stability impact", x = "Trophic level", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
+        legend.position = "none",
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
+TL_QSS
 
 # For IS_max
 ggplot(all_data, aes(x = TL, y = difQSS)) +
@@ -121,17 +127,20 @@ ggplot(all_data, aes(x = TL, y = difQSS)) +
 
 ## By degree ----
 
-ggplot(all_data, aes(x = TotalDegree, y = difQSS)) +
-  geom_point(aes(color = cluster_sum_tot,  # 'cluster_median' or 'cluster_sum_tot'
+DEG_QSS <- ggplot(all_data, aes(x = TotalDegree, y = difQSS)) +
+  geom_point(aes(color = cluster_mean,  # 'cluster_median' or 'cluster_sum_tot'
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   scale_x_log10() +
   labs(color = "Group", shape = "Stability impact", x = "Degree (log scale)", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
+        legend.position = "none",
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
+DEG_QSS
 
 # For IS_max
 ggplot(all_data, aes(x = TotalDegree, y = difQSS)) +
@@ -148,16 +157,19 @@ ggplot(all_data, aes(x = TotalDegree, y = difQSS)) +
 
 ## By trophic similarity ----
 
-ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
-  geom_point(aes(color = cluster_sum_tot, 
+TS_QSS <- ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
+  geom_point(aes(color = cluster_mean, 
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   labs(color = "Group", shape = "Stability impact", x = "Trophic similarity", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
+        legend.position = "none",
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
+TS_QSS
 
 # For IS_max
 ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
@@ -186,17 +198,20 @@ ggplot(all_data, aes(x = Omn, y = difQSS)) +
 
 ## By habitat ----
 
-ggplot(all_data, aes(x = Habitat, y = difQSS)) +
-  geom_violin(fill = "gray") +
-  geom_point(aes(color = cluster_sum_tot,  # 'cluster_median' or 'cluster_sum_tot'
+HAB_QSS <- ggplot(all_data, aes(x = Habitat, y = difQSS)) +
+  geom_violin(fill = "grey90") +
+  geom_point(aes(color = cluster_mean,  # 'cluster_median' or 'cluster_sum_tot'
                  shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
   scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   labs(color = "Group", shape = "Stability impact", x = "Habitat", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 15))
+        legend.position = "none",
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 6),
+        axis.text.y = element_text(size = 12))
+HAB_QSS
 
 # For IS_max
 ggplot(all_data, aes(x = Habitat, y = difQSS)) +
@@ -210,6 +225,39 @@ ggplot(all_data, aes(x = Habitat, y = difQSS)) +
         axis.title = element_text(size = 18, face = "bold"),
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 15))
+
+## Figure 6 ----
+library(ggpubr)
+library(grid)
+IS_QSS
+TL_QSS
+DEG_QSS
+TS_QSS
+HAB_QSS
+
+legend <- ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS))+
+  geom_point(aes(color = cluster_mean, 
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
+  lims(x = c(0,0), y = c(0,0)) +
+  theme_void() +
+  theme(legend.position = c(0.5,0.5),
+        legend.key.size = unit(1, "cm"),
+        legend.text = element_text(size =  10),
+        legend.title = element_text(size = 12, face = "bold")) +
+  guides(color = guide_legend(title = "Group"), shape = guide_legend(title = "Stability impact"))
+
+Fig6_QSS <- ggarrange(IS_QSS + rremove("ylab"), TL_QSS + rremove("ylab"), 
+                      DEG_QSS + rremove("ylab"), TS_QSS + rremove("ylab"), 
+                      HAB_QSS + rremove("ylab"), legend,
+                      labels = c("A", "B", "C", "D", "E"),
+                      ncol=3, nrow=2)
+Fig6_QSS <- annotate_figure(Fig6_QSS, left = text_grob("Stability difference", rot = 90, 
+                                          vjust = 1, size = 18))
+
+ggsave(filename = "Manuscript/Fig.6_QSSDif.png", plot = Fig6_QSS, 
+       width = 10, units = "in", dpi = 600, bg = "white")
 
 
 # Statistical correlations ----
