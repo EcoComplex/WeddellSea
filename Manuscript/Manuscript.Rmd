@@ -119,7 +119,7 @@ where \vec{\alpha} is the search rate, \vec{x_R} is the resource density, and \v
 
 We obtained estimations for the resource density and the search rate from the scaling relationships with the resource and the consumer mass, respectively [@Pawar2012]. The coefficients of such relationships, determined by ordinary least squares regression, vary with the interaction dimensionality. On one hand, resource density scales with resource mass as a power-law with exponents \vec{p = -0.79 \pm 0.09} in 2D and \vec{p = -0.86 \pm 0.06} in 3D. Since mean mass for resources 'phytodetritus' and 'sediment' were not available in GATEWAy, we considered the body mass of the smallest phytoplankton species ('Fragilariopsis cylindrus') as a proxy. This is justified by the fact that 'phytodetritus' and 'sediment' are mainly composed by dead or senescent phytoplankton reaching the seabed (@Wolanski2011). On the other hand, search rate scales with consumer mass as a power-law with exponents \vec{p = 0.68 \pm 0.12} in 2D and \vec{p = 1.05 \pm 0.08} in 3D.
 
-After this, we fit the distribution of the interaction strengths of the food web considering six candidate models (Uniform, Normal, Exponential, Power-law, log-Normal and Gamma) using maximum likelihood [@McCallum2008], and selected the model performance by computing the Akaike Information Criterion AIC [@Burnham2002].
+After this, we fit the interaction strength distribution of the food web considering six candidate models (Uniform, Normal, Exponential, Power-law, log-Normal and Gamma) using maximum likelihood [@McCallum2008], and selected the model performance by computing the Akaike Information Criterion AIC [@Burnham2002].
 
 ### Species properties
 
@@ -174,37 +174,37 @@ The conclusion goes here.
 \clearpage
 
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "Map of the Weddell Sea and Dronning Maud Land sector highlighting the high Antarctic shelf as a dashed-line contour. Modified from www.soos.aq."}
-knitr::include_graphics("WeddellSea_map.jpg")
+knitr::include_graphics("Fig.1_StudyMap.jpg")
 ```
 
 \clearpage
 
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "Scheme of a network showing the weighted and unweighted properties we used to characterize the species of the Weddell Sea food web."}
-knitr::include_graphics("ToyFoodWeb.jpg")
+knitr::include_graphics("Fig.2_ToyFoodWeb.jpg")
 ```
 
 \clearpage
 
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "Graphic representation of the Weddell Sea food web. Species (nodes) are arranged verticaly and colored by trophic level. The diameter of the node indicates the total number of interactions. Predator-prey interactions are represented by the arrows, from the prey to the predator."}
-knitr::include_graphics("WeddellSea_net.jpg")
+knitr::include_graphics("Fig.3_WeddellSeaNet.jpg")
 ```
 
 \clearpage
 
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "Frequency distribution of interaction strengths for the Weddell Sea food web (n = 490)."}
-knitr::include_graphics("IS_dist.jpg")
+knitr::include_graphics("Fig.4_ISDist.jpg")
 ```
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (interaction strength) and unweighted species properties. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C) for each group: 'High IS' and 'Low IS'. All regression slopes are significant and statistically different among groups (p < 0.01)."}
-knitr::include_graphics("Regressions.jpg")
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (interaction strength IS) and unweighted properties including habitat. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C) for each group of species resulted from the clustering analysis: 'High IS' and 'Low IS'. All regression slopes are significant and statistically different among groups (p < 0.01)."}
+knitr::include_graphics("Fig.5_Reg.png")
 ```
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Quasi-Sign Stability (QSS) difference between the whole Weddell Sea food web (n = 490) and the food web minus one species (n = 489), considering weighted (interaction strength) and unweighted species properties, and species habitat. Each point represents a species, where color represents 'High IS' and 'Low IS' groups. Shape indicates the impact on the QSS; if significant the extinction of that species altered the stability of the food web."}
-knitr::include_graphics("QSS_dif.jpg")
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Quasi-Sign Stability (QSS) difference between the whole Weddell Sea food web (n = 490) and the food web without one species (n = 489) for weighted (interaction strength) and unweighted species properties, and habitat. Each point represents a species colored by group ('High IS' or 'Low IS'). Shape indicates the impact on the QSS; if significant the extinction of that species altered the stability of the food web."}
+knitr::include_graphics("Fig.6_QSSDif.png")
 ```
 
 \clearpage
