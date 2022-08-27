@@ -164,6 +164,8 @@ When plotting the stability difference against species properties and the previo
 
 # Discussion
 
+Within a system of a given complexity, commonly only a few strong species interactions are present with most interactions being weak (e.g. Bascompte et al., 2005; Berlow et al., 2004; Paine, 1992; Wootton & Emmerson, 2005), though still being important for system stability (e.g. Kadoya et al., 2018; McCann et al., 1998; O'Gorman & Emmerson, 2009). Moreover, there is some evidence indicating that generalists (i.e. species with many possible interacting partners) mostly have weak interactions, while specialist species (i.e. fewer possible interacting partners) show stronger interactions (Wootton & Stouffer, 2016).
+
 "Low functional redundancy at key trophic levels makes these ecosystems (polar pelagic) particularly sensitive to change". [@Murphy2016]
 
 \clearpage
