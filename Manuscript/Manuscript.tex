@@ -373,6 +373,16 @@ Table 2 shows these results per species.
 
 \section{Discussion}
 
+Within a system of a given complexity, commonly only a few strong
+species interactions are present with most interactions being weak
+(e.g.~Bascompte et al., 2005; Berlow et al., 2004; Paine, 1992; Wootton
+\& Emmerson, 2005), though still being important for system stability
+(e.g.~Kadoya et al., 2018; McCann et al., 1998; O'Gorman \& Emmerson,
+2009). Moreover, there is some evidence indicating that generalists
+(i.e.~species with many possible interacting partners) mostly have weak
+interactions, while specialist species (i.e.~fewer possible interacting
+partners) show stronger interactions (Wootton \& Stouffer, 2016).
+
 ``Low functional redundancy at key trophic levels makes these ecosystems
 (polar pelagic) particularly sensitive to change''. \citep{Murphy2016}
 
@@ -396,25 +406,19 @@ The conclusion goes here.
 \clearpage
 
 \begin{figure}
-\includegraphics[width=12cm]{Fig.3_WeddellSeaNet} \caption{Graphic representation of the Weddell Sea food web. Species (nodes) are arranged verticaly and colored by trophic level. The diameter of the node indicates the total number of interactions. Predator-prey interactions are represented by the arrows, from the prey to the predator.}\label{fig:unnamed-chunk-3}
+\includegraphics[width=12cm]{Fig3_IntDist} \caption{Frequency distribution of interaction strengths for the Weddell Sea food web (n = 490).}\label{fig:unnamed-chunk-3}
 \end{figure}
 
 \clearpage
 
 \begin{figure}
-\includegraphics[width=12cm]{Fig.4_ISDist} \caption{Frequency distribution of interaction strengths for the Weddell Sea food web (n = 490).}\label{fig:unnamed-chunk-4}
+\includegraphics[width=12cm]{Fig4_LinReg} \caption{Relationships between weighted (interaction strength IS) and unweighted properties including habitat. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C) for each group of species resulted from the clustering analysis: 'High IS' and 'Low IS'. All regression slopes are significant and statistically different among groups (p < 0.01).}\label{fig:unnamed-chunk-4}
 \end{figure}
 
 \clearpage
 
 \begin{figure}
-\includegraphics[width=12cm]{Fig.5_Reg} \caption{Relationships between weighted (interaction strength IS) and unweighted properties including habitat. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C) for each group of species resulted from the clustering analysis: 'High IS' and 'Low IS'. All regression slopes are significant and statistically different among groups (p < 0.01).}\label{fig:unnamed-chunk-5}
-\end{figure}
-
-\clearpage
-
-\begin{figure}
-\includegraphics[width=12cm]{Fig.6_QSSDif} \caption{Quasi-Sign Stability (QSS) difference between the whole Weddell Sea food web (n = 490) and the food web without one species (n = 489) for weighted (interaction strength) and unweighted species properties, and habitat. Each point represents a species colored by group ('High IS' or 'Low IS'). Shape indicates the impact on the QSS; if significant the extinction of that species altered the stability of the food web.}\label{fig:unnamed-chunk-6}
+\includegraphics[width=12cm]{Fig.5_QSSDif} \caption{Quasi-Sign Stability (QSS) difference between the whole Weddell Sea food web (n = 490) and the food web without one species (n = 489) for weighted (interaction strength) and unweighted species properties, and habitat. Each point represents a species colored by group ('High IS' or 'Low IS'). Shape indicates the impact on the QSS; if significant the extinction of that species altered the stability of the food web.}\label{fig:unnamed-chunk-5}
 \end{figure}
 
 \clearpage
@@ -486,6 +490,19 @@ Dacodraco hunteri & 0.00064 & 4.80 & 65 & 0.101 & Demersal & 0.00006 & 7.51e- 3 
 \bottomhline
 \end{tabular}
 \end{table}
+
+\appendixfigures
+\clearpage
+
+\begin{figure}
+\includegraphics[width=12cm]{App1_FWplot} \caption{Graphic representation of the Weddell Sea food web. Species (nodes) are arranged vertically and colored by trophic level. The diameter of the node indicates the total number of interactions. Predator-prey interactions are represented by the arrows, from prey to predator.}\label{fig:unnamed-chunk-6}
+\end{figure}
+
+\clearpage
+
+\begin{figure}
+\includegraphics[width=12cm]{App2_Clus_meanIS} \caption{A) Frequency distribution for the mean interaction strength of the species of Weddell Sea food web. B) Visualization of the optimal number of clusters applying the Gap statistic.}\label{fig:unnamed-chunk-7}
+\end{figure}
 
 
 

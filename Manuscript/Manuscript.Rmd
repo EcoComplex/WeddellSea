@@ -187,26 +187,20 @@ knitr::include_graphics("Fig.2_ToyFoodWeb.jpg")
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Graphic representation of the Weddell Sea food web. Species (nodes) are arranged verticaly and colored by trophic level. The diameter of the node indicates the total number of interactions. Predator-prey interactions are represented by the arrows, from the prey to the predator."}
-knitr::include_graphics("Fig.3_WeddellSeaNet.jpg")
-```
-
-\clearpage
-
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "Frequency distribution of interaction strengths for the Weddell Sea food web (n = 490)."}
-knitr::include_graphics("Fig.4_ISDist.jpg")
+knitr::include_graphics("Fig3_IntDist.png")
 ```
 
 \clearpage
 
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (interaction strength IS) and unweighted properties including habitat. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C) for each group of species resulted from the clustering analysis: 'High IS' and 'Low IS'. All regression slopes are significant and statistically different among groups (p < 0.01)."}
-knitr::include_graphics("Fig.5_Reg.png")
+knitr::include_graphics("Fig4_LinReg.png")
 ```
 
 \clearpage
 
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "Quasi-Sign Stability (QSS) difference between the whole Weddell Sea food web (n = 490) and the food web without one species (n = 489) for weighted (interaction strength) and unweighted species properties, and habitat. Each point represents a species colored by group ('High IS' or 'Low IS'). Shape indicates the impact on the QSS; if significant the extinction of that species altered the stability of the food web."}
-knitr::include_graphics("Fig.6_QSSDif.png")
+knitr::include_graphics("Fig.5_QSSDif.png")
 ```
 
 \clearpage
@@ -286,6 +280,12 @@ Dacodraco hunteri & 0.00064 & 4.80 & 65 & 0.101 & Demersal & 0.00006 & 7.51e- 3 
 \appendixfigures
 \clearpage
 
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Graphic representation of the Weddell Sea food web. Species (nodes) are arranged vertically and colored by trophic level. The diameter of the node indicates the total number of interactions. Predator-prey interactions are represented by the arrows, from prey to predator."}
+knitr::include_graphics("App1_FWplot.png")
+```
+
+\clearpage
+
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "A) Frequency distribution for the mean interaction strength of the species of Weddell Sea food web. B) Visualization of the optimal number of clusters applying the Gap statistic."}
-knitr::include_graphics("Clus_meanIS.jpg")
+knitr::include_graphics("App2_Clus_meanIS.png")
 ```
