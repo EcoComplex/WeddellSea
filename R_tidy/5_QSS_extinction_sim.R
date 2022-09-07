@@ -4,12 +4,13 @@
 ## September 2022
 #
 
-## To run the following code first run 'R/1_calc_interaction_strength.R' & 'R/3_species_w&uw_prop.R'
+## To run the following code first run 'R/1_calc_interaction_strength.R', 
+# 'R/3_species_w&uw_prop.R' & 'R/4_quantile_regression.R'
 
 
 # Load packages ----
 
-packages <- c("igraph", "multiweb", "dplyr", "tictoc")
+packages <- c("igraph", "multiweb", "dplyr", "tictoc", "ggplot2")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -41,8 +42,102 @@ toc()
 
 QSS_extinction_dif <- as_tibble(QSS_extinction_dif)
 
-
-# Save results ----
+## Save simulations ----
 
 save(QSS_extinction_dif,
      file = "Results/QSS_extinction_dif.rda")
+
+
+# QSS vs spp prop ----
+
+# Load needed data
+load("Results/cluster_data.rds")
+load("Results/QSS_extinction_dif.rda")
+
+all_data <- QSS_extinction_dif %>% 
+  rename(TrophicSpecies = Deleted) %>% 
+  left_join(cluster_data) %>% 
+  left_join(spp_all_prop)
+
+## By mean interaction strength ----
+IS_QSS <- ggplot(all_data, aes(x = log(IS_mean), y = difQSS)) +
+  geom_point(aes(color = cluster_mean,
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
+  labs(color = "Group", shape = "Stability impact", x = "log(mean Interaction Strength)", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        legend.position = "none",
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
+IS_QSS
+
+## By trophic level ----
+TL_QSS <- ggplot(all_data, aes(x = TL, y = difQSS)) +
+  geom_point(aes(color = cluster_mean,
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
+  labs(color = "Group", shape = "Stability impact", x = "Trophic level", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        legend.position = "none",
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
+TL_QSS
+
+## By degree ----
+DEG_QSS <- ggplot(all_data, aes(x = TotalDegree, y = difQSS)) +
+  geom_point(aes(color = cluster_mean,
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
+  scale_x_log10() +
+  labs(color = "Group", shape = "Stability impact", x = "Degree (log scale)", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        legend.position = "none",
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
+DEG_QSS
+
+## By trophic similarity ----
+TS_QSS <- ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
+  geom_point(aes(color = cluster_mean, 
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
+  labs(color = "Group", shape = "Stability impact", x = "Trophic similarity", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        legend.position = "none",
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
+TS_QSS
+
+## By habitat ----
+HAB_QSS <- ggplot(all_data, aes(x = Habitat, y = difQSS)) +
+  geom_violin(fill = "grey90") +
+  geom_point(aes(color = cluster_mean,
+                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
+  labs(color = "Group", shape = "Stability impact", x = "Habitat", y = "Stability difference") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        legend.position = "none",
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 6),
+        axis.text.y = element_text(size = 12))
+HAB_QSS
+
+
+# Save results ----
+
+save(all_data, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS,
+     file = "Results/QSS_summary.rda")

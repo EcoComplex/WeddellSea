@@ -47,10 +47,6 @@ km <- kmeans(data.scaled, centers = 2, nstart = 25)
 # Add cluster assignment to original data
 cluster_data <- cbind(spp_all_prop, cluster_mean = km$cluster)
 
-# Save cluster results
-save(cluster_data, file = "Results/cluster_data.rds")
-
-
 # Plot clusters
 ggplot(cluster_data, aes(y = log(IS_mean), x=cluster_mean, color=cluster_mean)) + 
   geom_jitter() + theme_bw() + scale_color_viridis_c()
@@ -64,13 +60,14 @@ p <- ggplot(cluster_data, aes(x = log(IS_mean))) +
         axis.text.y = element_text(size = 15))
 p + guides(color = "none")
 
-
-# Regression by clusters (aka groups) ----
-
 # Rename clusters by relative interaction strength
 cluster_data["cluster_mean"][cluster_data["cluster_mean"] == "1"] <- "High"
 cluster_data["cluster_mean"][cluster_data["cluster_mean"] == "2"] <- "Low"
 
+# Save cluster results
+save(cluster_data, file = "Results/cluster_data.rds")
+
+# Regression by clusters (aka groups) ----
 
 ## Trophic level ----
 

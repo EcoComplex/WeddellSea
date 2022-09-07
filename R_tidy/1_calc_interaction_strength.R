@@ -57,7 +57,7 @@ weddell_dim_fill <- weddell_dim_fill %>%
   select(con.taxonomy, res.taxonomy, con.mass.mean.g., res.mass.mean.g., complete.dim) %>% 
   rename(interaction.dimensionality = complete.dim)
 
-write_csv(weddell_dim_fill, file = "Data/Wedd_int_complete.csv")
+#write_csv(weddell_dim_fill, file = "Data/Wedd_int_complete.csv")
 
 
 # Estimation of interaction strength ----

@@ -9,7 +9,7 @@
 
 # Load packages ----
 
-packages <- c("dplyr", "igraph", "NetIndices", "cheddar")
+packages <- c("dplyr", "igraph", "NetIndices", "cheddar", "multiweb")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -141,5 +141,5 @@ spp_all_prop <- spp_all_prop %>%
 
 # Save results ----
 
-save(g, spp_w_prop, spp_uw_prop, spp_all_prop,
+save(g, spp_w_prop, spp_uw_prop, spp_all_prop, fw_plot,
      file = "Results/net_&_spp_prop.rda")
