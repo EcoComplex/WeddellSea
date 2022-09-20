@@ -63,11 +63,12 @@ weddell_dim_fill <- weddell_dim_fill %>%
 # Estimation of interaction strength ----
 
 # Read the updated database
+# Convert g to kg (to follow Pawar et al. 2012 relationships)
 wedd_df_comp <- read_csv("Data/Wedd_int_complete.csv") %>% 
   mutate(res.mass.mean.kg. = res.mass.mean.g.*1000, con.mass.mean.kg. = con.mass.mean.g.*1000)
 
 # Replace 'phytodetritus' and 'sediment' body masses (-999) with that of smallest phytoplankton
-# Smallest phyto body mass = 1.53e-11
+# Smallest phyto body mass = 1.53e-11 kg
 wedd_df_pd <- wedd_df_comp %>% 
   mutate(res.mass.mean.kg. = replace(res.mass.mean.kg., res.mass.mean.kg. == -999000, 1.53e-11))
 
