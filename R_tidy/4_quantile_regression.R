@@ -31,7 +31,7 @@ ggplot(spp_all_prop, aes(x = log(IS_mean))) + geom_density() + theme_bw()
 ggplot(spp_all_prop, aes(x = log(IS_mean))) + geom_histogram(bins=50) + theme_bw()
 
 
-# Cluster by interaction strength ----
+# Check cluster by interaction strength ----
 
 # Determine and visualize the optimal number of clusters using total within sum of square
 data.scaled <- scale(log(spp_all_prop$IS_mean))
@@ -42,32 +42,11 @@ gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
 # Plot number of clusters vs. gap statistic
 fviz_gap_stat(gap_stat)
 # Perform k-means clustering with k = predicted clusters (gap_stat)
-km <- kmeans(data.scaled, centers = 2, nstart = 25)
+km <- kmeans(data.scaled, centers = 1, nstart = 25)
+# NO CLUSTERING FOUND! #
 
-# Add cluster assignment to original data
-cluster_data <- cbind(spp_all_prop, cluster_mean = km$cluster)
 
-# Plot clusters
-ggplot(cluster_data, aes(y = log(IS_mean), x=cluster_mean, color=cluster_mean)) + 
-  geom_jitter() + theme_bw() + scale_color_viridis_c()
-
-p <- ggplot(cluster_data, aes(x = log(IS_mean))) + 
-  geom_density(aes(group=as.factor(cluster_mean), color=as.factor(cluster_mean), fill=as.factor(cluster_mean)), alpha=0.3) + 
-  labs(x = "log(mean Interaction strength)", y = "Frequency", fill = "Cluster") +
-  theme_bw() +
-  theme(axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
-p + guides(color = "none")
-
-# Rename clusters by relative interaction strength
-cluster_data["cluster_mean"][cluster_data["cluster_mean"] == "1"] <- "High"
-cluster_data["cluster_mean"][cluster_data["cluster_mean"] == "2"] <- "Low"
-
-# Save cluster results
-save(cluster_data, file = "Results/cluster_data.rds")
-
-# Regression by clusters (aka groups) ----
+# Linear Regression ----
 
 ## Trophic level ----
 

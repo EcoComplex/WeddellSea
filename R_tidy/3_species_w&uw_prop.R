@@ -141,5 +141,5 @@ spp_all_prop <- spp_all_prop %>%
 
 # Save results ----
 
-save(g, spp_w_prop, spp_uw_prop, spp_all_prop, fw_plot,
+save(g, spp_w_prop, spp_uw_prop, spp_all_prop,
      file = "Results/net_&_spp_prop.rda")

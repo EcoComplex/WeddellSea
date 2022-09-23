@@ -65,12 +65,12 @@ weddell_dim_fill <- weddell_dim_fill %>%
 # Read the updated database
 # Convert g to kg (to follow Pawar et al. 2012 relationships)
 wedd_df_comp <- read_csv("Data/Wedd_int_complete.csv") %>% 
-  mutate(res.mass.mean.kg. = res.mass.mean.g.*1000, con.mass.mean.kg. = con.mass.mean.g.*1000)
+  mutate(res.mass.mean.kg. = res.mass.mean.g.*10e-3, con.mass.mean.kg. = con.mass.mean.g.*10e-3)
 
 # Replace 'phytodetritus' and 'sediment' body masses (-999) with that of smallest phytoplankton
-# Smallest phyto body mass = 1.53e-11 kg
+# Smallest phyto 'Fragilariopsis cylindrus' mean body mass (1.53e-14 g) * 10e-3 = 1.5e-16 kg
 wedd_df_pd <- wedd_df_comp %>% 
-  mutate(res.mass.mean.kg. = replace(res.mass.mean.kg., res.mass.mean.kg. == -999000, 1.53e-11))
+  mutate(res.mass.mean.kg. = replace(res.mass.mean.kg., res.mass.mean.kg. == -999000, 1.53e-16))
 
 # Estimate interaction strength
 wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg., con.mass.mean.kg., interaction.dimensionality)
