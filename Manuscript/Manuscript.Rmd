@@ -213,17 +213,17 @@ knitr::include_graphics("Fig.5_QSSDif.png")
 
 \textbf{Model} & \textbf{df} & \textbf{AIC} & \textbf{deltaAIC} \\
 \middlehline
-log-Normal & 2 & -358648 & 0 \\
+log-Normal & 2 & -359738 & 0 \\
 \middlehline
-Gamma & 2 & -354821 & 3827 \\
+Gamma & 2 & -359714.1 & 23.89 \\
 \middlehline
-Power-law & 2 & -349999 & 8649 \\
+Power-law & 2 & -350667 & 9070.97 \\
 \middlehline
-Exponential & 1 & -262855 & 95793 \\
+Exponential & 1 & -327606.5 & 32131.54 \\
 \middlehline
-Normal & 2 & -222785 & 135863 \\
+Normal & 2 & -291407.8 & 68330.21 \\
 \middlehline
-Uniform & 2 & -178001 & 180647 \\
+Uniform & 2 & -248179 & 111559.02 \\
 
 \bottomhline
 \end{tabular}
