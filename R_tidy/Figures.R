@@ -21,10 +21,9 @@ ipak(packages)
 
 load("Results/interaction_estimation.rda")
 load("Results/net_&_spp_prop.rda")
-load("Results/cluster_data.rds")
 load("Results/single_plots.rda")
-load("Results/QSS_extinction_dif.rda")
-load("Results/QSS_summary.rda")
+#load("Results/QSS_extinction_dif.rda")
+#load("Results/QSS_summary.rda")
 
 
 # Figures ----

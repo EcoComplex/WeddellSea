@@ -50,11 +50,10 @@ km <- kmeans(data.scaled, centers = 1, nstart = 25)
 
 ## Trophic level ----
 
-cl_IS_TL <- ggplot(cluster_data, aes(x = TL, y = log(IS_mean), color = cluster_mean)) +
+cl_IS_TL <- ggplot(spp_all_prop, aes(x = TL, y = log(IS_mean))) +
   geom_point() +
   geom_smooth(method = "lm") +
-  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  labs(x = "Trophic level", y = "log(mean Interaction Strength)", color = "Group") +
+  labs(x = "Trophic level", y = "log(mean Interaction Strength)") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 12, face = "bold"),
@@ -63,23 +62,19 @@ cl_IS_TL <- ggplot(cluster_data, aes(x = TL, y = log(IS_mean), color = cluster_m
 cl_IS_TL
 
 # Test regression significance by group
-TL_lm <- lm(log(IS_mean) ~ TL * cluster_mean, data = cluster_data)
+TL_lm <- lm(log(IS_mean) ~ TL, data = spp_all_prop)
 summary(TL_lm)
-TL_eq <- lstrends(TL_lm, "cluster_mean", var="TL")
-TL_eq
-pairs(TL_eq)  # significance btw group slopes
 ols_test_normality(TL_lm)  # check normality of residuals
 ols_plot_resid_qq(TL_lm)  # Q-Q plot
 
 
 ## Degree ----
 
-cl_IS_DEG <- ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_mean), color = cluster_mean)) +
+cl_IS_DEG <- ggplot(spp_all_prop, aes(x = TotalDegree, y = log(IS_mean))) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_x_log10() +
-  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  labs(x = "Degree (log scale)", y = "log(mean Interaction Strength)", color = "Group") +
+  labs(x = "Degree (log scale)", y = "log(mean Interaction Strength)") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 12, face = "bold"),
@@ -88,22 +83,18 @@ cl_IS_DEG <- ggplot(cluster_data, aes(x = TotalDegree, y = log(IS_mean), color =
 cl_IS_DEG
 
 # Test regression significance by group
-DEG_lm <- lm(log(IS_mean) ~ TotalDegree * cluster_mean, data = cluster_data)
+DEG_lm <- lm(log(IS_mean) ~ TotalDegree, data = spp_all_prop)
 summary(DEG_lm)
-DEG_eq <- lstrends(DEG_lm, "cluster_mean", var="TotalDegree")
-DEG_eq
-pairs(DEG_eq)  # significance btw group slopes
 ols_test_normality(DEG_lm)  # check normality of residuals
 ols_plot_resid_qq(DEG_lm)  # Q-Q plot
 
 
 ## Trophic similarity ----
 
-cl_IS_TS <- ggplot(cluster_data, aes(x = meanTrophicSimil, y = log(IS_mean), color = cluster_mean)) +
+cl_IS_TS <- ggplot(spp_all_prop, aes(x = meanTrophicSimil, y = log(IS_mean))) +
   geom_point() +
   geom_smooth(method = "lm") +
-  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  labs(x = "Trophic similarity", y = "log(mean Interaction Strength)", color = "Group") +
+  labs(x = "Trophic similarity", y = "log(mean Interaction Strength)") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 12, face = "bold"),
@@ -112,22 +103,18 @@ cl_IS_TS <- ggplot(cluster_data, aes(x = meanTrophicSimil, y = log(IS_mean), col
 cl_IS_TS
 
 # Test regression significance by group
-TS_lm <- lm(log(IS_mean) ~ meanTrophicSimil * cluster_mean, data = cluster_data)
+TS_lm <- lm(log(IS_mean) ~ meanTrophicSimil, data = spp_all_prop)
 summary(TS_lm)
-TS_eq <- lstrends(TS_lm, "cluster_mean", var="meanTrophicSimil")
-TS_eq
-pairs(TS_eq)  # significance btw group slopes
 ols_test_normality(TS_lm)  # check normality of residuals
 ols_plot_resid_qq(TS_lm)  # Q-Q plot
 
 
 ## Habitat ----
 
-cl_IS_HAB <- ggplot(cluster_data, aes(x = Habitat, y = log(IS_mean))) +
+cl_IS_HAB <- ggplot(spp_all_prop, aes(x = Habitat, y = log(IS_mean))) +
   geom_violin(fill = "grey70", alpha = 0.5) +
-  geom_point(shape=21, aes(fill = factor(cluster_mean))) +
-  scale_fill_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  labs(x = "Habitat", y = "log(mean Interaction Strength)", fill = "Group") +
+  geom_point(shape=19) +
+  labs(x = "Habitat", y = "log(mean Interaction Strength)") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 12, face = "bold"),
