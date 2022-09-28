@@ -71,3 +71,16 @@ When an equilibrium point becomes unstable, however, the system could respond in
 
 The distribution of species abundances, typically showing a large number of rare species (Magurran 2003), remains an important problem in ecology, and this generalized Lotka–Volterra model shows that the particular shape of the distribution is going to affect the stability of the ecological community.
 
+---
+@Daugaard2022
+
+Within a system of a given complexity, commonly only a few strong species interactions are present with most interactions being weak (e.g. Bascompte et al., 2005; Berlow et al., 2004; Paine, 1992; Wootton & Emmerson, 2005), though still being important for system stability (e.g. Kadoya et al., 2018; McCann et al., 1998; O'Gorman & Emmerson, 2009). Moreover, there is some evidence indicating that generalists (i.e. species with many possible interacting partners) mostly have weak interactions, while specialist species (i.e. fewer possible interacting partners) show stronger interactions (Wootton & Stouffer, 2016). 
+
+
+
+---
+@Saravia2018
+
+To select the best model we calculated the corrected Akaike Information Criteria (AIC c ) and Akaike weights
+for each model [@Burnham2011]. Akaike weights (w i ) are the weight of evidence in favour of model i being the best model
+among the candidate set of N models.
