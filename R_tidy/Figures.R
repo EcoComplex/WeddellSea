@@ -21,9 +21,8 @@ ipak(packages)
 
 load("Results/interaction_estimation.rda")
 load("Results/net_&_spp_prop.rda")
-load("Results/single_plots.rda")
-#load("Results/QSS_extinction_dif.rda")
-#load("Results/QSS_summary.rda")
+load("Results/single_plots_sep22.rda")
+load("Results/QSS_summary_sep22.rda")
 
 
 # Figures ----
@@ -44,7 +43,7 @@ load("Results/single_plots.rda")
 Fig3_IntDist <- ggplot(wedd_int_pd, aes(qRC)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   scale_y_log10() +
-  labs(x = "Interaction strength", y = "Frequency (log scale)") +
+  labs(x = "Interaction Strength", y = "Frequency (log scale)") +
   theme_classic() +
   theme(axis.text.x = element_text(face="bold", size=14),
         axis.text.y = element_text(face="bold", size=14),
@@ -82,17 +81,16 @@ ggsave(filename = "Manuscript/Fig4_LinReg.png", plot = Fig4_LinReg,
 # if significant the extinction of that species altered the stability of the food web.
 
 legend <- ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS))+
-  geom_point(aes(color = cluster_mean, 
-                 shape = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
+  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
+  #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   lims(x = c(0,0), y = c(0,0)) +
   theme_void() +
   theme(legend.position = c(0.5,0.5),
         legend.key.size = unit(1, "cm"),
         legend.text = element_text(size =  10),
         legend.title = element_text(size = 12, face = "bold")) +
-  guides(color = guide_legend(title = "Group"), shape = guide_legend(title = "Stability impact"))
+  guides(color = guide_legend(title = "Stability impact"))
 
 Fig.5_QSSDif <- ggarrange(IS_QSS + rremove("ylab"), TL_QSS + rremove("ylab"), 
                       DEG_QSS + rremove("ylab"), TS_QSS + rremove("ylab"), 
@@ -114,7 +112,8 @@ ggsave(filename = "Manuscript/Fig.5_QSSDif.png", plot = Fig.5_QSSDif,
 # from prey to predator.
 
 # Food web
-App1_FWplot <- plot_troph_level(g, vertexSizeFactor = V(g)$Deg*0.04, edge.width = 0.25)
+App1_FWplot <- plot_troph_level(g, vertexSizeFactor = V(g)$Deg*0.04, edge.width = 0.25,
+                                ylab = "Trophic level")
 
 # ggsave(filename = "Manuscript/App1_FWplot.png", plot = App1_FWplot,
 #        width = 10, units = "in", dpi = 600, bg = "white")
@@ -122,41 +121,20 @@ App1_FWplot <- plot_troph_level(g, vertexSizeFactor = V(g)$Deg*0.04, edge.width 
 # no applicable method for 'grid.draw' applied to an object of class "c('double', 'numeric')"
 
 
-## App 2 ----
+## App 2
 # A. Frequency distribution for the mean interaction strength of the species of Weddell Sea food web. 
 # B. Visualization of the optimal number of clusters applying the Gap statistic.
 
-a <- ggplot(cluster_data, aes(x = log(IS_mean), color = cluster_mean, fill= cluster_mean)) + 
+IS_dist <- ggplot(all_data, aes(x = log(IS_mean))) + 
   geom_density(alpha=0.3) + 
-  scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  scale_fill_manual(values = c("#541352FF", "#ffcf20FF")) +
-  labs(x = "log(mean Interaction Strength)", y = "Frequency", color = "Cluster") +
+  #scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
+  #scale_fill_manual(values = c("#541352FF", "#ffcf20FF")) +
+  labs(x = "log(mean Interaction Strength)", y = "Frequency") +
   theme_bw() +
   theme(axis.title = element_text(size = 18, face = "bold"),
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15))
-a <- a + guides(fill = "none")
+IS_dist <- IS_dist + guides(fill = "none")
 
-# Determine and visualize the optimal number of clusters using total within sum of square
-data.scaled <- scale(log(spp_all_prop$IS_mean))
-fviz_nbclust(data.scaled, kmeans, method = "wss")
-# Calculate gap statistic based on number of clusters
-gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
-                    K.max = 10, B = 500)
-# Plot number of clusters vs. gap statistic
-b <- fviz_gap_stat(gap_stat) +
-  theme_bw() +
-  theme(plot.title = element_blank(),
-        axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
-b
-
-App2_Clus_meanIS <- ggarrange(a, b,
-                         labels = c("A", "B"),
-                         ncol=2)
-App2_Clus_meanIS
-
-ggsave(filename = "Manuscript/App2_Clus_meanIS.png", plot = App2_Clus_meanIS,
+ggsave(filename = "Manuscript/App2_meanIS.png", plot = IS_dist,
        width = 10, units = "in", dpi = 600, bg = "white")
-
