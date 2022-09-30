@@ -95,7 +95,7 @@ The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS with a len
 
 ## Weddell Sea food web dataset
 
-We obtained the dataset of the Weddell Sea food web from the GlobAL daTabasE of traits and food Web Architecture (GATEWAy, version 1.0) of the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig [@Brose2018]. This open access database is a list of predator-prey interactions that contains several highly-resolved food webs, including biological data about the consumer and resource species involved in each trophic interaction (i.e. mean mass). Furthermore, it incorporates information on the interaction itself, such as the dimensionality (2 or 3 dimensions).
+We obtained the dataset of the Weddell Sea food web from the GlobAL daTabasE of traits and food Web Architecture (GATEWAy, version 1.0) of the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig [@Brose2018]. This open access database is a list of predator-prey interactions that contains several highly-resolved food webs, including biological data about the consumer and resource species involved in each trophic interaction (i.e. mean mass). Furthermore, it incorporates information about the interaction itself, such as the dimensionality (2 or 3 dimensions).
 
 This marine food web compiles all the food web data available for the high Antarctic Weddell Sea collected since 1983, and is one of the most highly-resolved marine food webs documented to date. It's noteworthy that it is a summary network that ignores seasonal changes [@Jacob2011].
 
@@ -105,7 +105,7 @@ We analysed the food web of the Weddell Sea by: a) estimating the strength of ea
 
 ### Interaction strength estimation and distribution
 
-To estimate the strength of each interaction in the food web, we followed the methodology proposed by @Pawar2012. The minimum data requirements are: body mass of the consumer (predator) and resource (prey), and the interaction dimensionality classified as 2 or 3 dimensions. GATEWAy v.1.0 does provide the mean mass for consumers and resources (except for 'detritus' and 'sediment') and the dimensionality for every interaction, though the latter is missing for 924 interactions. To solve this issue, we used information about movement type for consumer and resource included in GATEWAy. Then, we classified the interaction as 2D when both consumer and resource move in 2D (e.g., both are sessile or walking) or if a consumer moves in 3D and a resource in 2D (e.g., swimming consumer and sessile/walking resource). The interaction was classified as 3D when both consumer and resource move in 3D (e.g., both swimming) or if the consumer moves in 2D and resource in 3D (e.g., sessile/walking consumer, swimming resource) [@Pawar2012].
+To estimate the strength of each interaction in the food web, we followed the methodology proposed by @Pawar2012. The minimum data requirements are: body mass of the consumer (predator) and resource (prey), and the interaction dimensionality classified as 2 or 3 dimensions. GATEWAy v.1.0 does provide the mean mass for consumers and resources (except for 'detritus' and 'sediment') and the dimensionality for every interaction, though the latter is missing for 924 interactions. To solve this issue, we used information about movement type for consumer and resource included in GATEWAy. Then, we classified the interaction as 2D if both consumer and resource move in 2D (e.g., both are sessile or walking) or if a consumer moves in 3D and a resource in 2D (e.g., swimming consumer and sessile/walking resource). The interaction was classified as 3D if both consumer and resource move in 3D (e.g., both swimming) or if the consumer moves in 2D and the resource in 3D (e.g., sessile/walking consumer, swimming resource) [@Pawar2012].
 
 The main equation we used for estimating the interaction strength IS was:
 
@@ -115,33 +115,31 @@ IS = \alpha x_R \frac{m_R}{m_C}
 \end{equation}
 ```
 
-where \vec{\alpha} is the search rate, \vec{x_R} is the resource density, and \vec{m_R} and \vec{m_C} are the body mass of the resource and the consumer, respectively [@Pawar2012].
+where \vec{\alpha} is the search rate, \vec{x_R} is the resource density, and \vec{m_R} and \vec{m_C} are the body mass for the resource and the consumer, respectively [@Pawar2012].
 
 We obtained estimations for the resource density and the search rate from the scaling relationships with the resource and the consumer mass, respectively [@Pawar2012]. The coefficients of such relationships, determined by ordinary least squares regression, vary with the interaction dimensionality. On one hand, resource density scales with resource mass as a power-law with exponents \vec{p = -0.79 \pm 0.09} in 2D and \vec{p = -0.86 \pm 0.06} in 3D. Since mean mass for resources 'phytodetritus' and 'sediment' were not available in GATEWAy, we considered the body mass of the smallest phytoplankton species ('Fragilariopsis cylindrus') as a proxy. This is justified by the fact that 'phytodetritus' and 'sediment' are mainly composed by dead or senescent phytoplankton reaching the seabed (@Wolanski2011). On the other hand, search rate scales with consumer mass as a power-law with exponents \vec{p = 0.68 \pm 0.12} in 2D and \vec{p = 1.05 \pm 0.08} in 3D.
 
-After this, we fit the interaction strength distribution of the food web considering six candidate models (Uniform, Normal, Exponential, Power-law, log-Normal and Gamma) using maximum likelihood [@McCallum2008], and selected the model performance by computing the Akaike Information Criterion AIC [@Burnham2002].
+After this, we fit the interaction strength distribution of the food web considering six candidate models (Exponential, Gamma, log-Normal, Normal, Power-law and Uniform) using maximum likelihood [@McCallum2008], and selected the model performance by computing the Akaike Information Criterion AIC [@Burnham2002].
 
 ### Species properties
 
 In order to individually characterize the species of the food web, we considered weighted and unweighted properties (Figure 2). The former is based on the estimation of the interaction strength described in the previous section. The latter is related to properties commonly used in qualitative (presence/absence of interaction) food web studies [@Martinez1991; @Dunne2002; @Borrelli2014].
 
-As the weighted property we took into account the mean interaction strength, meaning the average strength of all interactions. After exploring the distribution of the species' log(mean interaction strength), we decided to apply the k-means clustering method, which aims to partition the species into k groups such that the sum of squares from points to the assigned cluster centres is minimized [@Hartigan1979]. Then we tested the goodness of this clustering measure with the Gap statistic, which is a kind of data mining algorithm to improve the clustering process by efficient estimation of the best number of clusters [@Tibshirani2001].
+As the weighted property we took into account the mean interaction strength, meaning the average strength of all species' interactions. On the other hand, we considered the following unweighted properties: a) degree or the total number of trophic interactions, taking into account in- and out-coming interactions (role as predator and prey, respectively); b) trophic level or the position in the food web relative to primary producers/detritus; and c) trophic similarity or the trophic overlap between species based on shared and unique resources and consumers. The following are arguments to have selected the above properties. The degree has often been equated with importance to the structure and functioning of a community, i.e. perturbations to high-degree species may therefore have larger effects on the food web than perturbations to low-degree species [@Dunne2002a; references in @Cirtwill2018a]. The trophic level offers information about how important a species is to its biotic community, i.e. top predators and primary producers are expected to have particularly large effects on the rest of their communities through top-down and bottom-up control, respectively [references in @Cirtwill2018a]. The trophic similarity measures the similarity of one of the most important aspect of species’ niches, the trophic niche, and functional aspects of biodiversity [@Martinez1991; @Williams2000].
 
-On the other hand, we considered the following unweighted properties: a) degree or the total number of trophic interactions, taking into account in- and out-coming interactions (role as predator and prey, respectively); b) trophic level or the position in the food web relative to primary producers/detritus; and c) trophic similarity or the trophic overlap between species based on shared and unique resources and consumers. The following are arguments to have selected the above properties. The degree has often been equated with importance to the structure and functioning of a community, i.e. perturbations to high-degree species may therefore have larger effects on the food web than perturbations to low-degree species [@Dunne2002a; references in @Cirtwill2018a]. The trophic level offers information about how important a species is to its biotic community, i.e. top predators and primary producers are expected to have particularly large effects on the rest of their communities through top-down and bottom-up control, respectively [references in @Cirtwill2018a]. The trophic similarity measures the similarity of one of the most important aspect of species’ niches, the trophic niche, and functional aspects of biodiversity [@Martinez1991; @Williams2000].
+Furthermore, we took into account the species' habitat, which describes the physical position of a species within the environment. These data was taken from @Jacob2011. Species were categorized as: 1) benthic, if the species lives on the seafloor; 2) pelagic, if the species lives close to the surface; 3) benthopelagic, if it moves between and connects the mentioned environments; 4) demersal, if it lives and feeds on or near the bottom of the sea; and 5) land-based, if the consumer is not aquatic but feeds predominantly in the marine realm.
 
-Furthermore, we took into account the species' habitat, which describes the physical position of a species within the environment. These data was taken from @Jacob2011. The species were categorized as: 1) benthic, if the species lives on the seafloor; 2) pelagic, if the species lives close to the surface; 3) benthopelagic, if it moves between and connects the mentioned environments; 4) demersal, lives and feeds on or near the bottom of the sea; and 5) land-based, if the consumer is not aquatic but feeds predominantly in the marine realm.
-
-With the aim of studying the relationship between the interaction strength of the species and its unweighted properties and habitat, we performed linear regression analyses between the log(mean interaction strength) and each of the mentioned unweighted properties. The statistical significance of the fitted slopes was tested, as well as the difference between the groups' slopes applying least-squares means [@Harvey1960].
+With the aim of studying the relationship between the interaction strength of the species and its unweighted properties and habitat, we performed linear regression analyses between the log(mean interaction strength) and each of the mentioned unweighted properties.
 
 Formulas used to obtain the above species properties are described in Supplementary Material.
 
-### Stability and extinction simulations
+### Extinction simulations and stability
 
 Finally, we run extinction simulations and estimated its impact on the stability of the network. For this, we calculated a stability index called Quasi-Sign Stability (QSS), which is the proportion of stable networks using randomized Jacobians and keeping the predator-prey sign structure fixed [@Allesina2008]. If this proportion is zero, then one should take into account the real part of the maximum eigenvalue of the Jacobian matrix, which is also a measure of stability [@Grilli2016].
 
-With the aim of analysing the effect of each species on the food web's stability we deleted one species at a time, so the network size was reduced by one. After each species extinction, we calculated the stability for the food web minus one species (size = 489) and compared it with that of the whole network (size = 490). We performed 1000 simulations for each species extinction and obtained a mean QSS and maximum eigenvalue. At last we statistically analysed such difference with an Anderson-Darling test considering a p-value < 0.01 [@Scholz1987]. If the difference was positive, then the stability of the food web was impacted positively (higher stability) when that species become extinct, and viceversa. Details for the stability calculations are described in Supplementary Material.
+With the aim of analysing the effect of each species on the food web's stability we performed extinction simulations deleting one species at a time, so the network size was reduced by one. After each species extinction, we calculated the stability for the food web minus one species (size = 489) and compared it with that of the whole network (size = 490). We performed 1000 simulations for each species extinction and obtained a mean QSS and maximum eigenvalue. At last we statistically analysed such difference with an Anderson-Darling test considering a p-value < 0.01 [@Scholz1987]. If the difference was positive, then the stability of the food web was impacted positively (higher stability) when that species become extinct, and viceversa. Details for the stability calculations are described in Supplementary Material.
 
-Once we had the results for the impact on stability for each species extinction, we plotted them considering weighted (interaction strength) and unweighted properties, and species habitat.
+Once we had the results for the impact on stability for each species extinction, we plotted them considering weighted (interaction strength) and unweighted properties, and species habitat. With this we aim to characterize those species with a relatively higher effect on the stability of the food web.
 
 All analyses were performed in R software, mainly using packages igraph [@Csardi2005], cheddar [@Hudson2013], and multiweb [@Saravia2019]. The source code and data are available at https://github.com/EcoComplex/WeddellSea.
 
@@ -149,16 +147,19 @@ All analyses were performed in R software, mainly using packages igraph [@Csardi
 
 ## Interaction strength
 
-In this work we have estimated the interaction strength for the most highly-resolved marine food web to date, which comprises 490 species and 16041 predator-prey interactions (Figure 3). The distribution of the interaction strength best fit to a log-Normal model, which indicates that there is a prevalent skew towards weaker interactions (Figure 4, Table 1).
+In this work we have estimated the interaction strength for the most highly-resolved marine food web to date, which comprises 490 species and 16041 predator-prey interactions. The distribution of the interaction strength best fit to a log-Normal model, which indicates that there is a prevalent skew towards weaker interactions (Figure 3, Table 1).
 
 ## Species properties
 
-Regarding the distribution of the species mean interaction strength, the clustering method showed that species do form two distinct groups: 'High' and 'Low' interaction strength (Appendix Fig. A1). The so-called 'High IS' and 'Low IS' groups of species exhibited different and, in some cases, opposite relationships with unweighted properties. It's noteworthy that only the relationship with trophic level revealed a similar trend in the regression analysis for both groups: mean interaction strength increases with trophic level (Figure 5A). On the contrary, the linear regressions with degree and trophic similarity showed opposite relationships comparing groups. These mean that in species with relatively higher mean interaction strength, 'High IS', such strength decreases when the number of interactions (degree) increases; the opposite occurs in species with relatively lower interaction strength 'Low IS' (Figure 5B). Regarding trophic similarity, the interaction strength decreases in 'High IS' species while increases in 'Low IS' species (Figure 5C).
+Regarding the distribution of the species' mean interaction strength and its relationship with the unweighted properties, we found that interaction strength-trophic level showed the strongest linear regression: the higher the trophic level of the species, the higher its mean interaction strength. We also found a positive relationship with the degree (total number of interactions). On the other hand, CONTINUE HERE ...
 
-## Stability and extinction simulations
+The so-called 'High IS' and 'Low IS' groups of species exhibited different and, in some cases, opposite relationships with unweighted properties. It's noteworthy that only the relationship with trophic level revealed a similar trend in the regression analysis for both groups: mean interaction strength increases with trophic level (Figure 5A). On the contrary, the linear regressions with degree and trophic similarity showed opposite relationships comparing groups. These mean that in species with relatively higher mean interaction strength, 'High IS', such strength decreases when the number of interactions (degree) increases; the opposite occurs in species with relatively lower interaction strength 'Low IS' (Figure 5B). Regarding trophic similarity, the interaction strength decreases in 'High IS' species while increases in 'Low IS' species (Figure 5C).
 
-It's important to note that since the proportion of Jacobians that are locally stable or QSS was zero for the Weddell Sea food web, we considered the mean maximum eigenvalue as the stability index. Our results showed that the majority of the species had no significant impact on the stability of the food web when extinct (Anderson-Darling test p-value > 0.01). This is clearly observed in Figure 6 A-D, where most of the points lie around the zero value of the 'Stability difference' axis. This means that the stability for the food web minus a given species is similar to the stability for the whole network. However, there were few species that when become extinct generated positive significant differences in the stability of the food web, meaning that they increased the network's stability when deleted. There is an exception, Pagetopsis macropterus (demersal fish), that when deleted decreased the stability. In total, 13 out of 490 species (2.65%) gave rise to significant changes in the network's stability.
+## Extinction simulations and stability
 
+It's important to note that since the proportion of Jacobians that are locally stable or QSS was zero for the Weddell Sea food web, we considered the mean maximum eigenvalue as the stability index. Our results showed that the majority of the species had no significant impact on the stability of the food web when extinct (Anderson-Darling p-value > 0.01, see Supplementary Material). This is shown in Figure 5 A-D, where most of the points lie around the zero value of the 'Stability difference' y axis. This means that the stability for the food web minus a given species is similar to the stability for the whole network. However, there were few species that when become extinct altered significantly the stability (QSS) of the food web. Most of such species generated positive significant differences in the stability of the food web, meaning that they increased the network's stability when deleted. There were two exceptions, Pagetopsis macropterus (demersal fish) and Maxilliphimedia longipes (benthopelagic amphipod), that when deleted decreased the stability. Overall, 15 out of 490 species (3.06%) gave rise to significant changes in the network's stability.
+
+NEED TO BE CHANGED
 When plotting the stability difference against species properties and the previous results regarding clustering, interesting insights arose (Figure 6). In the first place, all species with a significant impact on the stability belong to the 'High IS' group, denoting a high mean interaction strength (Figure 6A). Secondly, these species are positioned in high trophic levels (TL > 3.7) (Figure 6B). Thirdly, they have a relatively high number of interactions or degree (Degree > 25) (Figure 6C). Regarding trophic similarity, species have mid to low values (TS < 0.13) (Figure 6D). Habitat wise, species live in all the habitats, except for are benthic (Figure 6E). Table 2 shows these results per species.
 
 
@@ -193,13 +194,13 @@ knitr::include_graphics("Fig3_IntDist.png")
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (interaction strength IS) and unweighted properties including habitat. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C) for each group of species resulted from the clustering analysis: 'High IS' and 'Low IS'. All regression slopes are significant and statistically different among groups (p < 0.01)."}
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (mean Interaction Strength) and unweighted properties including habitat. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C). Equations for trophic level ($y = 1.12x - 15.29, R^2 = 0.43, p-value < 2e-16$), degree ($y = 0.006x - 12.77, R^2 = 0.03, p-value = 4.06e-5$) and trophic similarity ($y = -1.46x - 12.18, R^2 = -0.0004, p-value = 0.36$)."}
 knitr::include_graphics("Fig4_LinReg.png")
 ```
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Quasi-Sign Stability (QSS) difference between the whole Weddell Sea food web (n = 490) and the food web without one species (n = 489) for weighted (interaction strength) and unweighted species properties, and habitat. Each point represents a species colored by group ('High IS' or 'Low IS'). Shape indicates the impact on the QSS; if significant the extinction of that species altered the stability of the food web."}
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Quasi-Sign Stability (QSS) difference between the whole Weddell Sea food web (n = 490) and the food web without one species (n = 489) for weighted (interaction strength) and unweighted species properties, and habitat. Point color indicates the impact on the QSS; if significant the extinction of that species altered the stability of the food web."}
 knitr::include_graphics("Fig.5_QSSDif.png")
 ```
 
@@ -240,40 +241,35 @@ Uniform & 2 & -248179 & 111559.02 \\
 
 \textbf{Species} & \textbf{meanIS} & \textbf{TL} & \textbf{Deg} & \textbf{TS} & \textbf{Habitat} & \textbf{StabDif} & \textbf{ADvalue}\\
 \middlehline
-Orcinus orca & 0.00018 & 5.03 & 26 & 0.037 & Benthopelagic & 0.00004 & 2.28e-41 \\
+Orcinus orca & 1.83e-4 & 5.03 & 26 & 0.037 & Benthopelagic & 4.67e-5 & 2.28e-41 \\
 \middlehline
-Macrourus holotrachys & 0.00008 & 4.70 & 85 & 0.112 & Benthopelagic & 0.00003 & 2.73e-23 \\
+Macrourus holotrachys & 8.30e-5 & 4.70 & 85 & 0.112 & Benthopelagic & 3.55e-5 & 2.73e-23 \\
 \middlehline
-Pagetopsis macropterus & 0.00007 & 4.64 & 76 & 0.113 & Demersal & -0.00002 & 2.38e-12 \\
+Pagetopsis macropterus & 7.08e-5 & 4.64 & 76 & 0.113 & Demersal & -1.80e-5 & 2.38e-12 \\
 \middlehline
-Abyssorchomene nodimanus & 0.00003 & 4.21 & 137 & 0.130 & Benthopelagic & 0.00002 & 8.52e-10 \\
+Abyssorchomene nodimanus & 2.56e-5 & 4.21 & 137 & 0.130 & Benthopelagic & 2.30e-5 & 8.52e-10 \\
 \middlehline
-Dissostichus mawsoni & 0.00008 & 4.12 & 87 & 0.126 & Pelagic & 0.00002 & 1.57e-9 \\
+Dissostichus mawsoni & 7.82e-5 & 4.12 & 87 & 0.126 & Pelagic & 2.17e-5 & 1.57e-9 \\
 \middlehline
-Macrourus whitsoni & 0.00007 & 4.55 & 92 & 0.124 & Benthopelagic & 0.00002 & 3.30e-8 \\
+Macrourus whitsoni & 7.14e-5 & 4.55 & 92 & 0.124 & Benthopelagic & 2.12e-5 & 3.30e-8 \\
 \middlehline
-Hydrurga leptonyx & 0.00010 & 4.72 & 67 & 0.094 & Land-based & 0.00002 & 9.66e-6 \\
+Hydrurga leptonyx & 1.03e-4 & 4.72 & 67 & 0.094 & Land-based & 2.04e-5 & 9.66e-6 \\
 \middlehline
-Mesonychoteuthis hamiltoni & 0.00018 & 4.41 & 29 & 0.028 & Pelagic & 0.00002 & 4.59e-5 \\
+Mesonychoteuthis hamiltoni & 1.80e-4 & 4.41 & 29 & 0.028 & Pelagic & 1.82e-5 & 4.59e-5 \\
 \middlehline
-
-Notothenia marmorata & 0.00074 & 4.09 & 44 & 0.091 & Demersal & 0.00016 & 1.90e- 7 \\
+Champsocephalus gunnari & 7.62e-5 & 3.72 & 46 & 0.086 & Pelagic & 1.83e-5 & 6.79e-5 \\
 \middlehline
-Pagetopsis macropterus & 0.00063 & 4.64 & 76 & 0.113 & Demersal & -0.00014 & 6.64e- 7 \\
+Notothenia marmorata & 8.27e-5 & 4.09 & 44 & 0.091 & Demersal & 1.60e-5 & 1.23e-4 \\
 \middlehline
-Champsocephalus gunnari & 0.00068 & 3.72 & 46 & 0.086 & Pelagic & 0.00017 & 1.33e- 6 \\
+Arctocephalus gazella & 9.28e-5 & 4.67 & 61 & 0.093 & Land-based & 1.17e-5 & 2.09e-4 \\
 \middlehline
-Notothenia coriiceps & 0.00044 & 4.27 & 130 & 0.126 & Demersal & 0.00012 & 2.45e- 6 \\
+Trematomus pennellii & 3.04e-5 & 4.04 & 192 & 0.158 & Demersal & 1.44e-5 & 1.00e-3 \\
 \middlehline
-Arctocephalus gazella & 0.00083 & 4.67 & 61 & 0.093 & Land-based & 0.00014 & 5.14e- 5 \\
+Mirounga leonina & 1.20e-4 & 4.87 & 56 & 0.080 & Land-based & 1.41e-5 & 1.28e-3 \\
 \middlehline
-Gonatus antarcticus & 0.00080 & 4.31 & 36 & 0.046 & Pelagic & 0.00012 & 5.90e- 4 \\
+Notothenia coriiceps & 4.94e-5 & 4.27 & 130 & 0.126 & Demersal & 1.44e-5 & 1.66e-3 \\
 \middlehline
-Psychroteuthis glacialis & 0.00047 & 3.91 & 23 & 0.054 & Pelagic & 0.00011 & 1.66e- 3 \\
-\middlehline
-Mirounga leonina & 0.00107 & 4.87 & 56 & 0.080 & Land-based & 0.00009 & 3.50e- 3 \\
-\middlehline
-Dacodraco hunteri & 0.00064 & 4.80 & 65 & 0.101 & Demersal & 0.00006 & 7.51e- 3 \\
+Maxilliphimedia longipes & 2.21e-6 & 3.26 & 60 & 0.136 & Benthopelagic & -4.46e-6 & 9.74e-3 \\
 
 \bottomhline
 \end{tabular}
