@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.30)  9 NOV 2022 15:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.30)  10 NOV 2022 13:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -477,51 +477,73 @@ Overfull \hbox (2.46179pt too wide) in paragraph at lines 229--250
 
 [3] [4]
 
-Package natbib Warning: Citation `Kortsch2015' on page 5 undefined on input line 406.
+Package natbib Warning: Citation `Gutt2022' on page 5 undefined on input line 383.
 
 
-Package natbib Warning: Citation `Rodriguez2022' on page 5 undefined on input line 406.
+Package natbib Warning: Citation `McCann1998' on page 5 undefined on input line 387.
 
-[5] [6] [7
+
+Package natbib Warning: Citation `Neutel2002' on page 5 undefined on input line 387.
+
+
+Package natbib Warning: Citation `Wootton2005' on page 5 undefined on input line 387.
+
+
+Package natbib Warning: Citation `May1972' on page 5 undefined on input line 390.
+
+
+Package natbib Warning: Citation `Allesina2015' on page 5 undefined on input line 393.
+
+
+Package natbib Warning: Citation `Nilsson2016' on page 5 undefined on input line 393.
+
+[5]
+
+Package natbib Warning: Citation `Kortsch2015' on page 6 undefined on input line 440.
+
+
+Package natbib Warning: Citation `Rodriguez2022' on page 6 undefined on input line 440.
+
+[6] [7
 
 ]
-<Fig.1_StudyMap.jpg, id=147, 1027.84pt x 770.88pt>
+<Fig.1_StudyMap.jpg, id=155, 1027.84pt x 770.88pt>
 File: Fig.1_StudyMap.jpg Graphic file (type jpg)
 <use Fig.1_StudyMap.jpg>
-Package pdftex.def Info: Fig.1_StudyMap.jpg  used on input line 428.
+Package pdftex.def Info: Fig.1_StudyMap.jpg  used on input line 462.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 [8 <./Fig.1_StudyMap.jpg>]
-<Fig.2_ToyFoodWeb.jpg, id=153, 1027.84pt x 770.88pt>
+<Fig.2_ToyFoodWeb.jpg, id=161, 1027.84pt x 770.88pt>
 File: Fig.2_ToyFoodWeb.jpg Graphic file (type jpg)
 <use Fig.2_ToyFoodWeb.jpg>
-Package pdftex.def Info: Fig.2_ToyFoodWeb.jpg  used on input line 434.
+Package pdftex.def Info: Fig.2_ToyFoodWeb.jpg  used on input line 468.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 [9 <./Fig.2_ToyFoodWeb.jpg>]
-<Fig3_IntDist.png, id=159, 722.7pt x 611.1633pt>
+<Fig3_IntDist.png, id=167, 722.7pt x 611.1633pt>
 File: Fig3_IntDist.png Graphic file (type png)
 <use Fig3_IntDist.png>
-Package pdftex.def Info: Fig3_IntDist.png  used on input line 440.
+Package pdftex.def Info: Fig3_IntDist.png  used on input line 474.
 (pdftex.def)             Requested size: 341.43306pt x 288.73888pt.
 [10 <./Fig3_IntDist.png>]
-<Fig4_LinReg.png, id=165, 722.7pt x 611.1633pt>
+<Fig4_LinReg.png, id=173, 722.7pt x 611.1633pt>
 File: Fig4_LinReg.png Graphic file (type png)
 <use Fig4_LinReg.png>
-Package pdftex.def Info: Fig4_LinReg.png  used on input line 446.
+Package pdftex.def Info: Fig4_LinReg.png  used on input line 480.
 (pdftex.def)             Requested size: 341.43306pt x 288.73888pt.
 [11 <./Fig4_LinReg.png>]
-<Fig.5_QSSDif.png, id=175, 722.7pt x 611.1633pt>
+<Fig.5_QSSDif.png, id=183, 722.7pt x 611.1633pt>
 File: Fig.5_QSSDif.png Graphic file (type png)
 <use Fig.5_QSSDif.png>
-Package pdftex.def Info: Fig.5_QSSDif.png  used on input line 452.
+Package pdftex.def Info: Fig.5_QSSDif.png  used on input line 486.
 (pdftex.def)             Requested size: 341.43306pt x 288.73888pt.
 [12 <./Fig.5_QSSDif.png>] [13] [14]
-<App1_FWplot.png, id=192, 1204.5pt x 1048.91875pt>
+<App1_FWplot.png, id=200, 1204.5pt x 1048.91875pt>
 File: App1_FWplot.png Graphic file (type png)
 <use App1_FWplot.png>
-Package pdftex.def Info: App1_FWplot.png  used on input line 527.
+Package pdftex.def Info: App1_FWplot.png  used on input line 561.
 (pdftex.def)             Requested size: 341.43306pt x 297.32841pt.
 
-Overfull \hbox (10.3438pt too wide) in paragraph at lines 547--547
+Overfull \hbox (10.3438pt too wide) in paragraph at lines 581--581
 \T1/ptm/m/n/9 original draft (lead); Writing -- review and editing (lead). SK: Conceptualization (lead); Formal analysis (supporting); Methodology (supporting);
  []
 
@@ -540,18 +562,18 @@ Package natbib Warning: There were undefined citations.
 
 (./Manuscript.aux) ) 
 Here is how much of TeX's memory you used:
- 12947 strings out of 477031
- 204320 string characters out of 5826961
- 586676 words of memory out of 5000000
- 33770 multiletter control sequences out of 15000+600000
+ 12955 strings out of 477031
+ 204478 string characters out of 5826961
+ 586784 words of memory out of 5000000
+ 33776 multiletter control sequences out of 15000+600000
  511137 words of font info for 95 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  87i,8n,91p,611b,633s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}</Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Manuscript.pdf (17 pages, 3174673 bytes).
+Output written on Manuscript.pdf (17 pages, 3176731 bytes).
 PDF statistics:
- 311 PDF objects out of 1000 (max. 8388607)
- 254 compressed objects within 3 object streams
- 77 named destinations out of 1000 (max. 500000)
+ 322 PDF objects out of 1000 (max. 8388607)
+ 265 compressed objects within 3 object streams
+ 79 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
