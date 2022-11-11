@@ -162,12 +162,13 @@ After exploring the stability difference against the species properties (Figure 
 
 # Discussion
 
-Using the highest-resolved marine polar food web up to date, we show that 1) the distribution of the interaction strength at the food web level is asymmetric, where weak interactions are prevalent; that 2) there is a positive relationship between species mean interaction strength and two unweighted properties, trophic level and degree; and that 3) only few species are key in terms of food web stability, presenting particular weighted and unweighted properties. It's also noteworthy, that our study is the first of its type to consider the dimensionality of the interaction (2 or 3 dimensions) to estimate predator-prey relationships. After analysing more than 2900 predator-prey interactions from several ecosystems, @Pawar2012 concluded that interaction dimensionality is a critical factor driving consumer-resource dynamics, which will lead to better predictions of food web and ecosystem functioning. This arises as crucial to better understand how a complex system such as the Weddell Sea might respond to environmental change, which is an ongoing issue in that region of the Antarctic [@Gutt2022 and references herein].
+Using the highest-resolved marine polar food web up to date, we show that 1) the distribution of the interaction strength at the food web level is asymmetric, where weak interactions are prevalent; that 2) there is a positive relationship between species mean interaction strength and two unweighted properties, trophic level and degree; and that 3) only few species are key in terms of food web stability, presenting particular weighted and unweighted properties. It's also noteworthy, that our study is the first of its type to consider the dimensionality of the interaction (2 or 3 dimensions) to estimate predator-prey relationships within a food web framework. After analysing more than 2900 predator-prey interactions from several ecosystems, @Pawar2012 concluded that interaction dimensionality is a critical factor driving consumer-resource dynamics, which will lead to better predictions of food web and ecosystem functioning. This arises as crucial to better understand how a complex system such as the Weddell Sea might respond to environmental change, which is an ongoing issue in that region of the Antarctic [@Gutt2022 and references herein].
 
-Our results regarding the distribution of the interaction strengths are consistent with prior theoretical and empirical studies [e.g. @McCann1998; @Neutel2002; @Emmerson2004; @Wootton2005]. Within a system of a given complexity, commonly only a few strong species interactions are present with most interactions being weak. Historically, after @May1972 installed the debate complexity-stability, these results have been interpreted as an explanation for the persistence of complex food webs in nature [@Bascompte2005; @Allesina2015; @Nilsson2016]. Here we showed that this pattern is also prevalent in one of the most complex empirical marine food webs that was studied so far, with 490 species and 16041 predator-prey interactions.
+Our results regarding the distribution of the interaction strengths are consistent with prior theoretical and empirical studies [e.g. @McCann1998; @Neutel2002; @Emmerson2004; @Wootton2005]. Within a system of a given complexity, commonly only a few strong species interactions are present with most interactions being weak. Historically, after @May1972 installed the debate complexity-stability, the results about the interaction strength distribution have been interpreted as an explanation for the persistence of complex food webs in nature [@Bascompte2005; @Allesina2015; @Nilsson2016]. Here we showed that this pattern is also prevalent in one of the most complex empirical marine food webs that was studied so far, with 490 species and 16041 predator-prey interactions.
 
-Strong relationship between interaction strength and trophic level. Less stronger but evident relationship with degree
+Strong relationship between interaction strength and trophic level. Less stronger but evident relationship with degree.
 
+Our results show that only few species are key in terms of stability in the Weddell Sea food web. This is in concordance with studies of complex empirical food webs in marine ecosystems in the Arctic and other locations in Antarctica [@Kortsch2015; @Marina2018; @Rodriguez2022]. In the present work we identify that such key species present particular weighted and unweighted properties: 1) high mean interaction strength; 2) mid to high trophic level; 3) relatively high number of interactions; and 4) mid to low trophic similarity. The first attempt to gain insight into the role of species in the Weddell Sea applying a complex approach was that of @Jacob2011. These authors used information on body size, predatory and feeding type, and environment (habitat) to study species' roles. After performing sequential extinction simulations, @Jacob2011 found that larger bodied species can be lost without causing a direct collapse of the network topology. A major caveat of this finding, already recognized by the authors, is that population dynamics were ignored and therefore no top-down extinctions, or other indirect effects, could occur. In our study we did consider such effects by including information on the species interaction strength, which is of paramount importance when analysing the response of perturbations in ecological communities [@McCann1998; @Montoya2009; @Novak2011]. Thus, our study suggests that species with high mean interaction strength and high trophic level need to be considered with particular attention when trying to predict the effects of perturbations on the Weddell Sea ecosystem. Furthermore, this arises as a greater issue since we have identified that these species present a mid to low trophic similarity, meaning that few other species of the food web can occupy the same trophic role. In this sense, @Murphy2016's review emphasized that polar pelagic ecosystems are particularly sensitive to change due to a low functional redundancy at key trophic levels. It's important to note that we provide a more robust analysis in this regard because we have considered species from all habitats (pelagic, benthic, land-based).
 
 
 Principal results:
@@ -189,23 +190,16 @@ Within a system of a given complexity, commonly only a few strong species intera
 3)
 
 4)
-Our results showed that only few species are key in terms of stability in the Weddell Sea food web. This is in concordance with other studies of complex empirical food webs in high-latitude marine ecosystems [@Kortsch2015; @Marina2018; @Rodriguez2022]. In the present work we propose that such key species are characterized by: 1) high mean interaction strength; 2) mid to high trophic level; 3) relatively high number of interactions; and 4) mid to low trophic similarity.
 
-Our results contradict studies suggesting that mid-trophic level species are key in marine polar ecosystems.
-
-The trophic similarity index might be interpreted as a proxy for the functional redundancy of the food web. In this sense, ...
-Low functional redundancy at key trophic levels makes these ecosystems (polar pelagic) particularly sensitive to change. [@Murphy2016]
-
-
-
-
-
-
+Our results contradict studies suggesting that mid-trophic level species are key in marine polar ecosystems. [@Murphy2016], studies by Australians
+ 
 
 \clearpage
 \conclusions[Conclusions]
 
-Our analyses provide insights into ...
+Our study goes beyond the current understanding of how species influence ecosystem structure and stability in the Weddell Sea in particular and in most polar regions in general [@Murphy2016; @McCormack2021]. In the same analysis we have integrated information about weighted (interaction strength) and unweighted species properties, enabling a more complete assessment of the food web structure and function, likely highlighting the ecological processes at play in the Weddell Sea ecosystem.
+
+We consider that the information provided in this study is important for the development of effective policies and management strategies, particularly given the ongoing initiative to implement a Marine Protected Area (MPA) in the Weddell Sea [@Teschke2021].
 
 \clearpage
 
