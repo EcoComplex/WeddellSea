@@ -1,0 +1,69 @@
+---
+title: "Supplementary Material for 'New insights into the Weddell Sea ecosystem applying a network approach'"
+author: "Tomás I. Marina, Leonardo A. Saravia and Susanne Kortsch"
+bibliography: ../WeddellSea.bib
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Equations for calculating species properties
+
+We used the estimation of the interaction strength as the weighted property for the species of the Weddell Sea food web. The main equation to estimate the interaction strength $IS$ was:
+
+$$
+\begin{aligned}
+IS = \alpha X_R \frac{m_R}{m_C}\\
+\end{aligned}
+$$
+where $\alpha$ is the search rate, $X_R$ is the resource density, and $m_R$ and $m_C$ are the body mass for the resource and the consumer, respectively [@Pawar2012].
+
+As unweighted properties we calculated degree, trophic level and trophic similarity.
+The degree $k$ is simply the total number of feeding links in which the species participates. It was calculated as:
+
+$$
+\begin{aligned}
+L = \sum_{i=1}^{S} k_i
+\end{aligned}
+$$
+where $L$ is the total number of feeding links for the $i^{th}$ species in the food web; here denoted as $k_i$.
+The trophic level refers to a species’ vertical position in the food web, relative to the primary producers that support the community. Species that do not consume any other species in the web are primary producers or other basal resources; species with no predators are top predators; those with both predators and prey are intermediate consumers. Trophic levels $TP$ were calculated for every species based on its position in the food web using the “prey-averaged technique”:
+
+$$
+\begin{aligned}
+TP_i = \frac{\sum_{j} TP_j} {n_i} +1
+\end{aligned}
+$$
+where $n_i$ is the total number of prey taxa consumed by taxon $i$, and $TP_j$ represents the trophic position of all prey items $j$ of taxon $i$ [@Thompson2007].
+The trophic similarity $TS$ between every pair of species in the food web was calculated using the following algorithm:
+
+$$
+\begin{aligned}
+TS = \frac{c}{a+b+c}
+\end{aligned}
+$$
+where $c$ is the number of predators and prey common to the two species, $a$ is the number of predators and prey unique to one species, and $b$ is the number of predators and prey unique to the other species. When the two species have the same set of predators and prey, $TS$ = 1; when the two species have no common predators or common prey, $TS$ = 0 [@Martinez1991].
+
+Table S1 shows the mentioned properties for every species of the Weddell Sea food web.
+
+```{r echo=FALSE, results='asis'}
+library(knitr)
+library(dplyr)
+load("net_&_spp_prop.rda")
+knitr::kable(spp_all_prop %>% dplyr::select(TrophicSpecies, IS_mean, TotalDegree, TL, meanTrophicSimil) %>% mutate_if(is.numeric, round, digits=4))
+```
+
+
+## Extinction simulations and stability
+
+We performed extinction simulations, one at a time, for every species in the Weddell Sea food web. In order to assess the impact on the stability of the food web we statistically compared a stability index before and after performing the extinction. For this, we applied Quasi-Sign Stability $QSS$ that calculates the proportion of matrices that are locally stable. These matrices are created by sampling the values of the community matrix (the Jacobian) from a uniform distribution, preserving the sign structure: positive for predators and negative for prey. This stability index was originally proposed by @Allesina2008.
+We used the R package multiweb to calculate $QSS$ and to test the $QSS$ difference before and after performing the extinction (Saravia, 2019). Two functions were specifically created for these analyses: ‘calc_QSS’ and ‘calc_QSS_extinction_dif’.
+For the $QSS$ calculation we used a uniform distribution between 0 and maximum values given by the parameters negative, positive and self-damping, corresponding to the sign of interactions and self-limitation effect. Since we had estimated the interaction strength for each interaction of the Weddell Sea food web, the limits of the distribution were $negative*-x$,$positive*x$, $self-damping*x$, where $x$ is the value of the strength for the interaction in question.
+
+Table S2 shows the results for the QSS differences before and after performing extinction simulations for every species of the Weddell Sea food web.
+
+<!-- knitr::kable(websTbl %>% dplyr::select(Network,Size,Links,Connectance,PathLength,Clustering,SWness,SWnessCI,Q,zQ,Qlow,Qhigh,mTI,zTI,TIlow,TIhigh,Modularity,zMO,MOlow,MOhigh) %>% mutate_if(is.numeric, round, digits=4)) -->
+
+## References
