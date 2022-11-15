@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.30)  14 NOV 2022 10:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.30)  15 NOV 2022 12:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -471,62 +471,62 @@ Overfull \hbox (11.65157pt too wide) in paragraph at lines 212--217
  []
 
 [2]
-Overfull \hbox (2.46179pt too wide) in paragraph at lines 227--248
+Overfull \hbox (2.46179pt too wide) in paragraph at lines 227--249
 \T1/ptm/m/n/10 properties. The degree has often been equated with importance to the structure and functioning of a community, i.e. perturbations
  []
 
 [3] [4] [5]
 
-Package natbib Warning: Citation `Pinkerton2014' on page 6 undefined on input line 408.
+Package natbib Warning: Citation `Pinkerton2014' on page 6 undefined on input line 409.
 
 
-Package natbib Warning: Citation `McCormack2020' on page 6 undefined on input line 408.
+Package natbib Warning: Citation `McCormack2020' on page 6 undefined on input line 409.
 
 [6]
-Overfull \hbox (1.29141pt too wide) in paragraph at lines 468--472
+Overfull \hbox (1.29141pt too wide) in paragraph at lines 469--473
 []\T1/ptm/m/n/10 We consider that the information provided in this study is important for the development of effective policies and management
  []
 
 [7
 
 ]
-<Fig.1_StudyMap.jpg, id=214, 1027.84pt x 770.88pt>
+<Fig.1_StudyMap.jpg, id=215, 1027.84pt x 770.88pt>
 File: Fig.1_StudyMap.jpg Graphic file (type jpg)
 <use Fig.1_StudyMap.jpg>
-Package pdftex.def Info: Fig.1_StudyMap.jpg  used on input line 476.
+Package pdftex.def Info: Fig.1_StudyMap.jpg  used on input line 477.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 [8 <./Fig.1_StudyMap.jpg>]
-<Fig.2_ToyFoodWeb.jpg, id=220, 1027.84pt x 770.88pt>
+<Fig.2_ToyFoodWeb.jpg, id=221, 1027.84pt x 770.88pt>
 File: Fig.2_ToyFoodWeb.jpg Graphic file (type jpg)
 <use Fig.2_ToyFoodWeb.jpg>
-Package pdftex.def Info: Fig.2_ToyFoodWeb.jpg  used on input line 482.
+Package pdftex.def Info: Fig.2_ToyFoodWeb.jpg  used on input line 483.
 (pdftex.def)             Requested size: 341.43306pt x 256.07324pt.
 [9 <./Fig.2_ToyFoodWeb.jpg>]
-<Fig3_IntDist.png, id=226, 722.7pt x 611.1633pt>
+<Fig3_IntDist.png, id=227, 722.7pt x 611.1633pt>
 File: Fig3_IntDist.png Graphic file (type png)
 <use Fig3_IntDist.png>
-Package pdftex.def Info: Fig3_IntDist.png  used on input line 488.
+Package pdftex.def Info: Fig3_IntDist.png  used on input line 489.
 (pdftex.def)             Requested size: 341.43306pt x 288.73888pt.
 [10 <./Fig3_IntDist.png>]
-<Fig4_LinReg.png, id=232, 722.7pt x 611.1633pt>
+<Fig4_LinReg.png, id=233, 722.7pt x 611.1633pt>
 File: Fig4_LinReg.png Graphic file (type png)
 <use Fig4_LinReg.png>
-Package pdftex.def Info: Fig4_LinReg.png  used on input line 494.
+Package pdftex.def Info: Fig4_LinReg.png  used on input line 495.
 (pdftex.def)             Requested size: 341.43306pt x 288.73888pt.
 [11 <./Fig4_LinReg.png>]
-<Fig.5_QSSDif.png, id=242, 722.7pt x 611.1633pt>
+<Fig.5_QSSDif.png, id=243, 722.7pt x 611.1633pt>
 File: Fig.5_QSSDif.png Graphic file (type png)
 <use Fig.5_QSSDif.png>
-Package pdftex.def Info: Fig.5_QSSDif.png  used on input line 500.
+Package pdftex.def Info: Fig.5_QSSDif.png  used on input line 501.
 (pdftex.def)             Requested size: 341.43306pt x 288.73888pt.
 [12 <./Fig.5_QSSDif.png>] [13] [14]
-<App1_FWplot.png, id=259, 1204.5pt x 1048.91875pt>
+<App1_FWplot.png, id=260, 1204.5pt x 1048.91875pt>
 File: App1_FWplot.png Graphic file (type png)
 <use App1_FWplot.png>
-Package pdftex.def Info: App1_FWplot.png  used on input line 575.
+Package pdftex.def Info: App1_FWplot.png  used on input line 576.
 (pdftex.def)             Requested size: 341.43306pt x 297.32841pt.
 
-Overfull \hbox (10.3438pt too wide) in paragraph at lines 595--595
+Overfull \hbox (10.3438pt too wide) in paragraph at lines 596--596
 \T1/ptm/m/n/9 original draft (lead); Writing -- review and editing (lead). SK: Conceptualization (lead); Formal analysis (supporting); Methodology (supporting);
  []
 
@@ -558,10 +558,10 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  87i,8n,91p,611b,661s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}</Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></Users/tomasmarina/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Manuscript.pdf (18 pages, 3185475 bytes).
+Output written on Manuscript.pdf (18 pages, 3185467 bytes).
 PDF statistics:
- 401 PDF objects out of 1000 (max. 8388607)
- 342 compressed objects within 4 object streams
+ 402 PDF objects out of 1000 (max. 8388607)
+ 343 compressed objects within 4 object streams
  88 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
