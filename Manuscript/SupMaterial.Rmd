@@ -5,8 +5,8 @@ bibliography: ../WeddellSea.bib
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
 
 ## Equations for calculating species properties
@@ -46,13 +46,13 @@ TS = \frac{c}{a+b+c}
 $$
 where $c$ is the number of predators and prey common to the two species, $a$ is the number of predators and prey unique to one species, and $b$ is the number of predators and prey unique to the other species. When the two species have the same set of predators and prey, $TS$ = 1; when the two species have no common predators or common prey, $TS$ = 0 [@Martinez1991].
 
-Table S1 shows the mentioned properties for every species of the Weddell Sea food web.
+Table 1 shows the mentioned properties for every species of the Weddell Sea food web.
 
 ```{r echo=FALSE, results='asis'}
 library(knitr)
 library(dplyr)
-load("net_&_spp_prop.rda")
-knitr::kable(spp_all_prop %>% dplyr::select(TrophicSpecies, IS_mean, TotalDegree, TL, meanTrophicSimil) %>% mutate_if(is.numeric, round, digits=4))
+load("QSS_summary_sep22.rda")
+knitr::kable(all_data %>% dplyr::select(TrophicSpecies, IS_mean, TotalDegree, TL, meanTrophicSimil) %>% arrange(., desc(IS_mean)), digits = c(0,7,0,2,3), col.names = c("Species","IS_mean", "Degree", "TL", "TS"), caption = "Weighted (interaction strength) and unweighted properties of the species of Weddell Sea food web. Ordered by decreasing mean interaction strength. IS_mean = mean interaction strength, TL = trophic level, TS = trophic similarity.")
 ```
 
 
@@ -61,9 +61,15 @@ knitr::kable(spp_all_prop %>% dplyr::select(TrophicSpecies, IS_mean, TotalDegree
 We performed extinction simulations, one at a time, for every species in the Weddell Sea food web. In order to assess the impact on the stability of the food web we statistically compared a stability index before and after performing the extinction. For this, we applied Quasi-Sign Stability $QSS$ that calculates the proportion of matrices that are locally stable. These matrices are created by sampling the values of the community matrix (the Jacobian) from a uniform distribution, preserving the sign structure: positive for predators and negative for prey. This stability index was originally proposed by @Allesina2008.
 We used the R package multiweb to calculate $QSS$ and to test the $QSS$ difference before and after performing the extinction (Saravia, 2019). Two functions were specifically created for these analyses: ‘calc_QSS’ and ‘calc_QSS_extinction_dif’.
 For the $QSS$ calculation we used a uniform distribution between 0 and maximum values given by the parameters negative, positive and self-damping, corresponding to the sign of interactions and self-limitation effect. Since we had estimated the interaction strength for each interaction of the Weddell Sea food web, the limits of the distribution were $negative*-x$,$positive*x$, $self-damping*x$, where $x$ is the value of the strength for the interaction in question.
+We performed 1000 extinction simulations for every species. Our results showed that the proportion of Jacobians that were locally stable was zero. Thus, we considered the mean maximum eigenvalue as the stability index, hereafter $QSS$. For testing the $QSS$ difference before and after the extinction we performed an Anderson-Darling test considering a p-value < 0.01 [@Scholz1987].
 
-Table S2 shows the results for the QSS differences before and after performing extinction simulations for every species of the Weddell Sea food web.
+Table 2 summarizes the $QSS$ results for every species extinction of the Weddell Sea food web.
 
-<!-- knitr::kable(websTbl %>% dplyr::select(Network,Size,Links,Connectance,PathLength,Clustering,SWness,SWnessCI,Q,zQ,Qlow,Qhigh,mTI,zTI,TIlow,TIhigh,Modularity,zMO,MOlow,MOhigh) %>% mutate_if(is.numeric, round, digits=4)) -->
+```{r echo=FALSE, results='asis'}
+library(knitr)
+library(dplyr)
+load("QSS_summary_sep22.rda")
+knitr::kable(all_data %>% dplyr::select(TrophicSpecies, QSS_all, QSS_ext, difQSS, Ad_pvalue) %>% arrange(., Ad_pvalue), digits = c(0,7,7,7,41), col.names = c("Species", "QSS_all", "QSS_ext", "difQSS", "AD_pvalue"), caption = "Summary of Quasi-Sign Stability (QSS) results before and after performing extinction simulations in the Weddell Sea food web. Ordered by increasing p-values of the Anderson-Darling test. QSS_all = Quasi-Sign Stability before the extinction (whole food web), QSS_ext = Quasi-Sign Stability after the extinction, difQSS = QSS difference between 'QSS_all' and 'QSS_ext', AD_pvalue = p-value for the Anderson-Darling test.")
+```
 
 ## References
