@@ -1,0 +1,187 @@
+---
+title: "New insights into the Weddell Sea ecosystem applying a network approach"
+author: "Tomás I. Marina, Leonardo A. Saravia and Susanne Kortsch"
+bibliography: ../WeddellSea.bib
+output: word_document
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+## Abstract
+
+The network approach has proved to shade light on the structure and stability of complex marine ecosystems. In recent years, such approach was succesfully applied to the study of polar ecosystems, improving our knowledge on how they might respond to ongoing environmental changes. The Weddell Sea, particularly the high continental shelf area (74-78ºS), is one of the most studied areas outside the Antarctic Peninsula in the Southern Ocean. However, few researches have considered the known complexity of the Weddell Sea. Understanding and projecting impacts of change in this ecosystem requires a framework considering the full complexity of it. Here we focus on the trophic interactions that underpin ecosystem structure and stability. We analysed the Weddell Sea food web, composed by 490 species and 16041 predator-prey interactions, which is the highest-resolved Antarctic food web constructed so far. The objective of our work was threefold: 1) estimate the strength for each interaction in the food web, 2) characterise the species considering weighted and unweighted properties, and 3) analyse the species' role in the stability of the food web. On the one hand, we found that the distribution of the interaction strength at the food web level is asymmetric, where weak interactions are prevalent. Including such information as a (weighted) property for species we detected a positive relationship between species mean interaction strength and two unweighted properties, trophic level and the total number of interactions. We also found that only few species are key in terms of food web stability, presenting particular weighted and unweighted properties. In the same analysis we have integrated food web and species information, enabling a more complete assessment of the ecosystem structure and function, likely highlighting the ecological processes at play in the Weddell Sea. We consider that our results provide new insights important for the development of effective policies and management strategies, particularly given the ongoing initiative to implement a Marine Protected Area (MPA) in the Weddell Sea.
+
+## Introduction
+
+The objective of this work was threefold: 1) estimate the strength for each interaction in the Weddell Sea food web, 2) characterise species considering weighted and unweighted properties, and 3) analyse the species' role in the stability of the food web.
+
+## Methodology
+
+### Study area
+
+The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS with a length of approximately 450 km (Figure 1). Water depth varies from 200 to 500 m. Shallower areas are covered by continental ice, which forms the coastline along the eastern and southern part of the Weddell Sea. The shelf area contains a complex three-dimensional habitat with large biomass, intermediate to high diversity in comparison to benthic boreal communities and a spatially patchy distribution of organisms [@Dayton1990; @Teixido2002].
+
+```{r echo=FALSE, fig.align='center', fig.cap="Figure 1. Map of the Weddell Sea and Dronning Maud Land sector highlighting the high Antarctic shelf as a dashed-line contour. Modified from www.soos.aq."}
+
+library(knitr)
+knitr::include_graphics("Fig.1_StudyMap.jpg", dpi = 600)
+
+```
+
+### Weddell Sea food web dataset
+
+We obtained the dataset of the Weddell Sea food web from the GlobAL daTabasE of traits and food Web Architecture (GATEWAy, version 1.0) of the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig [@Brose2018]. This open access database is a list of predator-prey interactions that contains several highly-resolved food webs, including biological data about the consumer and resource species involved in each trophic interaction (i.e. mean mass). Furthermore, it incorporates information about the interaction itself, such as the dimensionality (2 or 3 dimensions).
+
+This marine food web compiles all the trophic data available for the high Antarctic Weddell Sea collected since 1983, and is one of the most highly-resolved marine food webs documented to date. It's noteworthy that it is a summary network that ignores seasonal changes [@Jacob2011].
+
+### Dataset analyses
+
+We analysed the food web of the Weddell Sea by: a) estimating the strength of each interaction; b) studying the species properties in a network framework; and c) comparing the stability of the food web after performing species extinction in silico simulations.
+
+### Interaction strength estimation and distribution
+
+To estimate the strength of each interaction in the food web we followed the methodology proposed by @Pawar2012. The minimum data requirements are: body mass of the consumer (predator) and resource (prey), and the interaction dimensionality classified as 2 or 3 dimensions. GATEWAy v.1.0 does provide the mean mass for consumers and resources (except for 'detritus' and 'sediment') and the dimensionality for the majority of the interactions, though the latter is missing in some cases (924 interactions). To complete such missing data, we used information about movement type for consumer and resource included in GATEWAy. Thus, we classified the interaction as 2D if both consumer and resource move in 2D (e.g., both are sessile or walking) or if a consumer moves in 3D and a resource in 2D (e.g., swimming consumer and sessile/walking resource). The interaction was classified as 3D if both consumer and resource move in 3D (e.g., both swimming) or if the consumer moves in 2D and the resource in 3D (e.g., sessile/walking consumer, swimming resource) [@Pawar2012].
+
+The main equation we used for estimating the interaction strength IS was:
+
+```{=tex}
+\begin{equation}
+IS = \alpha x_R \frac{m_R}{m_C}
+\end{equation}
+```
+
+where \vec{\alpha} is the search rate, \vec{x_R} is the resource density, and \vec{m_R} and \vec{m_C} are the body mass for the resource and the consumer, respectively [@Pawar2012].
+
+We obtained estimations for the resource density and the search rate from the scaling relationships with the resource and the consumer mass, respectively [@Pawar2012]. The coefficients of such relationships, determined by ordinary least squares regression, vary with the interaction dimensionality. On one hand, resource density scales with resource mass as power-law with exponents \vec{p = -0.79 \pm 0.09} in 2D and \vec{p = -0.86 \pm 0.06} in 3D. Since mean mass for resources 'phytodetritus' and 'sediment' were not available in GATEWAy, we considered the body mass of the smallest phytoplankton species ('Fragilariopsis cylindrus') as a proxy. This is justified by the fact that 'phytodetritus' and 'sediment' are mainly composed by dead or senescent phytoplankton reaching the seabed (@Wolanski2011). On the other hand, search rate scales with consumer mass as power-law with exponents \vec{p = 0.68 \pm 0.12} in 2D and \vec{p = 1.05 \pm 0.08} in 3D.
+
+Finally, we fit the interaction strength distribution of the food web considering six candidate models (Exponential, Gamma, log-Normal, Normal, Power-law and Uniform) using maximum likelihood [@McCallum2008], and selected the model performance by computing the Akaike Information Criterion AIC [@Burnham2002].
+
+### Species properties
+
+In order to individually characterize the species of the food web, we considered weighted and unweighted properties (Figure 2). The former is based on the estimation of the interaction strength described in the previous section. The latter is related to properties commonly used in qualitative or topological (presence/absence of interaction) food web studies [@Martinez1991; @Dunne2002; @Borrelli2014].
+
+
+```{r echo=FALSE, fig.align='center', fig.cap="Figure 2. Scheme of a network showing the weighted and unweighted properties we used to characterize the species of the Weddell Sea food web."}
+
+library(knitr)
+knitr::include_graphics("Fig.2_ToyFoodWeb.jpg", dpi = 600)
+
+```
+
+As the weighted property we took into account the total mean interaction strength, meaning the average strength of all species' interactions for each species. On the other hand, we considered the following unweighted properties: a) degree or the total number of trophic interactions, summing up in- and out-coming interactions (role as predator and prey, respectively); b) trophic level or the position in the food web relative to primary producers/detritus; and c) trophic similarity or the trophic overlap based on shared and unique resources and consumers. The following are arguments to have selected the unweighted properties. The degree has often been equated with importance to the structure and functioning of a community, i.e. perturbations to high-degree species may therefore have larger effects on the food web than perturbations to low-degree species [@Dunne2002a; references in @Cirtwill2018a]. The trophic level offers information about how important a species is to its biotic community, i.e. top predators and primary producers are expected to have particularly large effects on the rest of their communities through top-down and bottom-up control, respectively [references in @Cirtwill2018a]. The trophic similarity is an index of trophic overlap considering the set of prey and predators for a pair of species; it measures one of the most important aspects of species’ niches, the trophic niche, and functional aspects of biodiversity [@Martinez1991; @Williams2000].
+
+Furthermore, we took into account the species' habitat, which describes the physical position of a species within the ecosystem. Species were categorized as: 1) benthic, if the species lives on the seafloor; 2) pelagic, if the species lives close to the surface; 3) benthopelagic, if it moves between and connects the mentioned environments; 4) demersal, if it lives and feeds on or near the bottom of the sea; and 5) land-based, if the consumer is not aquatic but feeds predominantly in the marine realm. These data was taken from @Jacob2011.
+
+With the aim of studying the relationship between the interaction strength of the species (weighted property) and its unweighted properties we performed linear regression analyses between the log(mean interaction strength) and each of the mentioned unweighted properties. We also explored such weighted property with species habitat.
+
+Formulas used to obtain the above species properties are described in Supplementary Material.
+
+### Extinction simulations and stability
+
+Finally, we run extinction simulations and estimated its impact on the stability of the food web. For this, we calculated a stability index called Quasi-Sign Stability (QSS), which is the proportion of stable networks using randomized Jacobians and keeping the predator-prey sign structure fixed [@Allesina2008]. If this proportion is zero, then one should take into account the real part of the maximum eigenvalue of the Jacobian matrix, which is also a measure of stability [@Grilli2016], indicating a more stable food web when it is negative.
+
+With the aim of analysing the effect of each species on the food web's stability we performed extinction simulations deleting one species at a time, so the network size was reduced by one. After each species extinction, we calculated the stability for the food web minus one species (size = 489) and compared it with that of the whole network (size = 490). We performed 1000 simulations for each species extinction and obtained a mean QSS and maximum eigenvalue. At last we statistically analysed such difference with an Anderson-Darling test considering a p-value < 0.01 [@Scholz1987]. If the difference was positive, then the stability of the food web was impacted positively (higher stability) when that species become extinct, and viceversa. Details for the stability calculations are described in Supplementary Material.
+
+Once we had the results for the impact on stability for each species extinction, we plotted them considering weighted (interaction strength) and unweighted properties, and species habitat. With this we aim to characterize those species with a relatively high effect on the stability of the food web.
+
+All analyses were performed in R software, mainly using packages igraph [@Csardi2005], cheddar [@Hudson2013], and multiweb [@Saravia2019]. The source code and data are available at https://github.com/EcoComplex/WeddellSea.
+
+## Results
+
+### Interaction strength
+
+In this work we have estimated the interaction strength for the most highly-resolved marine food web to date, which comprises 490 species and 16041 predator-prey interactions. The distribution of the interaction strength best fit to a log-Normal model, meaning that there is a prevalent skew towards weaker interactions (Figure 3, Table 1).
+
+```{r echo=FALSE, fig.align='center', fig.cap="Figure 3. Frequency distribution of interaction strengths for the Weddell Sea food web. Total number of interactions = 16041."}
+
+library(knitr)
+knitr::include_graphics("Fig3_IntDist.png", dpi = 600)
+
+```
+
+```{=tex}
+\begin{table}[t]
+\caption{Model comparison for the distribution of interaction strengths of the Weddell Sea food web. Order by best fit. References: df = degrees of freedom, AIC = Akaike Information Criterion, deltaAIC = difference with best fit. Log-Normal is the best model.}
+\begin{tabular}{l c c c}
+\tophline
+
+\textbf{Model} & \textbf{df} & \textbf{AIC} & \textbf{deltaAIC} \\
+\middlehline
+log-Normal & 2 & -359738 & 0 \\
+\middlehline
+Gamma & 2 & -359714.1 & 23.89 \\
+\middlehline
+Power-law & 2 & -350667 & 9070.97 \\
+\middlehline
+Exponential & 1 & -327606.5 & 32131.54 \\
+\middlehline
+Normal & 2 & -291407.8 & 68330.21 \\
+\middlehline
+Uniform & 2 & -248179 & 111559.02 \\
+
+\bottomhline
+\end{tabular}
+\end{table}
+```
+
+```{r echo=FALSE, results='asis'}
+library(knitr)
+library(dplyr)
+
+load("../Manuscript/ModelFit.rda")
+knitr::kable(IS_fit %>% arrange(., deltaAIC), digits = c(0,0,2,2), col.names = c("Model", "df", "AIC", "deltaAIC"), caption = "Model comparison for the distribution of interaction strengths of the Weddell Sea food web. Order by best fit. References: df = degrees of freedom, AIC = Akaike Information Criterion, deltaAIC = difference with best fit. Log-Normal is the best model.")
+
+```
+
+### Species properties
+
+Following the above results for the distribution of the interaction strengths, we found that the species mean interaction strength was different. We also found that such weighted property is related more or less with unweighted properties (Figure 4A-D). In this regard, interaction strength - trophic level showed a significant positive linear regression: the higher the trophic level of the species, the higher its mean interaction strength. We also found a significant but less evident positive relationship with degree or the total number of interactions. On the other hand, there was no significant relationship with trophic similarity. Considering species habitat, the "Benthopelagic" and "Pelagic" categories presented the two species with the highest mean interaction strength (Orcinus orca and Mesonychoteuthis hamiltoni, respectively), though "Demersal" and "Land-based" habitats concentrated the majority of the species with relatively higher interaction strength. Species inhabiting the benthic realm showed the lowest mean interaction strength (Figure 4D).
+
+```{r echo=FALSE, fig.align='center', fig.cap="Figure 4. Relationships between weighted (mean Interaction Strength) and unweighted properties including habitat. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C). Linear regressions for trophic level ($y = 1.12x - 15.29, R^2 = 0.43, p-value < 2e-16$), degree ($y = 0.006x - 12.77, R^2 = 0.03, p-value = 4.06e-5$) and trophic similarity ($y = -1.46x - 12.18, R^2 = -0.0004, p-value = 0.36$)."}
+
+library(knitr)
+knitr::include_graphics("Fig4_LinReg.png", dpi = 600)
+
+```
+
+### Extinction simulations and stability
+
+It's important to note that since the proportion of Jacobians that were locally stable or QSS was zero for the Weddell Sea food web, we considered the mean maximum eigenvalue as the stability index. When performing the extinction simulations, our results showed that the majority of the species had no significant impact on the stability of the food web when extinct (Figure 5). This is shown in Figure 5, where most of the points lie around the zero value of the 'Stability difference' y axis, meaning that the stability for the food web minus a given species is similar (not significant) to the stability for the whole network. However, there were few species that when become extinct altered significantly the stability of the food web. Most of such species generated positive significant differences in the stability of the food web, which mean that they increased the network's stability when deleted. There were two exceptions, Pagetopsis macropterus (demersal fish) and Maxilliphimedia longipes (benthopelagic amphipod), that when deleted decreased the stability. Overall, 15 out of 490 species (3.06%) gave rise to significant changes in the food web's stability (Table 2).
+
+```{r echo=FALSE, fig.align='center', fig.cap="Figure 5. Quasi-Sign Stability (QSS) difference between the whole Weddell Sea food web (n = 490) and the food web without one species (n = 489) for weighted (interaction strength) and unweighted species properties, and habitat. Point color indicates the impact on the QSS; if significant the extinction of that species altered the stability (QSS) of the food web."}
+
+library(knitr)
+knitr::include_graphics("Fig.5_QSSDif.png", dpi = 600)
+
+```
+
+After exploring the stability difference against the species properties (Figure 5), we found that those species that generated a significant impact on the stability of the food web were characterized by: 1) high mean interaction strength; 2) mid to high trophic levels (TL > 3.2); 3) relatively high number of interactions (Degree > 25); and 4) mid to low trophic similarity (TS < 0.16). Habitat wise, species with a significant impact on the stability were present in all habitats, except for the benthic realm. Table 2 shows these results for such species.
+
+```{r echo=FALSE, results='asis'}
+library(knitr)
+library(dplyr)
+
+load("QSS_summary_sep22.rda")
+knitr::kable(all_data %>% dplyr::select(TrophicSpecies, IS_mean, TL, TotalDegree, meanTrophicSimil, Habitat, difQSS, Ad_pvalue) %>% dplyr::filter(Ad_pvalue < 0.01) %>%  arrange(., Ad_pvalue), digits = c(0,7,2,0,3,0,7,41), col.names = c("Species","MeanIS", "TL", "Deg", "TS", "Habitat", "StabDif", "ADvalue"), caption = "Properties of the species that when become extinct generated a significant impact on the stability of the Weddell Sea food web, ordered by significance (Anderson-Darling p-value). References: meanIS = mean interaction strength, TL = trophic level, Deg = degree, TS = trophic similarity, StabDif = stability difference, ADvalue = Anderson-Darling p-value.")
+
+```
+
+## Discussion
+
+Using the highest-resolved marine polar food web up to date, we show that 1) the distribution of the interaction strength at the food web level is asymmetric, where weak interactions are prevalent; that 2) there is a positive relationship between species mean interaction strength and two unweighted properties, trophic level and degree; and that 3) only few species are key in terms of food web stability, presenting particular weighted and unweighted properties. It's also noteworthy, that our study is the first of its type to consider the dimensionality of the interaction (2 or 3 dimensions) to estimate predator-prey relationships within a food web framework. After analysing more than 2900 predator-prey interactions from several ecosystems, @Pawar2012 concluded that interaction dimensionality is a critical factor driving consumer-resource dynamics, which will lead to better predictions of food web and ecosystem functioning. This arises as crucial to better understand how a complex system such as the Weddell Sea might respond to environmental change, which is an ongoing issue in that region of the Antarctic [@Gutt2022 and references herein].
+
+Our results regarding the distribution of the interaction strengths are consistent with prior theoretical and empirical studies [e.g. @McCann1998; @Neutel2002; @Emmerson2004; @Wootton2005]. Within a system of a given complexity, commonly only a few strong species interactions are present with most interactions being weak. Historically, after @May1972 installed the debate complexity-stability, the results about the distribution of the interaction strength has been interpreted as an explanation for the persistence of complex food webs in nature [@Bascompte2005; @Allesina2015; @Nilsson2016]. Here we showed that this pattern is also prevalent in one of the most complex empirical marine food webs that was studied so far, with 490 species and 16041 predator-prey interactions.
+
+Our approach to study species properties follows @Kortsch2021 recommendation that suggests to employ a range of descriptors from both unweighted and weighted food web in order to characterise the dynamic and multifaceted nature of structural and functional ecosystem changes. We went a step forward and analysed the relationship between weighted and unweighted descriptors. In this regard, our results show a positive relationship between interaction strength (weighted) and trophic level (unweighted), and between interaction strength and degree (total number of interactions). The former relationship might contradict those studies that suggest that mid-trophic level species are involved in the major pathways of energy flow in high-latitude marine ecosystems [@Pinkerton2014; @Murphy2016; @McCormack2020; @Riccialdelli2020]. This could be explained by the lack of species biomass data in our interaction strength estimations; the methodology we applied here [@Pawar2012] allows to include empirical data for the density of the resource, though not for all food web species. Unfortunately, the lack of individual data for the entire Weddell Sea food web hampers any alternative approach. On the other hand, the positive relationship between interaction strength and degree reinforces the importance of species with many interactions: species with high degree (hubs) have a large impact on overall food web structure and functioning [@Dunne2002a; @Kortsch2015]. In the Weddell Sea, species with high degree also tend to have high mean interaction strengths. This information on the quantity and quality of interactions and its relationship enables a robust assessment of the species' role in the stability of the food web [@Cirtwill2018a].
+
+Our results show that only few species are key in terms of stability in the Weddell Sea food web. This is in concordance with studies of complex empirical food webs in marine ecosystems in the Arctic and other locations in Antarctica [@Kortsch2015; @Marina2018; @Rodriguez2022]. In the present work we identify that such key species present particular weighted and unweighted properties: 1) high mean interaction strength; 2) mid to high trophic level; 3) relatively high number of interactions; and 4) mid to low trophic similarity. The first attempt to gain insight into the role of species in the Weddell Sea applying a complex approach was that of @Jacob2011. These authors used information on body size, predatory and feeding type, and environment (habitat) to study species' roles. After performing sequential extinction simulations, @Jacob2011 found that larger bodied species can be lost without causing a direct collapse of the network topology. A major caveat of this finding, already recognized by the authors, is that population dynamics were ignored and therefore no top-down extinctions, or other indirect effects, could occur. In our study we did consider such effects by including information on the species interaction strength, which is of paramount importance when analysing the response of perturbations in ecological communities [@McCann1998; @Montoya2009; @Novak2011]. Thus, our study suggests that species with high mean interaction strength and high trophic level need to be considered with particular attention when trying to predict the effects of perturbations on the Weddell Sea ecosystem. Furthermore, this arises as a greater issue since we have identified that these species present a mid to low trophic similarity, meaning that few other species of the food web can occupy the same trophic role. In this sense, @Murphy2016's review emphasized that polar pelagic ecosystems are particularly sensitive to change due to a low functional redundancy at key trophic levels. It's important to note that we provide a broader analysis in this regard because we have included species from all habitats (pelagic, benthic, land-based).
+
+## Conclusions
+
+Our study goes beyond the current understanding of how species influence ecosystem structure and stability in the Weddell Sea in particular and in most polar regions in general [@Murphy2016; @McCormack2021]. In the same analysis we have integrated information about weighted (interaction strength) and unweighted species properties, enabling a more complete assessment of the food web structure and function, likely highlighting the ecological processes at play in the Weddell Sea ecosystem.
+
+We consider that the information provided in this study is important for the development of effective policies and management strategies, particularly given the ongoing initiative to implement a Marine Protected Area (MPA) in the Weddell Sea [@Teschke2021].
+
+## References
