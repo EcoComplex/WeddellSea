@@ -47,3 +47,5 @@ IS_fit <- bind_cols(aic.result) %>%
   arrange(deltaAIC) %>% 
   dplyr::select(Model, df, AIC, deltaAIC)
 IS_fit
+
+save(IS_fit, file = "Manuscript/ModelFit.rda")
