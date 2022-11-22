@@ -101,31 +101,6 @@ knitr::include_graphics("Fig3_IntDist.png", dpi = 600)
 
 ```
 
-```{=tex}
-\begin{table}[t]
-\caption{Model comparison for the distribution of interaction strengths of the Weddell Sea food web. Order by best fit. References: df = degrees of freedom, AIC = Akaike Information Criterion, deltaAIC = difference with best fit. Log-Normal is the best model.}
-\begin{tabular}{l c c c}
-\tophline
-
-\textbf{Model} & \textbf{df} & \textbf{AIC} & \textbf{deltaAIC} \\
-\middlehline
-log-Normal & 2 & -359738 & 0 \\
-\middlehline
-Gamma & 2 & -359714.1 & 23.89 \\
-\middlehline
-Power-law & 2 & -350667 & 9070.97 \\
-\middlehline
-Exponential & 1 & -327606.5 & 32131.54 \\
-\middlehline
-Normal & 2 & -291407.8 & 68330.21 \\
-\middlehline
-Uniform & 2 & -248179 & 111559.02 \\
-
-\bottomhline
-\end{tabular}
-\end{table}
-```
-
 ```{r echo=FALSE, results='asis'}
 library(knitr)
 library(dplyr)
