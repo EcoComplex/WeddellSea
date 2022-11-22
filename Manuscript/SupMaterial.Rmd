@@ -60,7 +60,6 @@ knitr::kable(all_data %>% dplyr::select(TrophicSpecies, IS_mean, TotalDegree, TL
 
 ```
 
-
 ## Extinction simulations and stability
 
 We performed extinction simulations, one at a time, for every species in the Weddell Sea food web. In order to assess the impact on the stability of the food web we statistically compared a stability index before and after performing the extinction. For this, we applied Quasi-Sign Stability $QSS$ that calculates the proportion of matrices that are locally stable. These matrices are created by sampling the values of the community matrix (the Jacobian) from a uniform distribution, preserving the sign structure: positive for predators and negative for prey. This stability index was originally proposed by @Allesina2008.
@@ -76,6 +75,19 @@ library(dplyr)
 
 load("QSS_summary_sep22.rda")
 knitr::kable(all_data %>% dplyr::select(TrophicSpecies, QSS_all, QSS_ext, difQSS, Ad_pvalue) %>% arrange(., Ad_pvalue), digits = c(0,7,7,7,41), col.names = c("Species", "QSS_all", "QSS_ext", "difQSS", "AD_pvalue"), caption = "Summary of Quasi-Sign Stability (QSS) results before and after performing extinction simulations in the Weddell Sea food web. Ordered by increasing p-values of the Anderson-Darling test. QSS_all = Quasi-Sign Stability before the extinction (whole food web), QSS_ext = Quasi-Sign Stability after the extinction, difQSS = QSS difference between 'QSS_all' and 'QSS_ext', AD_pvalue = p-value for the Anderson-Darling test.")
+
+```
+
+## Interaction strength distribution
+
+The statistical distribution that best fitted the empirical interaction strength distribution was a ‘gamma’ due to the skew towards weaker interactions. Table 3 shows the results for the six candidate models used.
+
+```{r echo=FALSE, results='asis'}
+library(knitr)
+library(dplyr)
+
+load("../Manuscript/ModelFit.rda")
+knitr::kable(IS_fit %>% arrange(., deltaAIC), digits = c(0,0,2,2), col.names = c("Model", "df", "AIC", "deltaAIC"), caption = "Model comparison for the distribution of interaction strengths of the Weddell Sea food web. Order by best fit. References: df = degrees of freedom, AIC = Akaike Information Criterion, deltaAIC = difference with best fit. Log-Normal is the best model.")
 
 ```
 
