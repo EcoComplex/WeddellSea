@@ -61,7 +61,7 @@ cl_IS_TL <- ggplot(spp_all_prop, aes(x = TL, y = log(IS_mean))) +
         axis.text.y = element_text(size = 12))
 cl_IS_TL
 
-# Test regression significance by group
+# Test regression significance
 TL_lm <- lm(log(IS_mean) ~ TL, data = spp_all_prop)
 summary(TL_lm)
 ols_test_normality(TL_lm)  # check normality of residuals
@@ -82,7 +82,7 @@ cl_IS_DEG <- ggplot(spp_all_prop, aes(x = TotalDegree, y = log(IS_mean))) +
         axis.text.y = element_text(size = 12))
 cl_IS_DEG
 
-# Test regression significance by group
+# Test regression significance
 DEG_lm <- lm(log(IS_mean) ~ TotalDegree, data = spp_all_prop)
 summary(DEG_lm)
 ols_test_normality(DEG_lm)  # check normality of residuals
@@ -102,7 +102,7 @@ cl_IS_TS <- ggplot(spp_all_prop, aes(x = meanTrophicSimil, y = log(IS_mean))) +
         axis.text.y = element_text(size = 12))
 cl_IS_TS
 
-# Test regression significance by group
+# Test regression significance
 TS_lm <- lm(log(IS_mean) ~ meanTrophicSimil, data = spp_all_prop)
 summary(TS_lm)
 ols_test_normality(TS_lm)  # check normality of residuals
