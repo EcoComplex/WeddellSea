@@ -84,3 +84,24 @@ Within a system of a given complexity, commonly only a few strong species intera
 To select the best model we calculated the corrected Akaike Information Criteria (AIC c ) and Akaike weights
 for each model [@Burnham2011]. Akaike weights (w i ) are the weight of evidence in favour of model i being the best model
 among the candidate set of N models.
+
+
+---
+@Schiavon2021
+
+The continental shelf of the Weddell Sea (Antarctica) is still largely unprotected. This region is one of the most pristine and relatively unexplored hotspots of marine biodiversity in Antarctica, and it is less affected by sea surface warming compared with other, more exposed, areas as the Antarctic Peninsula (Teschke et al., 2016). Under a climate change scenario, Griffiths et al. (2017) hypothesized that the Weddell Sea continental shelf will be likely a sink area for species’ range shifts and a feasible refugium for highly cold-adapted benthic organisms. 
+
+---
+@Carrara2015
+
+Specifically, recent theoretical studies proved that both the architecture of the ecological networks and the distribution of interaction strengths impact ecosystem stability (Allesina & Tang 2012; Loreau & de Mazancourt 2013).
+
+---
+@Allesina2015
+
+We find that intervality and broad degree distributions tend to stabilize food webs, and that average interaction strength has little influence on stability, compared with the effect of variance and correlation.
+
+---
+@Barabas2017
+
+hese self-effects are known as 'self-regulation' when an increase in a species’ abundance decreases its per-capita growth rate. Sources of self-regulation include intraspecific interference, cannibalism, time-scale separation between consumers and their resources, spatial heterogeneity and nonlinear functional responses coupling predators with their prey. The influence of self-regulation on network stability is understudied and in addition, the empirical estimation of self-effects poses a formidable challenge. Here, we show that empirical food web structures cannot be stabilized unless the majority of species exhibit substantially strong self-regulation.
