@@ -4,8 +4,8 @@ title: Supplementary Material for 'New insights into the Weddell Sea ecosystem a
 author: "Tomás I. Marina, Leonardo A. Saravia and Susanne Kortsch"
 bibliography: ../WeddellSea.bib
 output:
-  word_document: default
   pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE} 
