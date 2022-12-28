@@ -80,7 +80,7 @@ knitr::kable(all_data %>% dplyr::select(TrophicSpecies, QSS_all, QSS_ext, difQSS
 
 ## Interaction strength distribution
 
-The statistical distribution that best fitted the empirical interaction strength distribution was a ‘gamma’ due to the skew towards weaker interactions. Table 3 shows the results for the six candidate models used.
+The statistical distribution that best fitted the empirical interaction strength distribution was a ‘gamma’ due to the skew towards weaker interactions. Gamma parameters are: shape = 2.699e-1 and scale = 2.008e+4. Table 3 shows the results for the six candidate models used.
 
 ```{r echo=FALSE, results='asis'}
 library(knitr)
