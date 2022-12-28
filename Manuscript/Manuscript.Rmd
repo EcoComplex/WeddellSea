@@ -166,7 +166,7 @@ All analyses were performed in R software, using the R packages igraph [@Csardi2
 
 ## Interaction strength distribution
 
-The statistical distribution that best fitted the empirical interaction strength distribution of the Weddell Sea food web was a ‘gamma’ due to the high proportion of weak interactions and the existence of a few strong interactions (Figure 3, Table S3). <!-- Gamma parameters: added in Supplementary Material --> 
+The statistical distribution that best fitted the empirical interaction strength distribution of the Weddell Sea food web was a ‘gamma’ due to the high proportion of weak interactions and the existence of a few strong interactions (Figure 3, Table S3). <!-- Gamma parameters ?? TIM: added them in Supplementary Material. -->
 
 ## Species’ role related to their mean interaction strength
 
@@ -208,7 +208,8 @@ knitr::include_graphics("Fig.1_StudyMap.jpg")
 
 \clearpage
 
-<!-- LAS Figure 2 is confusing, on the left side the title is "Weighted" but the network seems unweighted, I would delete the small predator-prey on the left, and explain that arrow are the flux of energy thus pointin to the predator, and that IS is represented by the width of the arrow. TIM: I corrected it & added the explanation in the caption. -->
+<!-- LAS Figure 2 is confusing, on the left side the title is "Weighted" but the network seems unweighted, I would delete the small predator-prey on the left, and explain that arrow are the flux of energy thus pointin to the predator, and that IS is represented by the width of the arrow.
+TIM: I corrected it & added the explanation in the caption. -->
 
 ```{r, out.width = "12cm", echo = FALSE, fig.cap = "Scheme of a network showing the weighted and unweighted properties we used to characterise the species of the Weddell Sea food web. Directed arrows indicate the flow of energy; the width of the arrow represents the interaction strength of it."}
 knitr::include_graphics("Fig.2_ToyFoodWeb.jpg")
