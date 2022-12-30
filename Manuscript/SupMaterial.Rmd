@@ -1,6 +1,6 @@
 ---
 title: Supplementary Material for 'New insights into the Weddell Sea ecosystem applying
-  a network approach'
+  a quantitative network approach'
 author: "Tomás I. Marina, Leonardo A. Saravia and Susanne Kortsch"
 bibliography: ../WeddellSea.bib
 output:
