@@ -65,19 +65,20 @@ weddell_dim_fill <- weddell_dim_fill %>%
 
 # Read the updated database
 # Convert g to kg (to follow Pawar et al. 2012 relationships)
-wedd_df_comp <- read_csv("Data/Wedd_int_complete.csv") %>% 
+wedd_df_comp <- read.csv("Data/Wedd_int_complete.csv") %>% 
   mutate(res.mass.mean.kg. = res.mass.mean.g.*10e-3, con.mass.mean.kg. = con.mass.mean.g.*10e-3)
 
 # Replace 'phytodetritus' and 'sediment' body masses (-999) with that of smallest phytoplankton
 # Smallest phyto 'Fragilariopsis cylindrus' mean body mass (1.53e-14 g) * 10e-3 = 1.5e-16 kg
 wedd_df_pd <- wedd_df_comp %>% 
-  mutate(res.mass.mean.kg. = replace(res.mass.mean.kg., res.mass.mean.kg. < 0, 1.53e-16))
+  mutate(res.mass.mean.kg. = replace(res.mass.mean.kg., res.mass.mean.kg. < 0, 1.53e-16),res_den = -999)
 
 # Estimate interaction strength
-wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg., con.mass.mean.kg., interaction.dimensionality)
-
+wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg.,res_den, con.mass.mean.kg., interaction.dimensionality,1000)
+wedd_int_pd_m <-  wedd_int_pd %>% group_by(con.taxonomy,res.taxonomy) %>% summarize(m_IS = mean(qRC),m_xR=mean(xR),m_alfa=mean(alfa),e_IS = median(qRC),e_xR=median(xR),e_alfa=median(alfa)) 
+  
 # Explore distribution of interaction intensity (qRC)
-ggplot(wedd_int_pd, aes(qRC)) + 
+ggplot(wedd_int_pd_m, aes(e_IS)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   scale_y_log10() +
   labs(x = "Interaction strength", y = "Frequency (log scale)") +
