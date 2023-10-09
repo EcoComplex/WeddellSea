@@ -21,31 +21,33 @@ ipak(packages)
 
 ## Load interaction strength estimation ----
 
-load("Results/interaction_estimation.rda")
+load("Results/interaction_estimation_sim.rda")
 
 
 ## Distribution of interaction strength ----
 
 # Plot
-ggplot(wedd_int_pd, aes(qRC)) + 
-  geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
-  scale_y_log10() +
-  labs(x = "Interaction strength", y = "Frequency (log scale)") +
-  theme_classic() +
-  theme(axis.text.x = element_text(face="bold", size=14),
-        axis.text.y = element_text(face="bold", size=14),
-        axis.title.x = element_text(face="bold", size=18),
-        axis.title.y = element_text(face="bold", size=18))
-
+# ggplot(wedd_int_pd, aes(qRC)) + 
+#   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
+#   scale_y_log10() +
+#   labs(x = "Interaction strength", y = "Frequency (log scale)") +
+#   theme_classic() +
+#   theme(axis.text.x = element_text(face="bold", size=14),
+#         axis.text.y = element_text(face="bold", size=14),
+#         axis.title.x = element_text(face="bold", size=18),
+#         axis.title.y = element_text(face="bold", size=18))
 
 # Fit distribution using Maximum Likelihood
+# Need to run this before:
+# wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg., res_den, con.mass.mean.kg., interaction.dimensionality, nsims=1000)
+
 x <- wedd_int_pd$qRC
 aic.result <- c(AIC(mlunif(x), mlexp(x), mlpower(x), mllnorm(x), mlnorm(x), mlgamma(x)))
-IS_fit <- bind_cols(aic.result) %>% 
+IS_fit_sim <- bind_cols(aic.result) %>% 
   mutate(Model = c("Uniform", "Exponential", "Power-law", "log-Normal", "Normal", "Gamma"),
          deltaAIC = AIC - min(AIC)) %>% 
   arrange(deltaAIC) %>% 
   dplyr::select(Model, df, AIC, deltaAIC)
-IS_fit
+IS_fit_sim
 
-save(IS_fit, file = "Manuscript/ModelFit.rda")
+save(IS_fit_sim, file = "Manuscript/ModelFit_sim.rda")
