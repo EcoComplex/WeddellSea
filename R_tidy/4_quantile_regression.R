@@ -21,20 +21,19 @@ ipak(packages)
 
 # Load data ----
 
-load("Results/net_&_spp_prop.rda")
+load("Results/net_&_spp_prop_sim.rda")
 
 
 # Distribution of species' interaction strength ----
 
 # Distribution of log IS
-ggplot(spp_all_prop, aes(x = log(IS_mean))) + geom_density() + theme_bw()
-ggplot(spp_all_prop, aes(x = log(IS_mean))) + geom_histogram(bins=50) + theme_bw()
+ggplot(IS_all_m, aes(x = log(IS_mean))) + geom_density() + theme_bw()
+ggplot(IS_all_m, aes(x = log(IS_mean))) + geom_histogram(bins=50) + theme_bw()
 
 
 # Check cluster by interaction strength ----
-
 # Determine and visualize the optimal number of clusters using total within sum of square
-data.scaled <- scale(log(spp_all_prop$IS_mean))
+data.scaled <- scale(log(IS_all_m$IS_mean))
 fviz_nbclust(data.scaled, kmeans, method = "wss")
 # Calculate gap statistic based on number of clusters
 gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
@@ -49,11 +48,14 @@ km <- kmeans(data.scaled, centers = 1, nstart = 25)
 # Linear Regression ----
 
 ## Trophic level ----
+ggplot(spp_all_prop, aes(x=TL, y=log(qRC))) +
+  geom_point() +
+  geom_errorbar(aes(ymin = log(IS_low_ci), ymax = log(IS_high_ci)))
 
-cl_IS_TL <- ggplot(spp_all_prop, aes(x = TL, y = log(IS_mean))) +
+cl_IS_TL <- ggplot(spp_all_prop, aes(x = TL, y = log(IS))) +
   geom_point() +
   geom_smooth(method = "lm") +
-  labs(x = "Trophic level", y = "log(mean Interaction Strength)") +
+  labs(x = "Trophic level", y = "log(Interaction Strength)") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 12, face = "bold"),
@@ -69,7 +71,6 @@ ols_plot_resid_qq(TL_lm)  # Q-Q plot
 
 
 ## Degree ----
-
 cl_IS_DEG <- ggplot(spp_all_prop, aes(x = TotalDegree, y = log(IS_mean))) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -90,7 +91,6 @@ ols_plot_resid_qq(DEG_lm)  # Q-Q plot
 
 
 ## Trophic similarity ----
-
 cl_IS_TS <- ggplot(spp_all_prop, aes(x = meanTrophicSimil, y = log(IS_mean))) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -110,7 +110,6 @@ ols_plot_resid_qq(TS_lm)  # Q-Q plot
 
 
 ## Habitat ----
-
 cl_IS_HAB <- ggplot(spp_all_prop, aes(x = Habitat, y = log(IS_mean))) +
   geom_violin(fill = "grey70", alpha = 0.5) +
   geom_point(shape=19) +
