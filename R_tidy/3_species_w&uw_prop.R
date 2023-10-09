@@ -23,31 +23,31 @@ ipak(packages)
 
 ## Load data ----
 
-load("Results/interaction_estimation.rda")
+load("Results/interaction_estimation_sim.rda")
 
 
 ## Obtain interaction strength per species ----
 
 # Select interaction strength for Consumers (incoming)
-con_int <- wedd_int_pd %>% 
-  dplyr::select(con.taxonomy, qRC) %>% 
-  dplyr::rename(TrophicSpecies = con.taxonomy, IS = qRC)
+con_int <- wedd_int_pd_summary %>% 
+  dplyr::select(con.taxonomy, IS_mean) %>% 
+  dplyr::rename(TrophicSpecies = con.taxonomy)
 
 # Select interaction strength for Resources (outcoming)
-res_int <- wedd_int_pd %>% 
-  dplyr::select(res.taxonomy, qRC) %>% 
-  dplyr::rename(TrophicSpecies = res.taxonomy, IS = qRC)
+res_int <- wedd_int_pd_summary %>% 
+  dplyr::select(res.taxonomy, IS_mean) %>% 
+  dplyr::rename(TrophicSpecies = res.taxonomy)
 
 # Bind interaction strengths for each species
 # Calculate mean, Q1 & Q3
 all_int <- bind_rows(con_int, res_int)
 total_int <- bind_rows(con_int, res_int) %>% 
   dplyr::group_by(TrophicSpecies) %>% 
-  dplyr::summarize(IS_mean = mean(IS),
-                   IS_median = median(IS),
-                   IS_Q1 = quantile(IS, 0.25),
-                   IS_Q3 = quantile(IS, 0.75),
-                   IS_max = max(IS),
+  dplyr::summarize(IS_mean = mean(IS_mean),
+                   IS_median = median(IS_mean),
+                   IS_Q1 = quantile(IS_mean, 0.25),
+                   IS_Q3 = quantile(IS_mean, 0.75),
+                   IS_max = max(IS_mean),
             Check_NumbInt = n())
 
 # Convert interaction list to an igraph with weights
