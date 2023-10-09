@@ -31,7 +31,6 @@ wedd_df <-  ga %>%
   filter(grepl('Weddell', foodweb.name))
 
 
-
 # Complete missing interaction dimensionality ----
 
 # Following Pawar et al. 2012 (https://doi.org/10.1038/nature11131) criteria:
@@ -71,17 +70,18 @@ wedd_df_comp <- read.csv("Data/Wedd_int_complete.csv") %>%
 # Replace 'phytodetritus' and 'sediment' body masses (-999) with that of smallest phytoplankton
 # Smallest phyto 'Fragilariopsis cylindrus' mean body mass (1.53e-14 g) * 10e-3 = 1.5e-16 kg
 wedd_df_pd <- wedd_df_comp %>% 
-  mutate(res.mass.mean.kg. = replace(res.mass.mean.kg., res.mass.mean.kg. < 0, 1.53e-16),res_den = -999)
+  mutate(res.mass.mean.kg. = replace(res.mass.mean.kg., res.mass.mean.kg. < 0, 1.53e-16), res_den = -999)
 
 # Estimate interaction strength
-wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg.,res_den, con.mass.mean.kg., interaction.dimensionality,1000)
-wedd_int_pd_m <-  wedd_int_pd %>% group_by(con.taxonomy,res.taxonomy) %>% summarize(m_IS = mean(qRC),m_xR=mean(xR),m_alfa=mean(alfa),e_IS = median(qRC),e_xR=median(xR),e_alfa=median(alfa)) 
+wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg., res_den, con.mass.mean.kg., interaction.dimensionality, nsims=1000)
+wedd_int_pd_summary <-  wedd_int_pd %>% group_by(con.taxonomy, res.taxonomy) %>% 
+  summarize(IS_mean=mean(qRC), xR_mean=mean(xR), alfa_mean=mean(alfa), IS_med = median(qRC), xR_med=median(xR), alfa_med=median(alfa)) 
   
 # Explore distribution of interaction intensity (qRC)
-ggplot(wedd_int_pd_m, aes(e_IS)) + 
+ggplot(wedd_int_pd_m, aes(IS_med)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   scale_y_log10() +
-  labs(x = "Interaction strength", y = "Frequency (log scale)") +
+  labs(x = "Interaction strength (median)", y = "Frequency (log scale)") +
   theme_classic() +
   theme(axis.text.x = element_text(face="bold", size=14),
         axis.text.y = element_text(face="bold", size=14),
@@ -91,5 +91,5 @@ ggplot(wedd_int_pd_m, aes(e_IS)) +
 
 # Save results ----
 
-save(wedd_df_pd, wedd_int_pd,
-     file = "Results/interaction_estimation.rda")
+save(wedd_df_pd, wedd_int_pd_summary,
+     file = "Results/interaction_estimation_sim.rda")
