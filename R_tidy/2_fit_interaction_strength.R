@@ -50,4 +50,4 @@ IS_fit_sim <- bind_cols(aic.result) %>%
   dplyr::select(Model, df, AIC, deltaAIC)
 IS_fit_sim
 
-save(IS_fit_sim, file = "Manuscript/ModelFit_sim.rda")
+save(IS_fit_sim, file = "Results/ModelFit_sim.rda")
