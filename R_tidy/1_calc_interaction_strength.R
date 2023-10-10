@@ -59,7 +59,6 @@ weddell_dim_fill <- weddell_dim_fill %>%
 
 #write_csv(weddell_dim_fill, file = "Data/Wedd_int_complete.csv")
 
-
 # Estimation of interaction strength ----
 
 # Read the updated database
@@ -72,13 +71,34 @@ wedd_df_comp <- read.csv("Data/Wedd_int_complete.csv") %>%
 wedd_df_pd <- wedd_df_comp %>% 
   mutate(res.mass.mean.kg. = replace(res.mass.mean.kg., res.mass.mean.kg. < 0, 1.53e-16), res_den = -999)
 
+# When resource body mass is greater than consumer body mass we assumed that interaction intensity is
+# decoupled from resource mass and density, then we set res_mm and res_den to 1 
+# 
+wedd_df_pd_decoupled <- wedd_df_pd %>% 
+  mutate(res.mass.mean.kg. = case_when(res.mass.mean.kg. > con.mass.mean.kg. ~ 1,
+                                       .default = res.mass.mean.kg.),
+                                       res_den = case_when(res.mass.mean.kg. > con.mass.mean.kg. ~ 1,
+                                                           .default = res_den
+                             ))
+
 # Estimate interaction strength
-wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg., res_den, con.mass.mean.kg., interaction.dimensionality, nsims=1000)
+wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg., res_den, con.mass.mean.kg., interaction.dimensionality,nsims=1000)
 wedd_int_pd_summary <-  wedd_int_pd %>% group_by(con.taxonomy, res.taxonomy) %>% 
-  summarize(IS_mean=mean(qRC), xR_mean=mean(xR), alfa_mean=mean(alfa), IS_med = median(qRC), xR_med=median(xR), alfa_med=median(alfa)) 
+  summarize(IS_mean=mean(qRC), xR_mean=mean(xR), alfa_mean=mean(alfa), IS_med = median(qRC), xR_med=median(xR), alfa_med=median(alfa), IS_iqr =IQR(qRC),mR_med=median(mR) ) 
   
 # Explore distribution of interaction intensity (qRC)
-ggplot(wedd_int_pd_m, aes(IS_med)) + 
+ggplot(wedd_int_pd_summary, aes(IS_med)) + 
+  geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
+  scale_y_log10() +
+  labs(x = "Interaction strength (median)", y = "Frequency (log scale)") +
+  theme_classic() +
+  theme(axis.text.x = element_text(face="bold", size=14),
+        axis.text.y = element_text(face="bold", size=14),
+        axis.title.x = element_text(face="bold", size=18),
+        axis.title.y = element_text(face="bold", size=18))
+
+# Explore distribution of variability of interaction intensity (qRC)
+ggplot(wedd_int_pd_summary, aes(IS_iqr)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   scale_y_log10() +
   labs(x = "Interaction strength (median)", y = "Frequency (log scale)") +
