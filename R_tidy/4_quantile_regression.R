@@ -1,14 +1,13 @@
 #
 ## Quantile regressions for relationships btw interaction strength and spp properties
 ## Authors: Leonardo Saravia & Tomás Ignacio Marina
-## September 2022
+## September 2022-2023
 #
 
 ## To run the following code first run 'R/1_calc_interaction_strength.R' & 'R/3_species_w&uw_prop.R'
 
 
-# Load packages ----
-
+# Load packages -----------------------------------------------------------
 packages <- c("ggplot2", "dplyr", "lsmeans", "olsrr", "factoextra", "cluster")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
@@ -19,21 +18,16 @@ ipak <- function(pkg){
 ipak(packages)
 
 
-# Load data ----
-
+# Load data ---------------------------------------------------------------
 load("Results/net_&_spp_prop_sim.rda")
 
 
-# Distribution of species' interaction strength ----
-
+# Check cluster by IS ------------------------------------------------------
 # Distribution of log IS
-ggplot(IS_all_m, aes(x = log(IS_mean))) + geom_density() + theme_bw()
-ggplot(IS_all_m, aes(x = log(IS_mean))) + geom_histogram(bins=50) + theme_bw()
-
-
-# Check cluster by interaction strength ----
+ggplot(spp_all_prop, aes(x = log(IS_mean))) + geom_density() + theme_bw()
+ggplot(spp_all_prop, aes(x = log(IS_mean))) + geom_histogram(bins=50) + theme_bw()
 # Determine and visualize the optimal number of clusters using total within sum of square
-data.scaled <- scale(log(IS_all_m$IS_mean))
+data.scaled <- scale(log(spp_all_prop$IS_med))
 fviz_nbclust(data.scaled, kmeans, method = "wss")
 # Calculate gap statistic based on number of clusters
 gap_stat <- clusGap(data.scaled, FUN = kmeans, nstart = 25,
@@ -45,14 +39,9 @@ km <- kmeans(data.scaled, centers = 1, nstart = 25)
 # NO CLUSTERING FOUND! #
 
 
-# Linear Regression ----
-
+# Linear Regression -------------------------------------------------------
 ## Trophic level ----
-ggplot(spp_all_prop, aes(x=TL, y=log(qRC))) +
-  geom_point() +
-  geom_errorbar(aes(ymin = log(IS_low_ci), ymax = log(IS_high_ci)))
-
-cl_IS_TL <- ggplot(spp_all_prop, aes(x = TL, y = log(IS))) +
+cl_IS_TL <- ggplot(spp_all_prop, aes(x = TL, y = log(IS_mean))) +
   geom_point() +
   geom_smooth(method = "lm") +
   labs(x = "Trophic level", y = "log(Interaction Strength)") +
@@ -122,7 +111,6 @@ cl_IS_HAB <- ggplot(spp_all_prop, aes(x = Habitat, y = log(IS_mean))) +
 cl_IS_HAB
 
 
-# Save plots ----
-
+# Save plots --------------------------------------------------------------
 save(cl_IS_TL, cl_IS_DEG, cl_IS_TS, cl_IS_HAB,
-     file = "Results/single_plots_sep22.rda")
+     file = "Results/single_plots_sep23.rda")
