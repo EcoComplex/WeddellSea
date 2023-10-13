@@ -21,7 +21,20 @@ $$
 IS = \alpha X_R \frac{m_R}{m_C}\\
 \end{aligned}
 $$
-where $\alpha$ is the search rate, $X_R$ is the resource density, and $m_R$ and $m_C$ are the body mass for the resource and the consumer, respectively [@Pawar2012].
+where $\alpha$ is the search rate, $X_R$ is the resource density, and $m_R$ and $m_C$ are the body mass for the resource and the consumer, respectively [@Pawar2012]. We assume the case were resources are scarce because this resembles field conditions, figure 3 e & f and equation 3 from Pawar's paper.
+Then the search rate for 2D interactions (see main text) is calculated as
+
+$$\alpha = \alpha_{2D} m_C^{0.68}$$
+For 3D interactions is calculated as: 
+
+$$\alpha = \alpha_{3D} m_C^{1.05}$$
+where $\alpha_{2D}$ and $\alpha_{3D}$ are the intercepts for each interaction dimensionality.
+
+As the resource density $X_R$ is not known we estimated it according to the equation S18 and supplementary figures 2i & j (individuals/m2 - m3)
+
+$$X_R = X_0 m_R^{-p_x}$$
+
+were $p_x$ is -0.79 for 2D and -0.86 for 3D. 
 
 As unweighted properties we calculated degree, trophic level and trophic similarity.
 The degree $k$ is simply the total number of feeding links in which the species participates. It was calculated as:
