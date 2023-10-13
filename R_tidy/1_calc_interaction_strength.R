@@ -1,15 +1,14 @@
 #
 ## Estimate interaction strength using 'multiweb' package 0.5.20
 ## Authors: Leonardo Saravia & Tomás Ignacio Marina
-## September 2022
+## September 2022-2023
 #
 
 ## To run the following code first clone the GitHub repo https://github.com/EcoComplex/WeddellSea
 ## git clone https://github.com/EcoComplex/WeddellSea.git
 
 
-# Load packages ----
-
+# Load packages -----------------------------------------------------------
 packages <- c("dplyr", "readr", "multiweb", "ggplot2")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
@@ -20,8 +19,7 @@ ipak <- function(pkg){
 ipak(packages)
 
 
-# Load food web database ----
-
+# Load food web database --------------------------------------------------
 # Read and check data available on GATEWAy version 1.0
 # https://doi.org/10.25829/IDIV.283-3-756
 # Filter Weddell Sea food web database
@@ -31,8 +29,7 @@ wedd_df <-  ga %>%
   filter(grepl('Weddell', foodweb.name))
 
 
-# Complete missing interaction dimensionality ----
-
+# Complete missing interaction dimensionality -----------------------------
 # Following Pawar et al. 2012 (https://doi.org/10.1038/nature11131) criteria:
 # benthic resource (R) and benthic consumer (C) = 2D
 # benthic resource and pelagic consumer = 2D
@@ -56,11 +53,10 @@ weddell_dim_fill <- wedd_df %>%
 weddell_dim_fill <- weddell_dim_fill %>%
   select(con.taxonomy, res.taxonomy, con.mass.mean.g., res.mass.mean.g., complete.dim) %>% 
   rename(interaction.dimensionality = complete.dim)
-
 #write_csv(weddell_dim_fill, file = "Data/Wedd_int_complete.csv")
 
-# Estimation of interaction strength ----
 
+# Estimation of interaction strength (IS) --------------------------------------
 # Read the updated database
 # Convert g to kg (to follow Pawar et al. 2012 relationships)
 wedd_df_comp <- read.csv("Data/Wedd_int_complete.csv") %>% 
@@ -73,20 +69,19 @@ wedd_df_pd <- wedd_df_comp %>%
 
 # When resource body mass is greater than consumer body mass we assumed that interaction intensity is
 # decoupled from resource mass and density, then we set res_mm and res_den to 1 
-# 
 wedd_df_pd_decoupled <- wedd_df_pd %>% 
-  mutate(res.mass.mean.kg. = case_when(res.mass.mean.kg. > con.mass.mean.kg. ~ 1,
-                                       .default = res.mass.mean.kg.),
-                                       res_den = case_when(res.mass.mean.kg. > con.mass.mean.kg. ~ 1,
-                                                           .default = res_den
-                             ))
+  mutate(res.mass.mean.kg. = case_when(res.mass.mean.kg. > con.mass.mean.kg. ~ 1, .default = res.mass.mean.kg.),
+         res_den = case_when(res.mass.mean.kg. > con.mass.mean.kg. ~ 1, .default = res_den))
 
-# Estimate interaction strength
-wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg., res_den, con.mass.mean.kg., interaction.dimensionality,nsims=1000)
-wedd_int_pd_summary <-  wedd_int_pd %>% group_by(con.taxonomy, res.taxonomy) %>% 
-  summarize(IS_mean=mean(qRC), xR_mean=mean(xR), alfa_mean=mean(alfa), IS_med = median(qRC), xR_med=median(xR), alfa_med=median(alfa), IS_iqr =IQR(qRC),mR_med=median(mR) ) 
+# Estimate IS
+wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg., res_den, con.mass.mean.kg., 
+                                                    interaction.dimensionality, nsims=1000)
+wedd_int_pd_summary <- wedd_int_pd %>% group_by(con.taxonomy, res.taxonomy) %>% 
+  summarize(IS_mean=mean(qRC), xR_mean=mean(xR), alfa_mean=mean(alfa), IS_med=median(qRC), 
+            xR_med=median(xR), alfa_med=median(alfa), IS_iqr=IQR(qRC), mR_med=median(mR)) %>% 
+  ungroup()
   
-# Explore distribution of interaction intensity (qRC)
+# Explore distribution of IS
 ggplot(wedd_int_pd_summary, aes(IS_med)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   scale_y_log10() +
@@ -97,11 +92,11 @@ ggplot(wedd_int_pd_summary, aes(IS_med)) +
         axis.title.x = element_text(face="bold", size=18),
         axis.title.y = element_text(face="bold", size=18))
 
-# Explore distribution of variability of interaction intensity (qRC)
+# Explore distribution of variability of IS
 ggplot(wedd_int_pd_summary, aes(IS_iqr)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   scale_y_log10() +
-  labs(x = "Interaction strength (median)", y = "Frequency (log scale)") +
+  labs(x = "Interquartil of IS estimation", y = "Frequency (log scale)") +
   theme_classic() +
   theme(axis.text.x = element_text(face="bold", size=14),
         axis.text.y = element_text(face="bold", size=14),
@@ -109,7 +104,6 @@ ggplot(wedd_int_pd_summary, aes(IS_iqr)) +
         axis.title.y = element_text(face="bold", size=18))
 
 
-# Save results ----
-
+# Save results ------------------------------------------------------------
 save(wedd_df_pd, wedd_int_pd_summary,
      file = "Results/interaction_estimation_sim.rda")

@@ -1,12 +1,11 @@
 #
 ## Figures
 ## Authors: Leonardo Saravia & Tomás Ignacio Marina
-## September 2022
+## September 2022-2023
 #
 
 
-# Load packages ----
-
+# Load packages -----------------------------------------------------------
 packages <- c("ggplot2", "ggpubr", "multiweb", "igraph", "factoextra", "cluster")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
@@ -19,14 +18,13 @@ ipak(packages)
 
 # Load results ----
 
-load("Results/interaction_estimation.rda")
-load("Results/net_&_spp_prop.rda")
-load("Results/single_plots_sep22.rda")
-load("Results/QSS_summary_sep22.rda")
+load("Results/interaction_estimation_sim.rda")
+load("Results/net_&_spp_prop_sim.rda")
+load("Results/single_plots_sep23.rda")
+# load("Results/QSS_summary_sep22.rda")
 
 
-# Figures ----
-
+# Figures -----------------------------------------------------------------
 ## Figure 1 ----
 # Map of the Weddell Sea and Dronning Maud Land sector highlighting the high Antarctic shelf as a dashed-line contour.
 # Modified from www.soos.aq.
@@ -35,15 +33,13 @@ load("Results/QSS_summary_sep22.rda")
 # Scheme of a network showing the weighted and unweighted properties we used to characterize the species 
 # of the Weddell Sea food web
 
-
 ## Figure 3 ----
 # Frequency distribution of interaction strengths for the Weddell Sea food web (n = 490).
-
-# Interaction strength distribution
-Fig3_IntDist <- ggplot(wedd_int_pd, aes(qRC)) + 
+# IS distribution
+Fig3_IntDist <- ggplot(wedd_int_pd_summary, aes(IS_med)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   scale_y_log10() +
-  labs(x = "Interaction Strength", y = "Frequency (log scale)") +
+  labs(x = "Interaction Strength (median)", y = "Frequency (log scale)") +
   theme_classic() +
   theme(axis.text.x = element_text(face="bold", size=14),
         axis.text.y = element_text(face="bold", size=14),
@@ -51,7 +47,7 @@ Fig3_IntDist <- ggplot(wedd_int_pd, aes(qRC)) +
         axis.title.y = element_text(face="bold", size=18))
 Fig3_IntDist
 
-ggsave(filename = "Manuscript/Fig3_IntDist.png", plot = Fig3_IntDist,
+ggsave(filename = "Manuscript/Fig3_IntDist_sim.png", plot = Fig3_IntDist,
        width = 10, units = "in", dpi = 600, bg = "white")
 
 
@@ -70,7 +66,7 @@ Fig4_LinReg <- annotate_figure(Fig4_LinReg, left = text_grob("log(mean Interacti
                                                        vjust = 1, size = 18))
 Fig4_LinReg
 
-ggsave(filename = "Manuscript/Fig4_LinReg.png", plot = Fig4_LinReg,
+ggsave(filename = "Manuscript/Fig4_LinReg_sim.png", plot = Fig4_LinReg,
        width = 10, units = "in", dpi = 600, bg = "white")
 
 

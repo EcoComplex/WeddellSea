@@ -1,14 +1,13 @@
 #
 ## Fit distribution of interaction strength estimation
 ## Authors: Leonardo Saravia & Tomás Ignacio Marina
-## September 2022
+## September 2022-2023
 #
 
 ## To run the following code first run 'R/1_calc_interaction_strength.R'
 
 
-## Load packages ----
-
+# Load packages -----------------------------------------------------------
 packages <- c("univariateML", "fitdistrplus", "gamlss", "ggplot2", "Rmisc", "dplyr")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
@@ -19,13 +18,13 @@ ipak <- function(pkg){
 ipak(packages)
 
 
-## Load interaction strength estimation ----
-
+# Load IS estimation ------------------------------------------------------
 load("Results/interaction_estimation_sim.rda")
 
 
-## Distribution of interaction strength ----
-
+# Fit IS distribution -----------------------------------------------------
+# Need to run this before:
+# wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg., res_den, con.mass.mean.kg., interaction.dimensionality, nsims=1000)
 # Plot
 # ggplot(wedd_int_pd, aes(qRC)) + 
 #   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
@@ -38,10 +37,7 @@ load("Results/interaction_estimation_sim.rda")
 #         axis.title.y = element_text(face="bold", size=18))
 
 # Fit distribution using Maximum Likelihood
-# Need to run this before:
-# wedd_int_pd <- multiweb::calc_interaction_intensity(wedd_df_pd, res.mass.mean.kg., res_den, con.mass.mean.kg., interaction.dimensionality, nsims=1000)
-
-x <- wedd_int_pd$qRC
+x <- wedd_int_pd_summary$IS_med
 aic.result <- c(AIC(mlunif(x), mlexp(x), mlpower(x), mllnorm(x), mlnorm(x), mlgamma(x)))
 IS_fit_sim <- bind_cols(aic.result) %>% 
   mutate(Model = c("Uniform", "Exponential", "Power-law", "log-Normal", "Normal", "Gamma"),
@@ -50,4 +46,6 @@ IS_fit_sim <- bind_cols(aic.result) %>%
   dplyr::select(Model, df, AIC, deltaAIC)
 IS_fit_sim
 
+
+# Save results ------------------------------------------------------------
 save(IS_fit_sim, file = "Results/ModelFit_sim.rda")
