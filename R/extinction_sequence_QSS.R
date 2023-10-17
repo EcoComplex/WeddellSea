@@ -10,7 +10,11 @@ library(tictoc)
 ## Load data
 load("Results/net_&_spp_prop_sim.rda")
 load("Results/QSS_extinction_dif.rda")
+load("Results/QSS_extinction_seq_sim.rda")
 
+## Read full taxonomic Classification  
+
+classall_df <- readRDS("Data/WeddellSea_clasification.rds")
 
 ## Extinction sequences ----
 
@@ -115,7 +119,7 @@ save(order_deg, order_tl, order_is, QSS_extinction_deg, QSS_extinction_tl,
 
 (plot_comp_del_deg <- QSS_extinction_deg %>% 
     mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
-    ggplot(aes(x = Ext_prop, y = Components)) +
+    ggplot(aes(x = Ext_prop, y = QSS_median)) +
     geom_line() +
     labs(x = "Proportion of deleted spp", y = "Components", 
          title = "Extinction sequence: decreasing Degree"))
