@@ -16,7 +16,7 @@ ipak <- function(pkg){
 ipak(packages)
 
 
-# Load results ----
+# Load results ------------------------------------------------------------
 
 load("Results/interaction_estimation_sim.rda")
 load("Results/net_&_spp_prop_sim.rda")
