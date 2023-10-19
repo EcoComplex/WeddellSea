@@ -6,7 +6,7 @@
 
 
 # Load packages -----------------------------------------------------------
-packages <- c("igraph", "multiweb", "dplyr", "ggplot2", "tictoc")
+packages <- c("igraph", "multiweb", "dplyr", "ggplot2", "tictoc", "tidyverse")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -21,10 +21,6 @@ ipak(packages)
 load("Results/net_&_spp_prop_sim.rda")
 load("Results/QSS_extinction_seq_sim.rda")
 #load("Results/QSS_extinction_dif.rda")
-
-
-## Read full taxonomic Classification  
-classall_df <- readRDS("Data/WeddellSea_clasification.rds")
 
 
 # Extinction simulations ----------------------------------------------------
@@ -70,19 +66,94 @@ QSS_extinction_is <- multiweb::calc_QSS_extinctions_seq(g, is_seq, nsim = nsim, 
    labs(x = "Proportion of deleted spp", y = "QSS median") +
    theme_classic())
 # Connectance vs QSS
-(plot_Conn_QSS <- QSS_extinction_is %>% 
+(plot_Conn_QSS <- QSS_extinction_deg %>% 
     mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
     ggplot(aes(x = Connectance, y = QSS_median)) +
     geom_line() +
     theme_classic())
 
+(plot_Conn_QSS <- QSS_extinction_deg %>% 
+    mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
+    ggplot(aes(x = Ext_prop, y = QSS_median)) +
+    geom_line() +
+    theme_classic())
+
+(plot_Conn_QSS <- QSS_extinction_is %>% 
+    mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
+    ggplot(aes(x = Ext_prop, y = QSS_median)) +
+    geom_line() +
+    theme_classic())
+
+(plot_Conn_QSS <- QSS_extinction_tl %>% 
+    mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
+    ggplot(aes(x = Ext_prop, y = QSS_median)) +
+    geom_line() +
+    theme_classic())
+plotly::ggplotly(plot_Conn_QSS)
+
+#
+# Extinction by group porifera and ascidians -----------------------------------------------------
+
+
+## Read full taxonomic Classification  
+classall_df <- readRDS("Data/WeddellSea_clasification.rds")
+
+bygroup <- classall_df %>% filter(phylum == "Porifera" | class =="Ascidiacea") %>% select(Taxon) %>% deframe()
+
+# Simulation
+nsim <- 100
+QSS_extinction_grp <- multiweb::calc_QSS_extinctions_seq(g, bygroup, nsim = nsim, ncores = 8, istrength = TRUE)
+
+(plot_Conn_QSS <- QSS_extinction_grp %>% 
+    mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
+    ggplot(aes(x = Ext_prop, y = QSS_median)) +
+    geom_line() + geom_smooth(method=lm) +
+    theme_classic())
+plotly::ggplotly(plot_Conn_QSS)
+
+#
+
+# Extinction by group Mammals and birds -----------------------------------
+
+
+bygroup <- classall_df %>% filter(class == "Aves" | class =="Mammalia") %>% dplyr::select(Taxon) %>% deframe()
+
+# Simulation
+nsim <- 100
+QSS_extinction_grp_am <- multiweb::calc_QSS_extinctions_seq(g, bygroup, nsim = nsim, ncores = 8, istrength = TRUE)
+
+(plot_Conn_QSS <- QSS_extinction_grp_am %>% 
+    mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
+    ggplot(aes(x = Ext_prop, y = QSS_median)) +
+    geom_line() + geom_smooth(method=lm) +
+    theme_classic())
+plotly::ggplotly(plot_Conn_QSS)
+
+# Extinction by group Myctopids and Euphasids -----------------------------------
+
+
+bygroup <- classall_df %>% filter(family == "Myctophidae" | family =="Euphausiidae") %>% dplyr::select(Taxon) %>% deframe()
+
+# Simulation
+nsim <- 100
+QSS_extinction_grp_me <- multiweb::calc_QSS_extinctions_seq(g, bygroup, nsim = nsim, ncores = 8, istrength = TRUE)
+
+(plot_Conn_QSS <- QSS_extinction_grp_me %>% 
+    mutate(Network_prop = Size/490, Ext_prop = (490-Size)/490) %>% 
+    ggplot(aes(x = Ext_prop, y = QSS_median)) +
+    geom_line() + geom_smooth(method=lm) +
+    theme_classic())
+plotly::ggplotly(plot_Conn_QSS)
+
+
 
 ## Save data ----
 
-save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
-     QSS_extinction_is, QSS_extinction_tl, QSS_extinction_deg, 
-     file = "Results/QSS_extinction_dif.rda")
+# save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
+#      QSS_extinction_is, QSS_extinction_tl, QSS_extinction_deg, 
+#      file = "Results/QSS_extinction_dif.rda")
 
 save(order_deg, order_tl, order_is, QSS_extinction_deg, QSS_extinction_tl, QSS_extinction_is,
+     QSS_extinction_grp,QSS_extinction_grp_am,QSS_extinction_grp_me,
      file = "Results/QSS_extinction_seq_sim.rda")
 
