@@ -145,7 +145,11 @@ QSS_extinction_grp_me <- multiweb::calc_QSS_extinctions_seq(g, bygroup, nsim = n
     theme_classic())
 plotly::ggplotly(plot_Conn_QSS)
 
-
+#
+## Extinction total group ----
+#
+nsim <- 1000
+grp_dif <- calc_QSS_extinction_dif_grp(g, bygroup,nsim,ncores=8,istrength=TRUE) %>% mutate(deleted_grp="Mycto - Eupha")
 
 ## Save data ----
 
