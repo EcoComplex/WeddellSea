@@ -98,9 +98,12 @@ plotly::ggplotly(plot_Conn_QSS)
 ## Read full taxonomic Classification  
 classall_df <- readRDS("Data/WeddellSea_clasification.rds")
 
-bygroup <- classall_df %>% filter(phylum == "Porifera" | class =="Ascidiacea") %>% select(Taxon) %>% deframe()
+# Extinction by group Porifera and Ascideas -----------------------------------
+
+bygroup <- classall_df %>% filter(phylum == "Porifera" | class =="Ascidiacea") %>% dplyr::select(Taxon) %>% deframe()
 
 # Simulation
+
 nsim <- 100
 QSS_extinction_grp <- multiweb::calc_QSS_extinctions_seq(g, bygroup, nsim = nsim, ncores = 8, istrength = TRUE)
 
@@ -112,6 +115,10 @@ QSS_extinction_grp <- multiweb::calc_QSS_extinctions_seq(g, bygroup, nsim = nsim
 plotly::ggplotly(plot_Conn_QSS)
 
 #
+nsim <- 1000
+grp_dif <- data.frame()
+grp_dif <- bind_rows(grp_dif,
+                     calc_QSS_extinction_dif_grp(g, bygroup,nsim,ncores=8,istrength=TRUE) %>% mutate(deleted_grp="Pori - Asci"))
 
 # Extinction by group Mammals and birds -----------------------------------
 
@@ -128,6 +135,10 @@ QSS_extinction_grp_am <- multiweb::calc_QSS_extinctions_seq(g, bygroup, nsim = n
     geom_line() + geom_smooth(method=lm) +
     theme_classic())
 plotly::ggplotly(plot_Conn_QSS)
+
+nsim <- 1000
+grp_dif <- bind_rows(grp_dif,
+                     calc_QSS_extinction_dif_grp(g, bygroup,nsim,ncores=8,istrength=TRUE) %>% mutate(deleted_grp="Mamm - Birds"))
 
 # Extinction by group Myctopids and Euphasids -----------------------------------
 
@@ -149,8 +160,9 @@ plotly::ggplotly(plot_Conn_QSS)
 ## Extinction total group ----
 #
 nsim <- 1000
-grp_dif <- calc_QSS_extinction_dif_grp(g, bygroup,nsim,ncores=8,istrength=TRUE) %>% mutate(deleted_grp="Mycto - Eupha")
-
+grp_dif <- bind_rows(grp_dif,
+                     calc_QSS_extinction_dif_grp(g, bygroup,nsim,ncores=8,istrength=TRUE) %>% mutate(deleted_grp="Mycto - Eupha"))
+QSS_extinction_grp_dif <- grp_dif
 ## Save data ----
 
 # save(QSS_null_comp,QSS_null_comp_raw,QSS_extinction_dif,
@@ -158,6 +170,6 @@ grp_dif <- calc_QSS_extinction_dif_grp(g, bygroup,nsim,ncores=8,istrength=TRUE) 
 #      file = "Results/QSS_extinction_dif.rda")
 
 save(order_deg, order_tl, order_is, QSS_extinction_deg, QSS_extinction_tl, QSS_extinction_is,
-     QSS_extinction_grp,QSS_extinction_grp_am,QSS_extinction_grp_me,
+     QSS_extinction_grp,QSS_extinction_grp_am,QSS_extinction_grp_me,QSS_extinction_grp_dif,
      file = "Results/QSS_extinction_seq_sim.rda")
 
