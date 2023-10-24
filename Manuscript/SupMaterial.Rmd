@@ -23,13 +23,13 @@ $$
 IS = \alpha X_R \frac{m_R}{m_C}\\
 \end{aligned}
 $$
-where $\alpha$ is the search rate, $X_R$ is the resource density, and $m_R$ and $m_C$ are the body mass for the resource and the consumer, respectively [@Pawar2012]. We assume the case were resources are scarce because this resembles field conditions, figure 3 e & f and equation 3 from Pawar's paper.
-Then the search rate for 2D interactions (see main text) is calculated as
+where $\alpha$ is the search rate, $X_R$ is the resource density, and $m_R$ and $m_C$ are the body mass for the resource and the consumer, respectively [@Pawar2012]. We assume the case were resources are scarce because this resembles field conditions (figure 3 e & f and equation 3 from @Pawar2012).
+Then the search rate for 2D interactions (see main text) is calculated as:
 
-$$\alpha = \alpha_{2D} m_C^{0.68}$$
-For 3D interactions is calculated as: 
+$$\alpha = \alpha_{2D} m_C^{0.68 \pm 0.12}$$
+For 3D interactions it is calculated as: 
 
-$$\alpha = \alpha_{3D} m_C^{1.05}$$
+$$\alpha = \alpha_{3D} m_C^{1.05 \pm 0.08}$$
 
 where $\alpha_{2D}=10^{-3.08}$ and $\alpha_{3D}=10^{-1.77}$ are the intercepts for each interaction dimensionality.
 
@@ -37,7 +37,7 @@ As the resource density $X_R$ is not known we estimated it according to the equa
 
 $$X_R = X_0 m_R^{-p_x}$$
 
-were $p_x$ is -0.79 for 2D and -0.86 for 3D. 
+were $p_x$ is -0.79±0.08 for 2D and -0.86±0.07 for 3D. 
 
 ### Unweighted properties
 
