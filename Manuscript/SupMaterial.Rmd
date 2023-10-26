@@ -33,11 +33,21 @@ $$\alpha = \alpha_{3D} m_C^{1.05 \pm 0.08}$$
 
 where $\alpha_{2D}=10^{-3.08}$ and $\alpha_{3D}=10^{-1.77}$ are the intercepts for each interaction dimensionality.
 
-As the resource density $X_R$ is not known we estimated it according to the equation S18 and supplementary figures 2i & j (individuals/m2 - m3)
+As the resource density $X_R$ is not known for our study case we estimated it according to the equation S18 and supplementary figures 2i & j (individuals/m2 - m3) from @Pawar2012:
 
 $$X_R = X_0 m_R^{-p_x}$$
 
-were $p_x$ is -0.79±0.08 for 2D and -0.86±0.07 for 3D. 
+where $p_x$ is -0.79±0.08 for 2D and -0.86±0.07 for 3D.
+
+### Interaction Strength variability
+
+With the aim of taking into account the variability of the exponents in $\alpha$ and $X_R$ estimations, we run 1000 simulations for calculating each pairwise predator-prey interaction. Due to the skewness nature of the estimated interaction distributions, we considered the median as the summarizing value. Such a skewness is shown in the following histogram for the interquartile range:
+
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Frequency distribution of interquartile range for the estimated interaction strengths of the Weddell Sea food web. Total number of interactions = 16041."}
+knitr::include_graphics("Supp1_IQR.png")
+
+```
+
 
 ### Unweighted properties
 
@@ -98,14 +108,14 @@ knitr::kable(all_data %>% dplyr::select(TrophicSpecies, QSS_all, QSS_ext, difQSS
 
 ## Interaction strength distribution
 
-The statistical distribution that best fitted the empirical interaction strength distribution was a ‘gamma’ due to the skew towards weaker interactions. Gamma parameters are: shape = 2.699e-1 and scale = 2.008e+4. Table 3 shows the results for the six candidate models used.
+The statistical distribution that best fitted the empirical interaction strength distribution was a ‘log-Normal’ due to the skew towards weaker interactions. Table 3 shows the results for the six candidate models used.
 
 ```{r echo=FALSE, results='asis'}
 library(knitr)
 library(dplyr)
 
-load("../Manuscript/ModelFit.rda")
-knitr::kable(IS_fit %>% arrange(., deltaAIC), digits = c(0,0,2,2), col.names = c("Model", "df", "AIC", "deltaAIC"), caption = "Model comparison for the distribution of interaction strengths of the Weddell Sea food web. Order by best fit. References: df = degrees of freedom, AIC = Akaike Information Criterion, deltaAIC = difference with best fit. Log-Normal is the best model.")
+load("../Results/ModelFit_sim.rda")
+knitr::kable(IS_fit_sim %>% arrange(., deltaAIC), digits = c(0,0,2,2), col.names = c("Model", "df", "AIC", "deltaAIC"), caption = "Model comparison for the distribution of interaction strengths of the Weddell Sea food web. Order by best fit. References: df = degrees of freedom, AIC = Akaike Information Criterion, deltaAIC = difference with best fit. Log-Normal is the best model.")
 
 ```
 

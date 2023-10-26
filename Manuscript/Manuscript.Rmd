@@ -169,8 +169,8 @@ knitr::include_graphics("Fig.2_ToyFoodWeb.jpg")
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Frequency distribution of interaction strengths for the Weddell Sea food web. Total number of interactions = 16041. The distribution was best fitted to a ‘gamma’ model."}
-knitr::include_graphics("Fig3_IntDist.png")
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "interquartile range for the estimated interaction strengths of the Weddell Sea food web. Total number of interactions = 16041."}
+knitr::include_graphics("Supp1_IQR.png")
 ```
 
 \clearpage

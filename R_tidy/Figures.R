@@ -101,7 +101,7 @@ ggsave(filename = "Manuscript/Fig.5_QSSDif.png", plot = Fig.5_QSSDif,
        width = 10, units = "in", dpi = 600, bg = "white")
 
 
-# Appendix ----
+# Appendix ----------------------------------------------------------------
 ## App 1 ----
 # Graphic representation of the Weddell Sea food web. Species (nodes) are arranged vertically and colored by trophic level.
 # The diameter of the node indicates the total number of interactions. Predator-prey interactions are represented by the arrows,
@@ -117,20 +117,19 @@ App1_FWplot <- plot_troph_level(g, vertexSizeFactor = V(g)$Deg*0.04, edge.width 
 # no applicable method for 'grid.draw' applied to an object of class "c('double', 'numeric')"
 
 
-## App 2
-# A. Frequency distribution for the mean interaction strength of the species of Weddell Sea food web. 
-# B. Visualization of the optimal number of clusters applying the Gap statistic.
+# Supplementary Material --------------------------------------------------
+## Supp 1 ----
+# Frequency distribution of interquartile range for the estimated interaction strengths (n=16041) of the Weddell Sea food web.
 
-IS_dist <- ggplot(all_data, aes(x = log(IS_mean))) + 
-  geom_density(alpha=0.3) + 
-  #scale_color_manual(values = c("#541352FF", "#ffcf20FF"), labels = c("High IS", "Low IS")) +
-  #scale_fill_manual(values = c("#541352FF", "#ffcf20FF")) +
-  labs(x = "log(mean Interaction Strength)", y = "Frequency") +
-  theme_bw() +
-  theme(axis.title = element_text(size = 18, face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15))
-IS_dist <- IS_dist + guides(fill = "none")
+IQR <- ggplot(wedd_int_pd_summary, aes(IS_iqr)) + 
+  geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
+  scale_y_log10() +
+  labs(x = "Interquartil of IS estimation", y = "Frequency (log scale)") +
+  theme_classic() +
+  theme(axis.text.x = element_text(face="bold", size=14),
+        axis.text.y = element_text(face="bold", size=14),
+        axis.title.x = element_text(face="bold", size=18),
+        axis.title.y = element_text(face="bold", size=18))
 
-ggsave(filename = "Manuscript/App2_meanIS.png", plot = IS_dist,
+ggsave(filename = "Manuscript/Supp1_IQR.png", plot = IQR,
        width = 10, units = "in", dpi = 600, bg = "white")
