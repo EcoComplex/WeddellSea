@@ -35,19 +35,19 @@ sp_list <- sp_list$TrophicSpecies
 nsim <- 1000
 print(paste("QSS 1 sp extinction  - Nsim = ", nsim))
 tic("QSS dif")
-QSS_extinction_dif <- calc_QSS_extinction_dif(g, sp_list, ncores=4, nsim=nsim, istrength = TRUE)
+QSS_extinction_dif <- calc_QSS_extinction_dif(g, sp_list, ncores=48, nsim=nsim, istrength = TRUE)
 toc()
 
 QSS_extinction_dif <- as_tibble(QSS_extinction_dif)
 
 ## Save simulations ----
-save(QSS_extinction_dif,
-     file = "Results/QSS_extinction_dif.rda")
+# save(QSS_extinction_dif,
+#      file = "Results/QSS_extinction_dif.rda")
 
 
 # QSS vs spp prop ----
 # Load needed data
-load("Results/QSS_extinction_dif.rda")
+#load("Results/QSS_extinction_dif.rda")
 
 all_data <- QSS_extinction_dif %>% 
   rename(TrophicSpecies = Deleted) %>% 
