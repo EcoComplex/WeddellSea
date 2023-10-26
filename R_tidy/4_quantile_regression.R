@@ -22,7 +22,7 @@ ipak(packages)
 load("Results/net_&_spp_prop_sim.rda")
 
 
-# Check cluster by IS ------------------------------------------------------
+# Check cluster by IS -----------------------------------------------------
 # Distribution of log IS
 ggplot(spp_all_prop, aes(x = log(IS_mean))) + geom_density() + theme_bw()
 ggplot(spp_all_prop, aes(x = log(IS_mean))) + geom_histogram(bins=50) + theme_bw()

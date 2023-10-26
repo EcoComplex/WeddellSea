@@ -8,8 +8,8 @@
 # 'R/3_species_w&uw_prop.R' & 'R/4_quantile_regression.R'
 
 
-# Load packages ----
 
+# Load packages -----------------------------------------------------------
 packages <- c("igraph", "multiweb", "dplyr", "tictoc", "ggplot2")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
@@ -20,36 +20,32 @@ ipak <- function(pkg){
 ipak(packages)
 
 
-# Load data ----
+# Load data ---------------------------------------------------------------
+load("Results/net_&_spp_prop_sim.rda")
 
-load("Results/net_&_spp_prop.rda")
 
-
-# Run extinction simulations & estimate QSS ----
-
+# Extinction simulations & QSS --------------------------------------------
 # List of species to delete
 sp_list <- arrange(spp_all_prop, desc(IS_mean)) %>% 
   dplyr::select(TrophicSpecies, IS_mean)
 sp_list <- sp_list$TrophicSpecies
 
 # Be aware that this simulation might take days
-# To reduce the time you can configure the number of simulations 'nsim'
+# To reduce the time you may configure the number of simulations 'nsim'
 nsim <- 1000
-print(paste("QSS 1 sp extinction  - Nsim = ",nsim))
+print(paste("QSS 1 sp extinction  - Nsim = ", nsim))
 tic("QSS dif")
-QSS_extinction_dif <- calc_QSS_extinction_dif(g, sp_list, ncores=48, nsim=nsim, istrength = TRUE)
+QSS_extinction_dif <- calc_QSS_extinction_dif(g, sp_list, ncores=4, nsim=nsim, istrength = TRUE)
 toc()
 
 QSS_extinction_dif <- as_tibble(QSS_extinction_dif)
 
 ## Save simulations ----
-
 save(QSS_extinction_dif,
      file = "Results/QSS_extinction_dif.rda")
 
 
 # QSS vs spp prop ----
-
 # Load needed data
 load("Results/QSS_extinction_dif.rda")
 
@@ -137,7 +133,7 @@ HAB_QSS <- ggplot(all_data, aes(x = Habitat, y = difQSS)) +
 HAB_QSS
 
 
-# Save results ----
+# Save results ------------------------------------------------------------
 
 save(all_data, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS,
      file = "Results/QSS_summary_sep22.rda")
