@@ -71,6 +71,18 @@ cl_IS_DEG <- ggplot(spp_all_prop, aes(x = TotalDegree, y = log(IS_mean))) +
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12))
 cl_IS_DEG
+# Interactive plot
+g_int <- ggplot(spp_all_prop, aes(x = TotalDegree, y = log(IS_mean), text=TrophicSpecies)) + 
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_x_log10() +
+  labs(x = "Degree (log scale)", y = "log(mean Interaction Strength)") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
+ggplotly(g_int, tooltip=c("x", "y", "text"))
 
 # Test regression significance
 DEG_lm <- lm(log(IS_mean) ~ TotalDegree, data = spp_all_prop)
