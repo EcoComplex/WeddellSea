@@ -10,7 +10,9 @@
 
 
 # Load packages -----------------------------------------------------------
-packages <- c("igraph", "multiweb", "dplyr", "tictoc", "ggplot2")
+
+
+packages <- c("igraph", "dplyr", "tictoc", "ggplot2", "devtools")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -19,10 +21,13 @@ ipak <- function(pkg){
 }
 ipak(packages)
 
+if( require(multiweb) == FALSE) {
+  devtools::install_github("lsaravia/multiweb")
+  require(multiweb)
+}
 
 # Load data ---------------------------------------------------------------
 load("Results/net_&_spp_prop_sim.rda")
-
 
 # Extinction simulations & QSS --------------------------------------------
 # List of species to delete
@@ -48,6 +53,7 @@ QSS_extinction_dif <- as_tibble(QSS_extinction_dif)
 # QSS vs spp prop ----
 # Load needed data
 #load("Results/QSS_extinction_dif.rda")
+load("Results/QSS_summary_oct30.rda")
 
 all_data <- QSS_extinction_dif %>% 
   rename(TrophicSpecies = Deleted) %>% 
@@ -55,15 +61,16 @@ all_data <- QSS_extinction_dif %>%
 
 # Species w/ QSS significant impact
 QSS_sig <- all_data %>% 
-  dplyr::filter(Ad_pvalue < 0.01) %>% 
-  dplyr::select(TrophicSpecies, IS_mean, TL, TotalDegree, meanTrophicSimil, Habitat, difQSS, Ad_pvalue) %>% 
+  dplyr::filter(Ad_pvalue < 0.05) %>% mutate(difQSSrelat = difQSS/QSS_all) %>%
+  dplyr::select(TrophicSpecies, IS_mean, TL, TotalDegree, meanTrophicSimil, Habitat, difQSS,difQSSrelat, Ad_pvalue) %>% 
   arrange(., Ad_pvalue)
 
 
 ## By mean interaction strength ----
-IS_QSS <- ggplot(all_data, aes(x = log(IS_mean), y = difQSS)) +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
+IS_QSS <- ggplot(all_data, aes(x = log(IS_mean), y = difQSS,text=TrophicSpecies)) +
+  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) + scale_color_viridis_d(direction=-1) +
+#  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
+#  geom_point(aes(color = Ad_pvalue)) + scale_color_viridis_c() +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   labs(color = "Stability impact", x = "log(mean Interaction Strength)", y = "Stability difference") +
   theme_bw() +
@@ -73,12 +80,15 @@ IS_QSS <- ggplot(all_data, aes(x = log(IS_mean), y = difQSS)) +
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12))
 IS_QSS
+ggplotly(IS_QSS, tooltip=c("x", "y", "text"))
 
 ## By trophic level ----
-TL_QSS <- ggplot(all_data, aes(x = TL, y = difQSS)) +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
+TL_QSS <- ggplot(all_data, aes(x = TL, y = difQSS,text=TrophicSpecies)) +
+#  geom_point(aes(color = ifelse(Ad_pvalue < 0.05, "Significant", "Non-significant"))) +
+  geom_point(aes(color = Ad_pvalue)) + scale_color_viridis_c() +
+#  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
+  
   labs(shape = "Stability impact", x = "Trophic level", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
@@ -87,11 +97,14 @@ TL_QSS <- ggplot(all_data, aes(x = TL, y = difQSS)) +
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12))
 TL_QSS
+require(plotly)
+ggplotly(TL_QSS, tooltip=c("x", "y", "text"))
 
 ## By degree ----
-DEG_QSS <- ggplot(all_data, aes(x = TotalDegree, y = difQSS)) +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
+DEG_QSS <- ggplot(all_data, aes(x = TotalDegree, y = difQSS,text=TrophicSpecies)) +
+#  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+#  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
+  geom_point(aes(color = Ad_pvalue)) + scale_color_viridis_c() +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   scale_x_log10() +
   labs(color = "Stability impact", x = "Degree (log scale)", y = "Stability difference") +
@@ -102,6 +115,7 @@ DEG_QSS <- ggplot(all_data, aes(x = TotalDegree, y = difQSS)) +
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12))
 DEG_QSS
+ggplotly(DEG_QSS, tooltip=c("x", "y", "text"))
 
 ## By trophic similarity ----
 TS_QSS <- ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
@@ -120,7 +134,7 @@ TS_QSS
 ## By habitat ----
 HAB_QSS <- ggplot(all_data, aes(x = Habitat, y = difQSS)) +
   geom_violin(fill = "grey90") +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  geom_jitter(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant")),width = 0.05,alpha=0.5) +
   scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   labs(color = "Stability impact", x = "Habitat", y = "Stability difference") +
@@ -135,5 +149,8 @@ HAB_QSS
 
 # Save results ------------------------------------------------------------
 
+#save(all_data, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS,
+#     file = "Results/QSS_summary_sep22.rda")
+
 save(all_data, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS,
-     file = "Results/QSS_summary_sep22.rda")
+          file = "Results/QSS_summary_oct30.rda")

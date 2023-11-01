@@ -105,3 +105,9 @@ We find that intervality and broad degree distributions tend to stabilize food w
 @Barabas2017
 
 hese self-effects are known as 'self-regulation' when an increase in a species’ abundance decreases its per-capita growth rate. Sources of self-regulation include intraspecific interference, cannibalism, time-scale separation between consumers and their resources, spatial heterogeneity and nonlinear functional responses coupling predators with their prey. The influence of self-regulation on network stability is understudied and in addition, the empirical estimation of self-effects poses a formidable challenge. Here, we show that empirical food web structures cannot be stabilized unless the majority of species exhibit substantially strong self-regulation.
+
+
+---
+@Beauchesne2021
+
+It must be recognised that if density dependence, that is, the negative effect of a population density on its own per capita growth rate—is an important driving factor for the dynamics of a population, or if trophic interaction strength is weak, then indirect effects may become weaker or even trivial (Abrams et al., 1996); one could then simply consider the direct effects of stressors. Still, there is ample empirical evidence for trophically mediated indirect effects and for the propagation of the effects of stressors through food webs (e.g. O’Gorman & Emmerson, 2009; Estes et al., 2011; O’Gorman et al., 2012). Furthermore, we would also expect indirect effects of the same direction and type if density dependence was weaker or stronger. Given the aim of our study, that is, to understand the propagation of stressors through species interactions, we thus intentionally focus on instances where density dependence is not the regulating factor for population and community dynamics.
