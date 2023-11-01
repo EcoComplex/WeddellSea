@@ -38,7 +38,7 @@ sp_list <- sp_list$TrophicSpecies
 # Be aware that this simulation might take days
 # To reduce the time you may configure the number of simulations 'nsim'
 nsim <- 1000
-print(paste("QSS 1 sp extinction  - Nsim = ", nsim))
+print(paste("QSS 1 sp extinction SIM 3 - Nsim = ", nsim))
 tic("QSS dif")
 QSS_extinction_dif <- calc_QSS_extinction_dif(g, sp_list, ncores=48, nsim=nsim, istrength = TRUE)
 toc()
@@ -51,19 +51,31 @@ QSS_extinction_dif <- as_tibble(QSS_extinction_dif)
 
 
 # QSS vs spp prop ----
-# Load needed data
-#load("Results/QSS_extinction_dif.rda")
+# Load previous results 
 load("Results/QSS_summary_oct30.rda")
 
-all_data <- QSS_extinction_dif %>% 
+# bind with new simulation
+#
+all_data_new_sim <- QSS_extinction_dif %>% 
   rename(TrophicSpecies = Deleted) %>% 
-  left_join(spp_all_prop)
+  left_join(spp_all_prop) %>% mutate(sim=3)       # Simulation number 3
+
+all_data <- bind_rows(all_data, all_data_new_sim)
+
+# Check the species that appear in all simulations and filter by difQSS 1% 
+QSS_sig <- all_data %>%
+  group_by(TrophicSpecies) %>%
+  filter(n() > 1 & all(difQSS > 0) | all(difQSS < 0)) %>% slice_max(order_by = abs(difQSS), n = 1) %>%
+  ungroup() %>% mutate(difQSSrelat = difQSS/QSS_all) %>% filter(abs(difQSSrelat) > 0.01) %>%
+  dplyr::select(TrophicSpecies, IS_mean, TL, TotalDegree, meanTrophicSimil, Habitat, difQSS,difQSSrelat, Ad_pvalue) %>% 
+  arrange(., difQSSrelat)  
+
 
 # Species w/ QSS significant impact
-QSS_sig <- all_data %>% 
-  dplyr::filter(Ad_pvalue < 0.05) %>% mutate(difQSSrelat = difQSS/QSS_all) %>%
-  dplyr::select(TrophicSpecies, IS_mean, TL, TotalDegree, meanTrophicSimil, Habitat, difQSS,difQSSrelat, Ad_pvalue) %>% 
-  arrange(., Ad_pvalue)
+# QSS_sig <- all_data %>% 
+#   dplyr::filter(Ad_pvalue < 0.05) %>% mutate(difQSSrelat = difQSS/QSS_all) %>%
+#   dplyr::select(TrophicSpecies, IS_mean, TL, TotalDegree, meanTrophicSimil, Habitat, difQSS,difQSSrelat, Ad_pvalue) %>% 
+#   arrange(., Ad_pvalue)
 
 
 ## By mean interaction strength ----
@@ -153,4 +165,4 @@ HAB_QSS
 #     file = "Results/QSS_summary_sep22.rda")
 
 save(all_data, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS,
-          file = "Results/QSS_summary_oct30.rda")
+          file = "Results/QSS_summary_oct31.rda")
