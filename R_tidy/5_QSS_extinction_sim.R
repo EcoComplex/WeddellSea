@@ -37,8 +37,8 @@ sp_list <- sp_list$TrophicSpecies
 
 # Be aware that this simulation might take days
 # To reduce the time you may configure the number of simulations 'nsim'
-nsim <- 1000
-print(paste("QSS 1 sp extinction SIM 3 - Nsim = ", nsim))
+nsim <- 10
+print(paste("QSS 1 sp extinction NEW version - Nsim = ", nsim))
 tic("QSS dif")
 QSS_extinction_dif <- calc_QSS_extinction_dif(g, sp_list, ncores=48, nsim=nsim, istrength = TRUE)
 toc()
@@ -46,41 +46,100 @@ toc()
 QSS_extinction_dif <- as_tibble(QSS_extinction_dif)
 
 ## Save simulations ----
-# save(QSS_extinction_dif,
-#      file = "Results/QSS_extinction_dif.rda")
+save(QSS_extinction_dif,
+      file = "Results/QSS_extinction_dif.rda")
 
 
 # QSS vs spp prop ----
 # Load previous results 
-load("Results/QSS_summary_oct30.rda")
-
-# bind with new simulation
 #
-all_data_new_sim <- QSS_extinction_dif %>% 
-  rename(TrophicSpecies = Deleted) %>% 
-  left_join(spp_all_prop) %>% mutate(sim=3)       # Simulation number 3
+# Need to change this --- no exec in the server
+#
+if(FALSE){
 
-all_data <- bind_rows(all_data, all_data_new_sim)
+load("Results/QSS_extinction_dif.rda")
+
+# * We need to find the important species
+  
+# * Then summarize the medians
+  
+# Calculate also the diffQSS from the median QSS_all
+#
+all_data_new <- QSS_extinction_dif %>% 
+  rename(TrophicSpecies = Deleted) %>% group_by(TrophicSpecies) %>% 
+  mutate(difQSSm = median(QSS_all) - QSS_ext, difQSSrelat = difQSSm/QSS_all) # %>% left_join(spp_all_prop) 
+
+# Calculate the proportion of >0 or <0
+#
+props <- all_data_new %>%
+  group_by(TrophicSpecies) %>%
+  summarize(
+    prop_difQSS_pos = mean(difQSS > 0),
+    prop_difQSS_neg = mean(difQSS < 0),
+    prop_difQSSm_pos = mean(difQSSm > 0), 
+    prop_difQSSm_neg = mean(difQSSm < 0),
+  ) 
+
+all_data_new <- all_data_new %>%
+  left_join(props)
+
+# Define a function to estimate the mode from a density object
+estimate_mode <- function(x) {
+  dens <- density(x)
+  x_value <- dens$x[which.max(dens$y)]
+  return(x_value)
+}
+
+# Calculate the mode for each TrophicSpecies
+mode_values <- all_data_new %>%
+  group_by(TrophicSpecies) %>%
+  summarize(
+    mode_difQSS = estimate_mode(difQSSrelat),
+    median_difQSS = median(difQSSrelat)
+  )
+
+# Join mode values back to the main data frame
+all_data_new <- all_data_new %>%
+  left_join(mode_values, by = "TrophicSpecies")
+
+
+# Plot with the proportion
+#
+all_data_new %>%
+  filter(TrophicSpecies %in% c("Orcinus orca","Hydrurga leptonyx","Euphausia superba","Balaenoptera acutorostrata")) %>% 
+  ggplot(aes(difQSSrelat,fill=TrophicSpecies)) + geom_density( alpha=0.3 ) + theme_bw() + geom_vline(xintercept = 0, linetype="dotted") +
+  facet_wrap(~TrophicSpecies, ncol = 2) + scale_fill_viridis_d(guide=FALSE) +
+  geom_text(aes(x = 0, y = 0.5, label = paste0( prop_difQSSm_neg*100,"%")), 
+            position = position_nudge(x = -0.2)) +
+  geom_text(aes(x = 0, y = 0.5, label = paste0( prop_difQSSm_pos*100,"%")),
+            position = position_nudge(x = 0.2)) + 
+  labs(x = "Stability difference %", y = "Density") +
+  geom_vline( aes(xintercept = mode_difQSS), color = "blue", linetype = "longdash") +
+  geom_vline( aes(xintercept = median_difQSS), color = "brown", linetype = "dashed")
+
 
 # Check the species that appear in all simulations and filter by difQSS 1% 
-QSS_sig <- all_data %>%
-  group_by(TrophicSpecies) %>%
-  filter(n() > 1 & all(difQSS > 0) | all(difQSS < 0)) %>% slice_max(order_by = abs(difQSS), n = 1) %>%
-  ungroup() %>% mutate(difQSSrelat = difQSS/QSS_all) %>% filter(abs(difQSSrelat) > 0.01) %>%
-  dplyr::select(TrophicSpecies, IS_mean, TL, TotalDegree, meanTrophicSimil, Habitat, difQSS,difQSSrelat, Ad_pvalue) %>% 
-  arrange(., difQSSrelat)  
+QSS_sig <- props %>%
+  filter(prop_difQSSm_pos > 0.55 | prop_difQSSm_neg > 0.55) 
+
+all_data_TS <- all_data_new %>% group_by(TrophicSpecies) %>% 
+  summarize(
+    prop_difQSS_pos = mean(difQSS > 0),
+    prop_difQSS_neg = mean(difQSS < 0),
+    difQSS=mean(difQSS),
+    difQSSrelat=mean(difQSSrelat)
+    ) %>% left_join(spp_all_prop) 
 
 
 # Species w/ QSS significant impact
-# QSS_sig <- all_data %>% 
-#   dplyr::filter(Ad_pvalue < 0.05) %>% mutate(difQSSrelat = difQSS/QSS_all) %>%
-#   dplyr::select(TrophicSpecies, IS_mean, TL, TotalDegree, meanTrophicSimil, Habitat, difQSS,difQSSrelat, Ad_pvalue) %>% 
-#   arrange(., Ad_pvalue)
-
+# 
+all_dif <- all_data_TS %>%
+  left_join(QSS_sig %>% select(TrophicSpecies,prop_difQSS_pos) ,by="TrophicSpecies") %>% 
+  mutate(coding=ifelse(!is.na(prop_difQSS_pos.y),ifelse(difQSSrelat>0,1,1),0))
 
 ## By mean interaction strength ----
-IS_QSS <- ggplot(all_data, aes(x = log(IS_mean), y = difQSS,text=TrophicSpecies)) +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) + scale_color_viridis_d(direction=-1) +
+IS_QSS <- ggplot(all_dif, aes(x = log(IS_mean), y = difQSSrelat,text=TrophicSpecies)) +
+  geom_point(aes(color = coding),alpha=0.8) + scale_color_viridis_c(direction=-1) +
 #  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
 #  geom_point(aes(color = Ad_pvalue)) + scale_color_viridis_c() +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
@@ -95,9 +154,9 @@ IS_QSS
 ggplotly(IS_QSS, tooltip=c("x", "y", "text"))
 
 ## By trophic level ----
-TL_QSS <- ggplot(all_data, aes(x = TL, y = difQSS,text=TrophicSpecies)) +
+TL_QSS <- ggplot(all_dif, aes(x = TL, y = difQSSrelat,text=TrophicSpecies)) +
+  geom_point(aes(color = coding),alpha=0.6) + scale_color_viridis_c(direction=-1) +
 #  geom_point(aes(color = ifelse(Ad_pvalue < 0.05, "Significant", "Non-significant"))) +
-  geom_point(aes(color = Ad_pvalue)) + scale_color_viridis_c() +
 #  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   
@@ -113,10 +172,10 @@ require(plotly)
 ggplotly(TL_QSS, tooltip=c("x", "y", "text"))
 
 ## By degree ----
-DEG_QSS <- ggplot(all_data, aes(x = TotalDegree, y = difQSS,text=TrophicSpecies)) +
+DEG_QSS <- ggplot(all_dif, aes(x = TotalDegree, y = difQSSrelat,text=TrophicSpecies)) +
 #  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
 #  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
-  geom_point(aes(color = Ad_pvalue)) + scale_color_viridis_c() +
+  geom_point(aes(color = coding),alpha=0.6) + scale_color_viridis_c(direction=-1) +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   scale_x_log10() +
   labs(color = "Stability impact", x = "Degree (log scale)", y = "Stability difference") +
@@ -130,9 +189,10 @@ DEG_QSS
 ggplotly(DEG_QSS, tooltip=c("x", "y", "text"))
 
 ## By trophic similarity ----
-TS_QSS <- ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
+TS_QSS <- ggplot(all_dif, aes(x = meanTrophicSimil, y = difQSSrelat)) +
+  geom_point(aes(color = coding),alpha=0.6) + scale_color_viridis_c(direction=-1) +
+#  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+#  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   labs(color = "Stability impact", x = "Trophic similarity", y = "Stability difference") +
   theme_bw() +
@@ -144,10 +204,11 @@ TS_QSS <- ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS)) +
 TS_QSS
 
 ## By habitat ----
-HAB_QSS <- ggplot(all_data, aes(x = Habitat, y = difQSS)) +
+HAB_QSS <- ggplot(all_dif, aes(x = Habitat, y = difQSSrelat)) +
   geom_violin(fill = "grey90") +
-  geom_jitter(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant")),width = 0.05,alpha=0.5) +
-  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
+  geom_jitter(aes(color = coding),width=0.05,alpha=0.6) + scale_color_viridis_c(direction=-1) +
+#  geom_jitter(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant")),width = 0.05,alpha=0.5) +
+#  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
   labs(color = "Stability impact", x = "Habitat", y = "Stability difference") +
   theme_bw() +
@@ -166,3 +227,4 @@ HAB_QSS
 
 save(all_data, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS,
           file = "Results/QSS_summary_oct31.rda")
+}
