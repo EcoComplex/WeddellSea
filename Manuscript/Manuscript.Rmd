@@ -189,45 +189,38 @@ knitr::include_graphics("Fig.5_QSSDif.png")
 
 ```{=tex}
 \begin{table}[t]
-\caption{Properties of the species that when become extinct generated a significant impact on the stability of the Weddell Sea food web, ordered by significance (Anderson-Darling p-value). References: meanIS = mean interaction strength, TL = trophic level, Deg = degree, TS = trophic similarity, StabDif = stability difference, ADvalue = Anderson-Darling p-value.}
-\begin{tabular}{l c c c c c c c}
+\caption{Properties of the species that when become extinct generated a significant impact on the stability of the Weddell Sea food web, ordered by interaction strength. References: medianIS = median interaction strength, TL = trophic level, Deg = degree, TS = trophic similarity, StabDif = stability difference.}
+\begin{tabular}{l c c c c c c}
 \tophline
 
-\textbf{Species} & \textbf{meanIS} & \textbf{TL} & \textbf{Deg} & \textbf{TS} & \textbf{Habitat} & \textbf{StabDif} & \textbf{ADvalue}\\
+\textbf{Species} & \textbf{medianIS} & \textbf{TL} & \textbf{Deg} & \textbf{TS} & \textbf{Habitat} & \textbf{StabDif} \\
 \middlehline
-Orcinus orca & 1.83e-4 & 5.03 & 26 & 0.037 & Benthopelagic & 4.67e-5 & 2.28e-41 \\
+Mesonychoteuthis hamiltoni & 1.967e-4 & 4.411 & 29 & 0.02781 & Pelagic & 0.02653 \\
 \middlehline
-Macrourus holotrachys & 8.30e-5 & 4.70 & 85 & 0.112 & Benthopelagic & 3.55e-5 & 2.73e-23 \\
+Orcinus orca & 1.557e-4 & 5.027 & 26 & 0.03712 & Benthopelagic & 0.02329 \\
 \middlehline
-Pagetopsis macropterus & 7.08e-5 & 4.64 & 76 & 0.113 & Demersal & -1.80e-5 & 2.38e-12 \\
+Mirounga leonina & 1.314e-4 & 4.868 & 56 & 0.07999 & Land-based & 0.03129 \\
 \middlehline
-Abyssorchomene nodimanus & 2.56e-5 & 4.21 & 137 & 0.130 & Benthopelagic & 2.30e-5 & 8.52e-10 \\
+Hydrurga leptonyx & 1.162e-4 & 4.716 & 67 & 0.09429 & Land-based & 0.05824 \\
 \middlehline
-Dissostichus mawsoni & 7.82e-5 & 4.12 & 87 & 0.126 & Pelagic & 2.17e-5 & 1.57e-9 \\
+Leptonychotes weddelli & 1.137e-4 & 4.859 & 59 & 0.08398 & Land-based & 0.02043 \\
 \middlehline
-Macrourus whitsoni & 7.14e-5 & 4.55 & 92 & 0.124 & Benthopelagic & 2.12e-5 & 3.30e-8 \\
+Ommatophoca rossii & 1.125e-4 & 4.868 & 56 & 0.07999 & Land-based & 0.02366 \\
 \middlehline
-Hydrurga leptonyx & 1.03e-4 & 4.72 & 67 & 0.094 & Land-based & 2.04e-5 & 9.66e-6 \\
+Arctocephalus gazella & 1.021e-4 & 4.666 & 61 & 0.09325 & Land-based & 0.03229 \\
 \middlehline
-Mesonychoteuthis hamiltoni & 1.80e-4 & 4.41 & 29 & 0.028 & Pelagic & 1.82e-5 & 4.59e-5 \\
+Notothenia marmorata & 8.36e-5 & 4.092 & 44 & 0.09066 & Demersal & 0.01840 \\
 \middlehline
-Champsocephalus gunnari & 7.62e-5 & 3.72 & 46 & 0.086 & Pelagic & 1.83e-5 & 6.79e-5 \\
+Macrourus holotrachys & 8.35e-5 & 4.705 & 85 & 0.11151 & Benthopelagic & 0.02399 \\
 \middlehline
-Notothenia marmorata & 8.27e-5 & 4.09 & 44 & 0.091 & Demersal & 1.60e-5 & 1.23e-4 \\
+Macrourus whitsoni & 7.95e-5 & 4.546 & 92 & 0.12373 & Benthopelagic & 0.02235 \\
 \middlehline
-Arctocephalus gazella & 9.28e-5 & 4.67 & 61 & 0.093 & Land-based & 1.17e-5 & 2.09e-4 \\
+Balaenoptera acutorostrata & 5.18e-5 & 3.738 & 29 & 0.07843 & Pelagic & -0.02649 \\
 \middlehline
-Trematomus pennellii & 3.04e-5 & 4.04 & 192 & 0.158 & Demersal & 1.44e-5 & 1.00e-3 \\
-\middlehline
-Mirounga leonina & 1.20e-4 & 4.87 & 56 & 0.080 & Land-based & 1.41e-5 & 1.28e-3 \\
-\middlehline
-Notothenia coriiceps & 4.94e-5 & 4.27 & 130 & 0.126 & Demersal & 1.44e-5 & 1.66e-3 \\
-\middlehline
-Maxilliphimedia longipes & 2.21e-6 & 3.26 & 60 & 0.136 & Benthopelagic & -4.46e-6 & 9.74e-3 \\
-
+Aporocidaris milleri & 2.8e-6 & 3.312 & 60 & 0.07457 & Benthopelagic & -0.02137 \\
 \bottomhline
 \end{tabular}
-\end{table}
+\end{table} 
 ```
 
 \appendixfigures

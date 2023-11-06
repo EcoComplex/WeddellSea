@@ -144,3 +144,10 @@ ggsave(filename = "Manuscript/Supp2_QSS_distr.png",
 # median in brown dash
 # zero black dotted
 #
+
+# Table 1
+#
+names(all_dif)
+knitr::kable(all_dif %>% filter(coding==1) %>% dplyr::select(TrophicSpecies, IS_median,IS_Q1,IS_Q3, TotalDegree, TL, meanTrophicSimil,median_difQSS) %>% arrange(., desc(IS_median)))
+
+                                               
