@@ -139,7 +139,7 @@ all_dif <- all_data_TS %>%
 
 ## By mean interaction strength ----
 IS_QSS <- ggplot(all_dif, aes(x = log(IS_mean), y = difQSSrelat,text=TrophicSpecies)) +
-  geom_point(aes(color = coding),alpha=0.8) + scale_color_viridis_c(direction=-1) +
+  geom_point(aes(color = coding),alpha=0.6) + scale_color_viridis_c(direction=-1) +
 #  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
 #  geom_point(aes(color = Ad_pvalue)) + scale_color_viridis_c() +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
