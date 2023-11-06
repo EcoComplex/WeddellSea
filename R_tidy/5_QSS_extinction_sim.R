@@ -105,7 +105,7 @@ all_data_new <- all_data_new %>%
 
 # Plot with the proportion
 #
-all_data_new %>%
+QSS_distr <- all_data_new %>%
   filter(TrophicSpecies %in% c("Orcinus orca","Hydrurga leptonyx","Euphausia superba","Balaenoptera acutorostrata")) %>% 
   ggplot(aes(difQSSrelat,fill=TrophicSpecies)) + geom_density( alpha=0.3 ) + theme_bw() + geom_vline(xintercept = 0, linetype="dotted") +
   facet_wrap(~TrophicSpecies, ncol = 2) + scale_fill_viridis_d(guide=FALSE) +
@@ -117,6 +117,7 @@ all_data_new %>%
   geom_vline( aes(xintercept = mode_difQSS), color = "blue", linetype = "longdash") +
   geom_vline( aes(xintercept = median_difQSS), color = "brown", linetype = "dashed")
 
+QSS_distr
 
 # Check the species that appear in all simulations and filter by difQSS 1% 
 QSS_sig <- props %>%
@@ -126,7 +127,11 @@ all_data_TS <- all_data_new %>% group_by(TrophicSpecies) %>%
   summarize(
     prop_difQSS_pos = mean(difQSS > 0),
     prop_difQSS_neg = mean(difQSS < 0),
+    prop_difQSSm_pos = mean(difQSSm > 0), 
+    prop_difQSSm_neg = mean(difQSSm < 0),
     difQSS=mean(difQSS),
+    mode_difQSS = estimate_mode(difQSSrelat),
+    median_difQSS = median(difQSSrelat),
     difQSSrelat=mean(difQSSrelat)
     ) %>% left_join(spp_all_prop) 
 
@@ -204,9 +209,11 @@ TS_QSS <- ggplot(all_dif, aes(x = meanTrophicSimil, y = difQSSrelat)) +
 TS_QSS
 
 ## By habitat ----
-HAB_QSS <- ggplot(all_dif, aes(x = Habitat, y = difQSSrelat)) +
+(HAB_QSS <- ggplot(all_dif, aes(x = Habitat, y = difQSSrelat)) +
   geom_violin(fill = "grey90") +
-  geom_jitter(aes(color = coding),width=0.05,alpha=0.6) + scale_color_viridis_c(direction=-1) +
+  geom_jitter(aes(color = coding),width=0.08,alpha=0.6) + 
+   geom_point(data=all_dif %>% filter(Habitat=="Benthic" & coding==1),alpha=0.6) +
+   scale_color_viridis_c(direction=-1) +
 #  geom_jitter(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant")),width = 0.05,alpha=0.5) +
 #  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
@@ -217,7 +224,7 @@ HAB_QSS <- ggplot(all_dif, aes(x = Habitat, y = difQSSrelat)) +
         axis.title = element_text(size = 12, face = "bold"),
         axis.text.x = element_text(size = 6),
         axis.text.y = element_text(size = 12))
-HAB_QSS
+) 
 
 
 # Save results ------------------------------------------------------------
@@ -225,6 +232,6 @@ HAB_QSS
 #save(all_data, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS,
 #     file = "Results/QSS_summary_sep22.rda")
 
-save(all_data, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS,
+save(all_data,all_dif, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS, QSS_distr,
           file = "Results/QSS_summary_oct31.rda")
 }

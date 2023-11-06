@@ -76,10 +76,12 @@ ggsave(filename = "Manuscript/Fig4_LinReg_sim.png", plot = Fig4_LinReg,
 # Each point represents a species colored by group ('High IS' or 'Low IS'). Shape indicates the impact on the QSS; 
 # if significant the extinction of that species altered the stability of the food web.
 
-legend <- ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS))+
-  geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
-  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
-  #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
+legend <- ggplot(all_dif, aes(x = meanTrophicSimil, y = difQSSrelat)) +
+  geom_point(aes(color = ifelse(coding>0, "> 0.55", "< 0.55"))) + 
+  scale_color_viridis_d(direction=-1) +
+  # ggplot(all_data, aes(x = meanTrophicSimil, y = difQSS))+
+  # geom_point(aes(color = ifelse(Ad_pvalue < 0.01, "Significant", "Non-significant"))) +
+  # scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
   lims(x = c(0,0), y = c(0,0)) +
   theme_void() +
   theme(legend.position = c(0.5,0.5),
@@ -133,3 +135,12 @@ IQR <- ggplot(wedd_int_pd_summary, aes(IS_iqr)) +
 
 ggsave(filename = "Manuscript/Supp1_IQR.png", plot = IQR,
        width = 10, units = "in", dpi = 600, bg = "white")
+
+QSS_distr
+ggsave(filename = "Manuscript/Supp2_QSS_distr.png", 
+       width = 10, units = "in", dpi = 600, bg = "white")
+#
+# mode in blue longdash
+# median in brown dash
+# zero black dotted
+#
