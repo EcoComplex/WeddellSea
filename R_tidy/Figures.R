@@ -62,7 +62,7 @@ Fig4_LinReg <- ggarrange(cl_IS_TL + rremove("ylab"), cl_IS_DEG + rremove("ylab")
                       common.legend = TRUE, legend = "bottom",
                       labels = c("A", "B", "C", "D"),
                       ncol=2, nrow=2)
-Fig4_LinReg <- annotate_figure(Fig4_LinReg, left = text_grob("log(mean Interaction Strength)", rot = 90, 
+Fig4_LinReg <- annotate_figure(Fig4_LinReg, left = text_grob("log(median Interaction Strength)", rot = 90, 
                                                        vjust = 1, size = 18))
 Fig4_LinReg
 
@@ -153,4 +153,4 @@ knitr::kable(all_dif %>% dplyr::filter(coding==1) %>%
 # Summary of maximum eigenvalue (QSS) distribution of differences before and after performing extinction simulations in the Weddell Sea food web. Ordered by decreasing proportion of positive differences. Prop dif QSS +  = Proportion of positive differences, Prop dif QSS - = Proportion of negative differences, median difQSS relat = median of relative QSS differences.
 knitr::kable(all_dif %>% 
                dplyr::select(TrophicSpecies, prop_difQSSm_pos, prop_difQSSm_neg, median_difQSS) %>% 
-               arrange(., prop_difQSSm_neg))
+               dplyr::arrange(., prop_difQSSm_neg))

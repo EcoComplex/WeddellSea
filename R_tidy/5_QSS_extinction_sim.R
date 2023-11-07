@@ -113,9 +113,14 @@ QSS_distr <- all_data_new %>%
             position = position_nudge(x = -0.2)) +
   geom_text(aes(x = 0, y = 0.5, label = paste0( prop_difQSSm_pos*100,"%")),
             position = position_nudge(x = 0.2)) + 
-  labs(x = "Stability difference %", y = "Density") +
   geom_vline( aes(xintercept = mode_difQSS), color = "blue", linetype = "longdash") +
-  geom_vline( aes(xintercept = median_difQSS), color = "brown", linetype = "dashed")
+  geom_vline( aes(xintercept = median_difQSS), color = "brown", linetype = "dashed") +
+  labs(x = "Stability difference %", y = "Density") +
+  theme_classic() +
+  theme(axis.text.x = element_text(face="bold", size=14),
+        axis.text.y = element_text(face="bold", size=14),
+        axis.title.x = element_text(face="bold", size=18),
+        axis.title.y = element_text(face="bold", size=18))
 
 QSS_distr
 
@@ -142,13 +147,13 @@ all_dif <- all_data_TS %>%
   left_join(QSS_sig %>% select(TrophicSpecies,prop_difQSS_pos) ,by="TrophicSpecies") %>% 
   mutate(coding=ifelse(!is.na(prop_difQSS_pos.y),ifelse(difQSSrelat>0,1,1),0))
 
-## By mean interaction strength ----
-IS_QSS <- ggplot(all_dif, aes(x = log(IS_mean), y = difQSSrelat,text=TrophicSpecies)) +
+## By median interaction strength ----
+IS_QSS <- ggplot(all_dif, aes(x = log(IS_median), y = difQSSrelat,text=TrophicSpecies)) +
   geom_point(aes(color = coding),alpha=0.6) + scale_color_viridis_c(direction=-1) +
 #  scale_color_manual(values = c("black", "red"), labels = c("Non-significant", "Significant")) +
 #  geom_point(aes(color = Ad_pvalue)) + scale_color_viridis_c() +
   #scale_shape_manual(values = c(19, 2), labels = c("Non-significant", "Significant")) +
-  labs(color = "Stability impact", x = "log(mean Interaction Strength)", y = "Stability difference") +
+  labs(color = "Stability impact", x = "log(median Interaction Strength)", y = "Stability difference") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         legend.position = "none",
@@ -156,7 +161,8 @@ IS_QSS <- ggplot(all_dif, aes(x = log(IS_mean), y = difQSSrelat,text=TrophicSpec
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12))
 IS_QSS
-ggplotly(IS_QSS, tooltip=c("x", "y", "text"))
+#require(plotly)
+#ggplotly(IS_QSS, tooltip=c("x", "y", "text"))
 
 ## By trophic level ----
 TL_QSS <- ggplot(all_dif, aes(x = TL, y = difQSSrelat,text=TrophicSpecies)) +
@@ -173,8 +179,7 @@ TL_QSS <- ggplot(all_dif, aes(x = TL, y = difQSSrelat,text=TrophicSpecies)) +
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12))
 TL_QSS
-require(plotly)
-ggplotly(TL_QSS, tooltip=c("x", "y", "text"))
+#ggplotly(TL_QSS, tooltip=c("x", "y", "text"))
 
 ## By degree ----
 DEG_QSS <- ggplot(all_dif, aes(x = TotalDegree, y = difQSSrelat,text=TrophicSpecies)) +
@@ -191,7 +196,7 @@ DEG_QSS <- ggplot(all_dif, aes(x = TotalDegree, y = difQSSrelat,text=TrophicSpec
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12))
 DEG_QSS
-ggplotly(DEG_QSS, tooltip=c("x", "y", "text"))
+#ggplotly(DEG_QSS, tooltip=c("x", "y", "text"))
 
 ## By trophic similarity ----
 TS_QSS <- ggplot(all_dif, aes(x = meanTrophicSimil, y = difQSSrelat)) +
@@ -224,7 +229,7 @@ TS_QSS
         axis.title = element_text(size = 12, face = "bold"),
         axis.text.x = element_text(size = 6),
         axis.text.y = element_text(size = 12))
-) 
+)
 
 
 # Save results ------------------------------------------------------------
@@ -232,7 +237,7 @@ TS_QSS
 #save(all_data, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS,
 #     file = "Results/QSS_summary_sep22.rda")
 
-save(all_data,all_dif, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS, QSS_distr,
+save(all_data_new, all_dif, IS_QSS, TL_QSS, DEG_QSS, TS_QSS, HAB_QSS, QSS_distr,
           file = "Results/QSS_summary_oct31.rda")
 }
 
