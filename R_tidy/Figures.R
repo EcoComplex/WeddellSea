@@ -120,9 +120,9 @@ App1_FWplot <- plot_troph_level(g, vertexSizeFactor = V(g)$Deg*0.04, edge.width 
 
 
 # Supplementary Material --------------------------------------------------
-## Supp 1 ----
-# Frequency distribution of interquartile range for the estimated interaction strengths (n=16041) of the Weddell Sea food web.
 
+## Figure S1 ----
+# Frequency distribution of interquartile range for the estimated interaction strengths (n=16041) of the Weddell Sea food web
 IQR <- ggplot(wedd_int_pd_summary, aes(IS_iqr)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   scale_y_log10() +
@@ -136,18 +136,21 @@ IQR <- ggplot(wedd_int_pd_summary, aes(IS_iqr)) +
 ggsave(filename = "Manuscript/Supp1_IQR.png", plot = IQR,
        width = 10, units = "in", dpi = 600, bg = "white")
 
+## Figure S2 ----
+# Distribution of relative stability differences (between the whole network and the network minus one species) when the species in question are removed from the Weddell Sea food web. Central tendencies are shown: median in brown dash, mode in blue longdash.
 QSS_distr
 ggsave(filename = "Manuscript/Supp2_QSS_distr.png", 
        width = 10, units = "in", dpi = 600, bg = "white")
-#
-# mode in blue longdash
-# median in brown dash
-# zero black dotted
-#
 
-# Table 1
-#
+## Table S1 ----
+# Weighted (interaction strength) and unweighted properties of the trophic species of Weddell Sea food web. Ordered by decreasing median interaction strength. median IS = median interaction strength, Q1 IS = First quartil of the IS distribution, Q3 IS = Third quartil of the IS distribution, TL = trophic level, TS = trophic similarity.
 names(all_dif)
-knitr::kable(all_dif %>% filter(coding==1) %>% dplyr::select(TrophicSpecies, IS_median,IS_Q1,IS_Q3, TotalDegree, TL, meanTrophicSimil,median_difQSS) %>% arrange(., desc(IS_median)))
+knitr::kable(all_dif %>% dplyr::filter(coding==1) %>% 
+               dplyr::select(TrophicSpecies, IS_median, IS_Q1, IS_Q3, TotalDegree, TL, meanTrophicSimil, median_difQSS) %>% 
+               dplyr::arrange(., desc(IS_median)))
 
-                                               
+## Table S2 ----
+# Summary of maximum eigenvalue (QSS) distribution of differences before and after performing extinction simulations in the Weddell Sea food web. Ordered by decreasing proportion of positive differences. Prop dif QSS +  = Proportion of positive differences, Prop dif QSS - = Proportion of negative differences, median difQSS relat = median of relative QSS differences.
+knitr::kable(all_dif %>% 
+               dplyr::select(TrophicSpecies, prop_difQSSm_pos, prop_difQSSm_neg, median_difQSS) %>% 
+               arrange(., prop_difQSSm_neg))
