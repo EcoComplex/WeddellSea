@@ -175,13 +175,13 @@ knitr::include_graphics("Supp1_IQR.png")
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (mean Interaction Strength) and unweighted properties including habitat. Linear regressions are shown between log(mean interaction strength) and trophic level (A), degree (B) and trophic similarity (C). Linear regressions for trophic level ($y = 1.12x - 15.29, R^2 = 0.43, p-value < 2e-16$), degree ($y = 0.006x - 12.77, R^2 = 0.03, p-value = 4.06e-5$) and trophic similarity ($y = -1.46x - 12.18, R^2 = -0.0004, p-value = 0.36$)."}
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (median Interaction Strength) and unweighted properties including habitat. Linear regressions are shown between log(median interaction strength) and trophic level (A), degree (B) and trophic similarity (C). Linear regressions for trophic level ($y = 1.12x - 15.29, R^2 = 0.43, p-value < 2e-16$), degree ($y = 0.006x - 12.77, R^2 = 0.03, p-value = 4.06e-5$) and trophic similarity ($y = -1.46x - 12.18, R^2 = -0.0004, p-value = 0.36$)."}
 knitr::include_graphics("Fig4_LinReg.png")
 ```
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Stability  difference (mean maximum eingenvalue) between the whole Weddell Sea food web (n = 490) and the food web minus one species (n = 489) for weighted (interaction strength) and unweighted species properties, and habitat. Point color indicates the impact on the stability; if significant the extinction of that species altered the stability of the food web."}
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Stability  difference (median maximum eingenvalue) between the whole Weddell Sea food web (n = 490) and the food web minus one species (n = 489) for weighted (interaction strength) and unweighted species properties, and habitat. Point color indicates the impact on the stability; if substantial (> 0.55 relative difference) the extinction of that species altered the stability of the food web."}
 knitr::include_graphics("Fig.5_QSSDif.png")
 ```
 
@@ -189,35 +189,35 @@ knitr::include_graphics("Fig.5_QSSDif.png")
 
 ```{=tex}
 \begin{table}[t]
-\caption{Properties of the species that when become extinct generated a significant impact on the stability of the Weddell Sea food web, ordered by interaction strength. References: medianIS = median interaction strength, TL = trophic level, Deg = degree, TS = trophic similarity, StabDif = stability difference.}
-\begin{tabular}{l c c c c c c}
+\caption{Properties for the species with highest impact on the food web stability. Summary of maximum eigenvalue (QSS) distribution of differences before and after performing extinction simulations in the Weddell Sea food web. Ordered by decreasing proportion of positive differences. References: medianIS = median interaction strength, TL = trophic level, Deg = degree, TS = trophic similarity, Prop dif QSS + = Proportion of positive differences, Prop dif QSS - = Proportion of negative differences.}
+\begin{tabular}{l c c c c c c c}
 \tophline
 
-\textbf{Species} & \textbf{medianIS} & \textbf{TL} & \textbf{Deg} & \textbf{TS} & \textbf{Habitat} & \textbf{StabDif} \\
+\textbf{Species} & \textbf{medianIS} & \textbf{TL} & \textbf{Deg} & \textbf{TS} & \textbf{Habitat} & \textbf{Prop dif QSS +} & \textbf{Prop dif QSS -} \\
 \middlehline
-Mesonychoteuthis hamiltoni & 1.967e-4 & 4.411 & 29 & 0.02781 & Pelagic & 0.02653 \\
+Hydrurga leptonyx & 1.162399e-04 & 4.716 & 67 & 0.09428900 & Land-based & 0.651 & 0.349 \\
 \middlehline
-Orcinus orca & 1.557e-4 & 5.027 & 26 & 0.03712 & Benthopelagic & 0.02329 \\
+Arctocephalus gazella & 1.021457e-04 & 4.666 & 61 & 0.09325095 & Land-based & 0.613 & 0.387 \\
 \middlehline
-Mirounga leonina & 1.314e-4 & 4.868 & 56 & 0.07999 & Land-based & 0.03129 \\
+Mirounga leonina & 1.314364e-04 & 4.868 & 56 & 0.07998706 & Land-based & 0.581 & 0.419 \\
 \middlehline
-Hydrurga leptonyx & 1.162e-4 & 4.716 & 67 & 0.09429 & Land-based & 0.05824 \\
+Mesonychoteuthis hamiltoni & 1.966995e-04 & 4.411 & 29 & 0.02781001 & Pelagic & 0.573 & 0.427 \\
 \middlehline
-Leptonychotes weddelli & 1.137e-4 & 4.859 & 59 & 0.08398 & Land-based & 0.02043 \\
+Orcinus orca & 1.557436e-04 & 5.027 & 26 & 0.03712293 & Benthopelagic & 0.570 & 0.430 \\
 \middlehline
-Ommatophoca rossii & 1.125e-4 & 4.868 & 56 & 0.07999 & Land-based & 0.02366 \\
+Macrourus holotrachys & 8.350777e-05 & 4.705 & 85 & 0.11150715 & Benthopelagic & 0.568 & 0.432 \\
 \middlehline
-Arctocephalus gazella & 1.021e-4 & 4.666 & 61 & 0.09325 & Land-based & 0.03229 \\
+Notothenia marmorata & 8.357614e-05 & 4.092 & 44 & 0.09065823 & Demersal & 0.563 & 0.437 \\
 \middlehline
-Notothenia marmorata & 8.36e-5 & 4.092 & 44 & 0.09066 & Demersal & 0.01840 \\
+Macrourus whitsoni & 7.945909e-05 & 4.546 & 92 & 0.12372962 & Benthopelagic & 0.558 & 0.442 \\
 \middlehline
-Macrourus holotrachys & 8.35e-5 & 4.705 & 85 & 0.11151 & Benthopelagic & 0.02399 \\
+Ommatophoca rossii & 1.124936e-04 & 4.868 & 56 & 0.07998706 & Land-based & 0.558 & 0.442 \\
 \middlehline
-Macrourus whitsoni & 7.95e-5 & 4.546 & 92 & 0.12373 & Benthopelagic & 0.02235 \\
+Leptonychotes weddelli & 1.137129e-04 & 4.859 & 59 & 0.08397729 & Land-based & 0.551 & 0.449 \\
 \middlehline
-Balaenoptera acutorostrata & 5.18e-5 & 3.738 & 29 & 0.07843 & Pelagic & -0.02649 \\
+Aporocidaris milleri & 2.762191e-06 & 3.312 & 60 & 0.07457218 & Benthic & 0.447 & 0.553 \\
 \middlehline
-Aporocidaris milleri & 2.8e-6 & 3.312 & 60 & 0.07457 & Benthopelagic & -0.02137 \\
+Balaenoptera acutorostrata & 5.181120e-05 & 3.738 & 29 & 0.07843173 & Benthopelagic & 0.423 & 0.577 \\
 \bottomhline
 \end{tabular}
 \end{table} 
