@@ -84,7 +84,7 @@ library(knitr)
 library(dplyr)
 
 load("../Results/QSS_summary_oct31.rda")
-knitr::kable(all_dif %>% dplyr::select(TrophicSpecies, IS_median, IS_Q1, IS_Q3, TotalDegree, TL, meanTrophicSimil) %>% arrange(., desc(IS_median)), digits = c(0,7,7,7,0,2,3), col.names = c("Species","median IS","Q1 IS", "Q3 IS", "Degree", "TL", "TS"), caption = "Weighted (interaction strength) and unweighted properties of the trophic species of Weddell Sea food web. Ordered by decreasing median interaction strength. median IS = median interaction strength, Q1 IS = First quartil of the IS distribution, Q3 IS = Third quartil of the IS distribution, TL = trophic level, TS = trophic similarity.")
+knitr::kable(all_dif %>% dplyr::select(TrophicSpecies, IS_median, IS_Q1, IS_Q3, TotalDegree, TL, meanTrophicSimil) %>% arrange(., desc(IS_median)) %>%  mutate(across(c(IS_median, IS_Q1, IS_Q3), ~as.character(signif(., 7)))), digits = c(0,7,7,7,0,2,3), col.names = c("Species","median IS","Q1 IS", "Q3 IS", "Degree", "TL", "TS"), caption = "Weighted (interaction strength) and unweighted properties of the trophic species of Weddell Sea food web. Ordered by decreasing median interaction strength. median IS = median interaction strength, Q1 IS = First quartil of the IS distribution, Q3 IS = Third quartil of the IS distribution, TL = trophic level, TS = trophic similarity.")
 
 ```
 
