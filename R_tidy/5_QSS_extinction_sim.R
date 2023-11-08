@@ -144,8 +144,11 @@ all_data_TS <- all_data_new %>% group_by(TrophicSpecies) %>%
 # Species w/ QSS significant impact
 # 
 all_dif <- all_data_TS %>%
-  left_join(QSS_sig %>% select(TrophicSpecies,prop_difQSS_pos) ,by="TrophicSpecies") %>% 
-  mutate(coding=ifelse(!is.na(prop_difQSS_pos.y),ifelse(difQSSrelat>0,1,1),0))
+  left_join(QSS_sig %>% select(TrophicSpecies, prop_difQSS_pos), by="TrophicSpecies") %>% 
+  mutate(coding=ifelse(!is.na(prop_difQSS_pos.y), ifelse(difQSSrelat>0, 1, 1), 0)) %>% 
+  dplyr::filter(prop_difQSSm_pos > 0.55 | prop_difQSSm_neg > 0.55) %>% 
+  dplyr::select(TrophicSpecies, IS_median, TL, TotalDegree, meanTrophicSimil, Habitat, prop_difQSSm_pos, prop_difQSSm_neg)
+
 
 ## By median interaction strength ----
 IS_QSS <- ggplot(all_dif, aes(x = log(IS_median), y = difQSSrelat,text=TrophicSpecies)) +
