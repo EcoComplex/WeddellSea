@@ -157,7 +157,7 @@ We consider that the information provided in this study is important for the dev
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Map of the Weddell Sea and Dronning Maud Land sector highlighting the high Antarctic shelf as a dashed-line contour. Modified from www.soos.aq."}
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Map of the Weddell Sea and Dronning Maud Land sector highlighting with a dashed-line contour the high Antarctic shelf that represents the spatial extent of the food web. Modified from www.soos.aq."}
 knitr::include_graphics("Fig.1_StudyMap.jpg")
 ```
 
@@ -169,14 +169,14 @@ knitr::include_graphics("Fig.2_ToyFoodWeb.jpg")
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "interquartile range for the estimated interaction strengths of the Weddell Sea food web. Total number of interactions = 16041."}
-knitr::include_graphics("Supp1_IQR.png")
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Frequency distribution of (median) interaction strengths for the Weddell Sea food web. The distribution was best fitted to a ‘log-Normal’ model". Total number of interactions = 16041."}
+knitr::include_graphics("Fig3_IntDist_sim.png")
 ```
 
 \clearpage
 
-```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (median Interaction Strength) and unweighted properties including habitat. Linear regressions are shown between log(median interaction strength) and trophic level (A), degree (B) and trophic similarity (C). Linear regressions for trophic level ($y = 1.12x - 15.29, R^2 = 0.43, p-value < 2e-16$), degree ($y = 0.006x - 12.77, R^2 = 0.03, p-value = 4.06e-5$) and trophic similarity ($y = -1.46x - 12.18, R^2 = -0.0004, p-value = 0.36$)."}
-knitr::include_graphics("Fig4_LinReg.png")
+```{r, out.width = "12cm", echo = FALSE, fig.cap = "Relationships between weighted (median Interaction Strength) and unweighted properties including habitat. Linear regressions are shown between log(median interaction strength) and trophic level (A), degree (B) and trophic similarity (C). Linear regressions for trophic level ($y = 1.23x - 15.67, R^2 = 0.46, p-value < 2.2e-16$), degree ($y = 0.006x - 12.86, R^2 = 0.03, p-value = 1.19e-4$) and trophic similarity ($y = -2.78x - 12.12, R^2 = 0.03, p-value = 0.11$)."}
+knitr::include_graphics("Fig4_LinReg_sim.png")
 ```
 
 \clearpage
