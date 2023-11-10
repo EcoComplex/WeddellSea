@@ -2,10 +2,11 @@
 title: Supplementary Material for 'New insights into the Weddell Sea ecosystem applying
   a quantitative network approach'
 author: "Tomás I. Marina, Leonardo A. Saravia and Susanne Kortsch"
-bibliography: ../WeddellSea.bib
+bibliography: WeddellSea.bib
 output:
-  pdf_document: default
-  word_document: default
+  pdf_document: 
+    includes:
+      in_header: "Appendices.sty"
 ---
 
 ```{r setup, include=FALSE} 
@@ -77,7 +78,6 @@ TS = \frac{c}{a+b+c}
 $$
 where $c$ is the number of predators and prey common to the two species, $a$ is the number of predators and prey unique to one species, and $b$ is the number of predators and prey unique to the other species. When the two species have the same set of predators and prey, $TS$ = 1; when the two species have no common predators or common prey, $TS$ = 0 [@Martinez1991].
 
-Table 1 shows the mentioned properties for every species of the Weddell Sea food web.
 
 ```{r echo=FALSE, results='asis'}
 library(knitr)
@@ -92,7 +92,7 @@ knitr::kable(all_dif %>% dplyr::select(TrophicSpecies, IS_median, IS_Q1, IS_Q3, 
 
 We performed extinction simulations, one at a time, for every species in the Weddell Sea food web. In order to assess the impact on the stability of the food web we statistically compared a stability index before and after performing the extinction. For this, we applied Quasi-Sign Stability $QSS$ that calculates the proportion of matrices that are locally stable. These matrices are created by sampling the values of the community matrix (the Jacobian) from a uniform distribution, preserving the sign structure: positive for predators and negative for prey. This stability index was originally proposed by @Allesina2008.
 For the $QSS$ calculation we used a uniform distribution between 0 and maximum values given by the parameters negative, positive and self-damping, corresponding to the sign of interactions and self-limitation effect. Since we had estimated the interaction strength for each interaction of the Weddell Sea food web, the limits of the distribution were $negative*-x$, $positive*x$, $self-damping*x$, where $x$ is the value of the strength for the interaction in question. The $x$ for the self-limitation effect of the species is 0 unless the species presents cannibalism.
-We performed 1000 extinction simulations for every species. Our results showed that the proportion of Jacobians that were locally stable was zero, probably due to the absence of self-limitation in the species. Thus, we considered the distribution of maximum eigenvalues as the stability index, hereafter $QSS$. For testing if the $QSS$ difference before and after the extinction is positive or negative we performed a contrast. This means that for each simulation we made the difference of the $QSS$ after extinction with the median value of the 1000 simulations of $QSS$ for the whole network, thus we obtained a distribution of $QSS$ differences. A positive difference indicates that the food web's stability is greater without the targeted species, suggesting that the species in question contributes to the network's instability. Conversely, a negative difference implies that the network is less stable without the species, indicating a stabilizing effect. Due to the variability in the estimation of the eigenvalues, we decided to consider that a substantial impact on stability was reached when the proportion of either negative or positive differences within this distribution must exceeded 0.55. Figure 2 shows this for four species.
+We performed 1000 extinction simulations for every species. Our results showed that the proportion of Jacobians that were locally stable was zero, probably due to the absence of self-limitation in the species. Thus, we considered the distribution of maximum eigenvalues as the stability index, hereafter $QSS$. For testing if the $QSS$ difference before and after the extinction is positive or negative we performed a contrast. This means that for each simulation we made the difference of the $QSS$ after extinction with the median value of the 1000 simulations of $QSS$ for the whole network, thus we obtained a distribution of $QSS$ differences. A positive difference indicates that the food web's stability is greater without the targeted species, suggesting that the species in question contributes to the network's instability. Conversely, a negative difference implies that the network is less stable without the species, indicating a stabilizing effect. Due to the variability in the estimation of the eigenvalues, we decided to consider that a substantial impact on stability was reached when the proportion of either negative or positive differences within this distribution must exceeded 0.55. Figure S2 shows this for four species.
 
 We used the R package multiweb to calculate $QSS$ and to test the $QSS$ difference before and after performing the extinction [@Saravia2019]. Two functions were specifically created for these analyses: ‘calc_QSS’ and ‘calc_QSS_extinction_dif’.
 
@@ -101,7 +101,6 @@ knitr::include_graphics("Supp2_QSS_distr.png")
 
 ```
 
-Table 2 summarizes the $QSS$ results for every species extinction of the Weddell Sea food web.
 
 ```{r echo=FALSE, results='asis'}
 library(knitr)
