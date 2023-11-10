@@ -37,7 +37,7 @@ sp_list <- sp_list$TrophicSpecies
 
 # Be aware that this simulation might take days
 # To reduce the time you may configure the number of simulations 'nsim'
-nsim <- 10
+nsim <- 1000
 print(paste("QSS 1 sp extinction NEW version - Nsim = ", nsim))
 tic("QSS dif")
 QSS_extinction_dif <- calc_QSS_extinction_dif(g, sp_list, ncores=48, nsim=nsim, istrength = TRUE)
