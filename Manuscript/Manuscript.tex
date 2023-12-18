@@ -264,14 +264,14 @@ species' roles related to the stability of the food web.
 
 \subsection{Study area}
 
-The high Antarctic Weddell Sea shelf is situated between 74 and 78ºS,
-stretching approximately 450 km from East to West (Figure 1). Water
-depth varies between 200 and 500 meters, and shallower areas are covered
-by continental ice, which forms the coastline along the eastern and
-southern parts of the Weddell Sea. The shelf area contains a complex
-three-dimensional benthic habitat with large benthic biomasses,
-intermediate to high diversity in comparison to benthic boreal
-communities and a spatially patchy distribution of organisms
+The high Antarctic Weddell Sea shelf, our study area, is situated
+between 74 and 78ºS, stretching approximately 450 km from East to West
+(Figure 1). Water depth varies between 200 and 500 meters, and shallower
+areas are covered by continental ice, which forms the coastline along
+the eastern and southern parts of the Weddell Sea. The shelf area
+contains a complex three-dimensional benthic habitat with large benthic
+biomasses, intermediate to high diversity in comparison to benthic
+boreal communities and a spatially patchy distribution of organisms
 \citep{Dayton1990, Teixido2002}.
 
 \subsection{Weddell Sea food web dataset}
@@ -280,43 +280,44 @@ The Weddell Sea food web was retrieved from the GlobAL daTabasE of
 traits and food Web Architecture (GATEWAy, version 1.0) of the German
 Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig
 \citep{Brose2018}. In addition to predator-prey interactions, the
-database contains information on other biological data such as mean body
-mass and movement type for each species in the food web. Furthermore, it
-incorporates information about the interaction itself, such as the
-dimension of the predator search space (2 or 3 dimensions). In its
+database contains information on other biological data: mean body mass
+and length, and movement and metabolic type for each species in the food
+web. Furthermore, it incorporates information about the interaction
+itself: type (predacious, herbivorous and detritivorous) and dimension
+(2 or 3 dimensions according to the predator search space). In its
 current form, the Weddell Sea food web comprises 490 species and 16041
 predator-prey interactions and thus constitutes one of the most resolved
 food webs constructed to date \citep{Jacob2011}.
 
 Complex empirical food webs are compilations of species and their
 potential feeding interactions within a given area and time period. The
-species occurrence data to construct the Weddell Sea food web
-(Antarctica) was sampled between 1983 and 2005, and hence the Weddell
-Sea food web is representative for this time period. The diet
-composition for each species was observed between 2001 and 2004 through
-a combination of field observations and stomach content analyses
-(further details can be found in \citet{Jacob2005}). Some species, such
-as benthic grazers and suspension feeders had poor taxonomic resolution
-of their prey, therefore laboratory information about their size,
-behavior, and stable isotope signatures was used to infer their feeding
-habits \citep{Jacob2011}. As the data used to construct the Weddell Sea
-food web is sampled during the summer season due to the inaccessibility
-of ecological field sampling in Antarctica during the winter, the
-Weddell Sea food web is representative of the summer season. Moreover,
-the species in the food web are representative of adult specimens, and
-were not categorized into ontogenetic life stages (i.e., larvae,
-juveniles, and adults). As a result, ontogenetic diet shifts cannot be
-addressed with this food web. The average body masses of species were
-either directly measured \citep{Jacob2005} or taken from published
-accounts for marine mammals and seabirds \citep{Brose2006a}. Due to the
-static nature of the Weddell Sea food web and its low temporal
-resolution, it is not possible to assess phenological mismatches nor
-species temporal turnover. Because of these methodological limitations,
-the nature of the Weddell Sea food web data may likely lead to
-overestimations of some trophic interactions and network properties
-(connectance), compared to realised networks at any given point in time
-and space. The spatial extent of the food web is described in the Study
-area section (Figure 1).
+species occurrence data to construct the Weddell Sea food web was
+sampled between 1983 and 2005, and hence the Weddell Sea food web is
+representative for this time period. The diet composition for each
+species was observed between 2001 and 2004 through a combination of
+field observations and stomach content analyses (further details can be
+found in \citet{Jacob2005}). Some species, such as benthic grazers and
+suspension feeders had poor taxonomic resolution of their prey,
+therefore laboratory information about their size, behavior, and stable
+isotope signatures was used to infer their feeding habits
+\citep{Jacob2011}. As the data used to construct the Weddell Sea food
+web is sampled during the summer season due to the inaccessibility of
+ecological field sampling in Antarctica during the winter, the Weddell
+Sea food web is representative of the summer season. Moreover, the
+species in the food web are representative of adult specimens, and were
+not categorized into ontogenetic life stages (i.e., larvae, juveniles,
+and adults). As a result, ontogenetic diet shifts cannot be addressed
+with this food web. The average body masses of species were either
+directly measured \citep{Jacob2005} or taken from published accounts for
+marine mammals and seabirds \citep{Brose2006a}. Due to the static nature
+of the Weddell Sea food web and its low temporal resolution, it is not
+possible to assess phenological mismatches nor species temporal
+turnover. Because of these methodological limitations, the nature of the
+Weddell Sea food web data may likely lead to overestimations of some
+trophic interactions and network properties (connectance), compared to
+realised networks at any given point in time and space. The spatial
+extent of the food web is described in the Study area section (Figure
+1).
 
 \subsection{Dataset analyses}
 
@@ -515,9 +516,9 @@ strong interactions (Figure 3, Table S3).
 Here it is important to note that we observed an important variability
 when estimating each IS. The interactions that showed the greatest
 variability, represented by a wide interquartile range, were those where
-consumer and resource body masses were very small (approximately 1e-15
-kg). The frequency distribution of the interquartile range is presented
-in the Supplementary Material (Figure S1).
+consumer and resource body masses were very small (approximately
+\(1 x 10 ^{-15}\) kg). The frequency distribution of the interquartile
+range is presented in the Supplementary Material (Figure S1).
 
 \subsection{Species' role related to their mean interaction strength}
 
@@ -664,9 +665,9 @@ stability outcomes
 \citep{Brose2006a, Allesina2015, Gross2009, Landi2018}. Concerning body
 mass, the model utilized in this study exhibits sensitivity in
 estimating interaction strengths (IS) among species with exceedingly
-small body masses (approximately 1e-15 kg), as evidenced by a broad
-interquartile range. Additionally, some of the observed results may stem
-from the fact that the applied methodology does not incorporate
+small body masses (approximately \(1 x 10 ^{-15}\) kg), as evidenced by
+a broad interquartile range. Additionally, some of the observed results
+may stem from the fact that the applied methodology does not incorporate
 empirically measured biomasses for species. For example, we would have
 expected a relatively high impact on community stability when removing
 the Antarctic krill Euphausia superba, as it is one of the most
