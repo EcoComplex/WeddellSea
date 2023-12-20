@@ -10,4 +10,4 @@ This work was submitted to the inter-journal Special Issue "The Weddell Sea and 
 
 ## Pre-print
 
-https://doi.org/10.5194/egusphere-2022-1518, 2023
+https://doi.org/10.5194/egusphere-2022-1518
