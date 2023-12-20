@@ -6,7 +6,7 @@
 
 
 # Load packages -----------------------------------------------------------
-packages <- c("ggplot2", "ggpubr", "multiweb", "igraph", "factoextra", "cluster")
+packages <- c("ggplot2", "ggpubr", "multiweb", "igraph", "factoextra", "cluster", "scales")
 ipak <- function(pkg){
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
   if (length(new.pkg))
@@ -36,9 +36,15 @@ load("Results/QSS_summary_oct31.rda")
 ## Figure 3 ----
 # Frequency distribution of interaction strengths for the Weddell Sea food web (n = 490).
 # IS distribution
+# options(scipen = 999)  # avoid scientific notation
+scientific_10 <- function(x) {
+  parse(text=gsub("e", " %*% 10^", scales::scientific_format()(x)))
+}
+
 Fig3_IntDist <- ggplot(wedd_int_pd_summary, aes(IS_med)) + 
   geom_histogram(bins = 50, color = "darkblue", fill = "white") + 
   scale_y_log10() +
+  scale_x_continuous(label = scientific_10) +
   labs(x = "Interaction Strength (median)", y = "Frequency (log scale)") +
   theme_classic() +
   theme(axis.text.x = element_text(face="bold", size=14),
